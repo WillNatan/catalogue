@@ -1,0 +1,76 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div class="main-card">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <div class="card shadow py-2">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <i class="fa fa-user-circle fa-10x"></i>
+                                </div>
+                                <div class="col-12 text-center mt-3">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <a href="{{ path('Profil') }}"><h3 class="text-orange">Mon profil</h3></a>
+                                        </div>
+                                        <div class="col-12">
+                                            {{ form_start(form) }}
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="small text-gray-500">
+                                                        Rôles
+                                                    </span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="text-gray-700 form-group">
+                                                        {{ form_widget(form.roles) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span class="small text-gray-500">
+                                                        Adresse Email
+                                                    </span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="text-gray-700 form-group">
+                                                        {{ form_widget(form.email) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <span class="small text-gray-500">
+                                                        Nom d'utilisateur
+                                                    </span>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="text-gray-700 form-group">
+                                                        {{ form_widget(form.username) }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mt-3">
+                                            <button type="submit" class="gradient-btn">Modifier</button>
+                                        </div>
+                                    </div>
+                                    {{ form_end(form) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+{% endblock %}

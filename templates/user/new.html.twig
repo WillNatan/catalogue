@@ -1,0 +1,18 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block body %}
+    <h1>Ajout d'un utilisateur</h1>
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-top-primary shadow h-100 py-2">
+                <div class="card-body">
+                    {{ include('user/_form.html.twig') }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

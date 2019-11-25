@@ -1,0 +1,8 @@
+RAPPORT_Usages_Appels :
+	Mêmes objets en ROAMING
+	Eventuellement afficher la source
+	Copier exactement la maquette en PJ
+	Onglet Description:
+		Reprendre un rapport, copier/coller
+	Date en invite pour semaine à un mois puis afficher la période
+	

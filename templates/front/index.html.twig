@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FrontController!{% endblock %}
+
+{% block body %}
+    <div class="table-responsive">
+        <table class="table" id="tblData">
+            <thead>
+            <tr>
+                <th>N°</th>
+                <th>Dossier</th>
+                <th>Sous-dossier</th>
+                <th>Nom du rapport</th>
+                <th>Version actuelle</th>
+                <th>Catégorie</th>
+                <th>Commentaires</th>
+                <th>Objectifs</th>
+                <th>Détails</th>
+                <th>Sources</th>
+                <th>Paramètres</th>
+                <th>Historique des versions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for report_catalog in report_catalog %}
+                <tr class="test">
+                    <td>{{ report_catalog.n }}</td>
+                    <td>{% if report_catalog.mainFolder %}{{ report_catalog.mainFolder.nomDossier }}{% endif %}</td>
+                    <td>{{ report_catalog.subFolder }}</td>
+                    <td>{{ report_catalog.NomRapport }}</td>
+                    <td>{{ report_catalog.VersionActuelle }}</td>
+                    <td>
+                        {{ report_catalog.Categorie }}
+                    </td>
+                    <td>
+                        {{ report_catalog.Commentaire|nl2br }}
+                    </td>
+
+                    <td>
+                        {{ report_catalog.objectifs|nl2br }}
+                    </td>
+                    <td>
+                        {{ report_catalog.details|nl2br }}
+                    </td>
+                    <td>
+                        {{ report_catalog.sources|nl2br }}
+                    </td>
+                    <td>
+                        {{ report_catalog.parametres|nl2br }}
+                    </td>
+                    <td>
+                        {{ report_catalog.historiqueVersions|nl2br }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="14" class="text-center">Aucun résultat</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button onclick="exportTableToExcel('tblData')">Export Table Data To Excel File</button>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('dashboard/js/xlsx.min.js') }}">
+    </script>
+    <script>
+
+    </script>
+{% endblock %}

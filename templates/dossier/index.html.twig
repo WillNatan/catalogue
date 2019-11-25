@@ -1,0 +1,62 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Liste des dossiers{% endblock %}
+
+{% block body %}
+    <h1>Liste des dossiers</h1>
+    <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+
+    <div class="table-responsive">
+            <table class="table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>Nom du dossier</th>
+                            <th>Sous-dossiers</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for dossier in dossiers %}
+                        <tr>
+                            <td>{{ dossier.nomDossier }}</td>
+                           <td>
+                                {% if dossier.subFolders %}
+                                    <ul>
+                                        {% for subfolder in dossier.subFolders %}
+                                            <li>{{ subfolder.nomDossier }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                        </td>
+                            <td>
+                                <a href="{{ path('Détails-dossier', {'id': dossier.id}) }}" class="btn btn-outline-primary" ><i class="fas fa-eye" ></i></a>
+                                <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn btn-outline-warning" ><i class="fas fa-edit" ></i></a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="3">Aucun Résultat</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+    </div>
+            <a href="{{ path('Nouveau-dossier') }}" class="btn btn-outline-success" ><i class="fas fa-plus" ></i></a>
+    </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+  <script>
+      // Call the dataTables jQuery plugin
+$(document).ready(function() {
+    $('#dataTable').DataTable({
+        "language":{
+            "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+        }
+    });
+  });
+  
+  </script>
+  {% endblock %}

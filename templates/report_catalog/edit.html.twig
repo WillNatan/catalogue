@@ -1,0 +1,69 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier les informations du rapport{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card border-left-orange shadow h-100 p-3">
+                <h1 class="text-gray-600">Modifier les informations du rapport</h1>
+                {{ include('report_catalog/_delete_form.html.twig') }}
+                {{ include('report_catalog/_form.html.twig', {'button_label': 'Modifier'}) }}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        let $mainFolder = $('#report_catalog_mainFolder');
+        let $rapport = $("#report_catalog_Nom_Rapport");
+        let $currentVer = $("#report_catalog_VersionActuelle");
+        let $category = $("#report_catalog_Categorie");
+        let $comm = $("#report_catalog_Commentaire");
+        let $obj = $("#report_catalog_Objectifs");
+        let $details = $("#report_catalog_Details");
+        let $sources = $("#report_catalog_Sources");
+        let $param = $("#report_catalog_Parametres");
+        let $HistVer = $("#report_catalog_Historique_Versions");
+
+        // When sport gets selected ...
+        $mainFolder.change(function() {
+            // ... retrieve the corresponding form.
+            let $form = $(this).closest('form');
+            // Simulate form data, but only include the selected sport value.
+            let data = {};
+            data[$mainFolder.attr('name')] = $mainFolder.val();
+            data[$rapport.attr('name')] = $rapport.val();
+            data[$currentVer.attr('name')] = $currentVer.val();
+            data[$category.attr('name')] = $category.val();
+            data[$comm.attr('name')] = $comm.val();
+            data[$obj.attr('name')] = $obj.val();
+            data[$details.attr('name')] = $details.val();
+            data[$sources.attr('name')] = $sources.val();
+            data[$param.attr('name')] = $param.val();
+            data[$HistVer.attr('name')] = $HistVer.val();
+
+            $('.blur-load').fadeIn(200);
+            // Submit data via AJAX to the form's action path.
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    $('.blur-load').fadeOut(200);
+                    console.log($(html).find('#report_catalog_subFolder'));
+                    // Replace current position field ...
+                    $('#report_catalog_subFolder').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(html).find('#report_catalog_subFolder')
+                    );
+                    // Position field now displays the appropriate positions.
+                }
+            });
+        });
+    </script>
+{% endblock %}

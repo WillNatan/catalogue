@@ -1,0 +1,76 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Rapport - {{ report_catalog.nomRapport }}{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card border-top-primary shadow h-100 py-2">
+            <div class="card-body">
+                <h1>{{ report_catalog.nomRapport }}</h1>
+    <div class="table-responsive">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Dossier</th>
+                <td>{% if report_catalog.mainFolder %}{{ report_catalog.mainFolder.nomDossier }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Sous Dossier</th>
+                <td>{% if report_catalog.subFolder %}{{ report_catalog.subFolder }}{% else %}Aucun{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Créateur de la ligne</th>
+                <td>{{ report_catalog.user.username }}</td>
+            </tr>
+            <tr>
+                <th>Nom du rapport</th>
+                <td>{{ report_catalog.NomRapport }}</td>
+            </tr>
+            <tr>
+                <th>Version actuelle</th>
+                <td>{{ report_catalog.VersionActuelle }}</td>
+            </tr>
+            <tr>
+                <th>Catégorie</th>
+                <td>{{ report_catalog.Categorie }}</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>{{ report_catalog.Commentaire|raw }}</td>
+            </tr>
+            <tr>
+                <th>Objectifs</th>
+                <td>{{ report_catalog.Objectifs|raw }}</td>
+            </tr>
+            <tr>
+                <th>Détails</th>
+                <td>{{ report_catalog.Details|raw }}</td>
+            </tr>
+            <tr>
+                <th>Sources</th>
+                <td>{{ report_catalog.Sources|raw }}</td>
+            </tr>
+            <tr>
+                <th>Paramètres</th>
+                <td>{{ report_catalog.Parametres|raw }}</td>
+            </tr>
+            <tr>
+                <th>Historique des versions</th>
+                <td>{{ report_catalog.HistoriqueVersions|raw }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex flex-wrap">
+        <a href="{{ path('Catalogue-des-rapports') }}" class="btn btn-primary mr-1"><i class="fa fa-arrow-left"></i></a>
+        <a href="{{ path('Modifier-rapport', {'id': report_catalog.id}) }}" class="btn btn-orange mr-1"><i class="fa fa-edit"></i></a>
+        {{ include('report_catalog/_delete_form.html.twig') }}
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

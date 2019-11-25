@@ -1,0 +1,79 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Nouvelle ligne catalogue des rapports BO{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('dashboard/css/summernote.min.css') }}">
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-lg-8 offset-lg-2">
+            <div class="card border-left-orange shadow h-100">
+                <h1 class="text-gray-600 text-center mt-2">Nouvelle ligne catalogue des rapports BO</h1>
+
+                {{ include('report_catalog/_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        $(document).ready(function(){
+
+            $('footer').addClass('orange-bg');
+        });
+
+        /*
+        let mainFolders = $('.mainFolder');
+        let subfolderList = $('#report_catalog_Sous_Dossier');
+        mainFolders.change(function(){
+            $.get('./data/retrieve', 
+            {
+                mainfolder: mainFolders.val()
+                }, 
+                function(data){
+                    $(subfolderList).empty();
+                    $('<option>Sélectionner un sous-dossier (Si nécessaire)</option>').appendTo(subfolderList)
+                    $.each(data, function(k,v){
+                        let divdata = '<option value='+v+'>'+v+'</option>';
+                        $(divdata).appendTo(subfolderList);
+                        subfolderList.removeAttr('disabled')
+                    });
+                
+            })
+        });
+        */
+    </script>
+    <script src="{{ asset('dashboard/js/summernote.min.js') }}"></script>
+    <script>
+
+        var $sport = $('#report_catalog_mainFolder');
+        // When sport gets selected ...
+        $sport.change(function() {
+            // ... retrieve the corresponding form.
+            var $form = $(this).closest('form');
+            // Simulate form data, but only include the selected sport value.
+            var data = {};
+            data[$sport.attr('name')] = $sport.val();
+            // Submit data via AJAX to the form's action path.
+            $('.blur-load').fadeIn(200);
+            $.ajax({
+                url : $form.attr('action'),
+                type: $form.attr('method'),
+                data : data,
+                success: function(html) {
+                    $('.blur-load').fadeOut(200);
+                    // Replace current position field ...
+                    $('#report_catalog_subFolder').replaceWith(
+                        // ... with the returned one from the AJAX response.
+                        $(html).find('#report_catalog_subFolder')
+                    );
+                    // Position field now displays the appropriate positions.
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

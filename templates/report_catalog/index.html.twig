@@ -1,0 +1,84 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Catalogue des rapports BO{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesRowOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesResponsive.css') }}">
+{% endblock %}
+{% block body %}
+    <h1>Catalogue des rapports BO</h1>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-top-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <a href="{{ path('spreadsheet') }}"><button class="button-excel"><i class="fa fa-file-excel"></i> Excel</button></a>
+                            <div class="table-responsive">
+                                <table class="table" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Créateur</th>
+                                        <th>Dossier</th>
+                                        <th>Sous-dossier</th>
+                                        <th>Nom du rapport</th>
+                                        <th>Version actuelle</th>
+                                        <th>Catégorie</th>
+                                        <th>actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for report_catalog in report_catalogs %}
+                                        <tr class="test">
+                                            <td>{{ report_catalog.n }}</td>
+                                            <td>{{ report_catalog.user.username }}</td>
+                                            <td>{% if report_catalog.mainFolder %}{{ report_catalog.mainFolder.nomDossier }}{% endif %}</td>
+                                            <td>{{ report_catalog.subFolder }}</td>
+                                            <td>{{ report_catalog.NomRapport }}</td>
+                                            <td>{{ report_catalog.VersionActuelle }}</td>
+                                            <td>
+                                                {{ report_catalog.Categorie }}
+                                            </td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <a href="{{ path('Détails-rapport', {'id': report_catalog.id}) }}" class="btn btn-outline-primary mr-1"><i class="fas fa-eye"></i></a>
+                                                    <a href="{{ path('Modifier-rapport', {'id': report_catalog.id}) }}" class="btn btn-orange mr-1"><i class="fas fa-edit"></i></a>
+                                                    {{ include('report_catalog/_delete_form.html.twig') }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="14" class="text-center">Aucun résultat</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                    <a href="{{ path('Nouveau-rapport') }}" class="btn btn-primary"><i class=" fas fa-plus"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('dashboard/js/datatablesResponsive.js') }}"></script>
+    <script src="{{ asset('dashboard/js/datatalesRowOrder.js') }}"></script>
+  <script>
+      // Call the dataTables jQuery plugin
+$(document).ready(function() {
+    $('#dataTable').DataTable({
+        dom: 'Bfrtip',
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+        "language":{
+            "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+        },
+        responsive: true,
+    });
+  });
+  
+  </script>
+  {% endblock %}

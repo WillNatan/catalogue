@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>{{ user.username }}</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="card border-top-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Rôles</th>
+                            <td>{% for role in user.roles %}{{ role }}{% if loop.last %}{% else %}, {% endif %}{% endfor %}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom d'utilisateur</th>
+                            <td>{{ user.username }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="d-flex">
+                        <a href="{{ path('Utilisateurs') }}" class="mr-1 btn btn-primary"><i class="fa fa-arrow-left"></i></a>
+
+                        <a href="{{ path('Modifier-utilisateur', {'id': user.id}) }}" class="btn btn-warning mr-1"><i class="fa fa-edit"></i></a>
+                        {{ include('user/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
