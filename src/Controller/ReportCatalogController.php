@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/admin/catalogue-rapports-bo")
+ * @Route("/dashboard/catalogue-rapports-bo")
  */
 class ReportCatalogController extends AbstractController
 {
