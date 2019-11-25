@@ -1,7 +1,9 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}Rapport - {{ report_catalog.nomRapport }}{% endblock %}
-
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('dashboard/css/custom.css') }}">
+{% endblock %}
 {% block body %}
 
 <div class="row">
@@ -46,7 +48,7 @@
             </tr>
             <tr>
                 <th>Détails</th>
-                <td>{{ report_catalog.Details|raw }}</td>
+                <td>{{ report_catalog.Details }}</td>
             </tr>
             <tr>
                 <th>Sources</th>

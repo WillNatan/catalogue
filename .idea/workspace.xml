@@ -153,6 +153,7 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/easycorp/easy-log-handler" />
+      <path value="$PROJECT_DIR$/vendor/twig/extensions" />
     </include_path>
   </component>
   <component name="ProjectId" id="1Rh1sCSntjUDmMH74AlCAMkAWOU" />
@@ -225,7 +226,7 @@
       <workItem from="1574310685212" duration="14662000" />
       <workItem from="1574337258033" duration="1861000" />
       <workItem from="1574396177947" duration="16458000" />
-      <workItem from="1574652746794" duration="19825000" />
+      <workItem from="1574652746794" duration="21517000" />
     </task>
     <servers />
   </component>

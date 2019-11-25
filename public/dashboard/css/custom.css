@@ -17,6 +17,7 @@
     background-color: rgba(41, 41, 41, 0.5);
 }
 
+
 .box-login label{
     padding:0;
     margin:0;
@@ -96,7 +97,6 @@
 
 table td{
     text-overflow: ellipsis;
-    white-space: nowrap;
 }
 
 ul li{
