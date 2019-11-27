@@ -10,61 +10,77 @@
     <div class="col-12">
         <div class="card border-top-primary shadow h-100 py-2">
             <div class="card-body">
-                <h1>{{ report_catalog.nomRapport }}</h1>
-    <div class="table-responsive">
-        <table class="table">
-            <tbody>
-            <tr>
-                <th>Dossier</th>
-                <td>{% if report_catalog.mainFolder %}{{ report_catalog.mainFolder.nomDossier }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Sous Dossier</th>
-                <td>{% if report_catalog.subFolder %}{{ report_catalog.subFolder }}{% else %}Aucun{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Créateur de la ligne</th>
-                <td>{{ report_catalog.user.username }}</td>
-            </tr>
-            <tr>
-                <th>Nom du rapport</th>
-                <td>{{ report_catalog.NomRapport }}</td>
-            </tr>
-            <tr>
-                <th>Version actuelle</th>
-                <td>{{ report_catalog.VersionActuelle }}</td>
-            </tr>
-            <tr>
-                <th>Catégorie</th>
-                <td>{{ report_catalog.Categorie }}</td>
-            </tr>
-            <tr>
-                <th>Commentaire</th>
-                <td>{{ report_catalog.Commentaire|raw }}</td>
-            </tr>
-            <tr>
-                <th>Objectifs</th>
-                <td>{{ report_catalog.Objectifs|raw }}</td>
-            </tr>
-            <tr>
-                <th>Détails</th>
-                <td>{{ report_catalog.Details }}</td>
-            </tr>
-            <tr>
-                <th>Sources</th>
-                <td>{{ report_catalog.Sources|raw }}</td>
-            </tr>
-            <tr>
-                <th>Paramètres</th>
-                <td>{{ report_catalog.Parametres|raw }}</td>
-            </tr>
-            <tr>
-                <th>Historique des versions</th>
-                <td>{{ report_catalog.HistoriqueVersions|raw }}</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                <h1 class="text-normal">{{ report_catalog.nomRapport }}</h1>
+                <div class="row">
+                    <div class="col-12 col-sm-3 col-lg-3">
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="text-orange">Dossier</p>
+                                <p class="text-xs">{% if report_catalog.mainFolder %}{{ report_catalog.mainFolder.nomDossier|nl2br }}{% endif %}</p>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <p class="text-orange">Sous-Dossier</p>
+                                <p class="text-xs">{% if report_catalog.subFolder %}{{ report_catalog.subFolder|nl2br }}{% else %}Aucun{% endif %}</p>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <p class="text-orange">Créateur de la ligne</p>
+                                <p class="text-xs">{{ report_catalog.user.username|nl2br }}</p>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <p class="text-orange">Nom du rapport</p>
+                                <p class="text-xs">{{ report_catalog.NomRapport|nl2br }}</p>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <p class="text-orange">Version actuelle</p>
+                                <p class="text-xs">{{ report_catalog.VersionActuelle|nl2br }}</p>
+                            </div>
+                            <div class="col-12">
+                                <hr>
+                                <p class="text-orange">Catégorie</p>
+                                <p class="text-xs">{{ report_catalog.Categorie|nl2br }}</p>
+                            </div>
+                        </div>
+                    </div>
+                       <div class="col-sm-9 col-lg-7 offset-lg-2">
+                           <div class="row">
+                               <div class="col-12 col-lg-6">
+                                   <hr class="d-sm-none d-block">
+                                   <p class="text-orange">Commentaire</p>
+                                   <p class="text-xs">{{ report_catalog.Commentaire|nl2br }}</p>
+                               </div>
+                               <div class="col-12 col-lg-6">
+                                   <hr class="d-lg-none d-block">
+                                   <p class="text-orange">Objectifs</p>
+                                   <p class="text-xs">{{ report_catalog.Objectifs|nl2br }}</p>
+                               </div>
+                               <div class="col-12 col-lg-6">
+                                   <hr>
+                                   <p class="text-orange">Détails</p>
+                                   <p class="text-xs">{{ report_catalog.Details|nl2br }}</p>
+                               </div>
+                               <div class="col-12 col-lg-6">
+                                   <hr>
+                                   <p class="text-orange">Sources</p>
+                                   <p class="text-xs">{{ report_catalog.Sources|nl2br }}</p>
+                               </div>
+                               <div class="col-12 col-lg-6">
+                                   <hr>
+                                   <p class="text-orange">Paramètres</p>
+                                   <p class="text-xs">{{ report_catalog.Parametres|nl2br }}</p>
+                               </div>
+                               <div class="col-12 col-lg-6">
+                                   <hr>
+                                   <p class="text-orange">Historique des versions</p>
+                                   <p class="text-xs">{{ report_catalog.HistoriqueVersions|nl2br }}</p>
+                               </div>
+                           </div>
+                       </div>
+                    </div>
+
 
     <div class="d-flex flex-wrap">
         <a href="{{ path('Catalogue-des-rapports') }}" class="btn btn-primary mr-1"><i class="fa fa-arrow-left"></i></a>

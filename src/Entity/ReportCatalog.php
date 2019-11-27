@@ -21,77 +21,77 @@ class ReportCatalog
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $n;
+    private $n = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Nom_Rapport;
+    private $Nom_Rapport = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $VersionActuelle;
+    private $VersionActuelle = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Commentaire;
+    private $Commentaire = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Categorie;
+    private $Categorie = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Objectifs;
+    private $Objectifs = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Details;
+    private $Details = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Sources;
+    private $Sources = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Parametres;
+    private $Parametres = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Historique_Versions;
+    private $Historique_Versions = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SousDossier", inversedBy="rapport")
      */
-    private $subFolder;
+    private $subFolder = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Dossier", inversedBy="rapport")
      */
-    private $mainFolder;
+    private $mainFolder = null;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reports")
      */
-    private $user;
+    private $user = null;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $last_update;
+    private $last_update = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $update_nb;
+    private $update_nb = null;
 
     public function __construct()
     {

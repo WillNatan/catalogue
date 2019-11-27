@@ -1,104 +1,73 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block body %}
-    <div class="main-card">
-        <div class="container">
-                <div class="row">
-                    <div class="col-12 col-md-5">
-                        <div class="card shadow py-2">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12 text-center">
-                                        <i class="fa fa-user-circle fa-10x"></i>
-                                    </div>
-                                    <div class="col-12 text-center mt-3">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <h3 class="text-orange">Mon profil</h3>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow py-2">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="col-12 text-center">
+                                                <i class="fa fa-user fa-10x"></i>
                                             </div>
-                                            <div class="col-12">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                    <span class="small text-gray-500">
-                                                        Nom d'utilisateur
-                                                    </span>
-                                                    </div>
-                                                    <div class="col-12">
-                                                    <span class="text-gray-700">
-                                                        {{ user.username }}
-                                                    </span>
-                                                    </div>
+                                            <div class="col-12 mt-3">
+                                                <hr class="hr-text text-xs" data-content="DETAILS">
+                                                <h1 class="text-normal text-orange">Email</h1>
+                                                <p class="text-xs">{{ app.user.email }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="offset-1 col-7">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h1>{{ app.user.username }}</h1>
+                                                    <p class="text-xs text-orange">SuperAdmin</p>
+                                                    <hr class="hr-text text-xs" data-content="PROFIL">
                                                 </div>
-                                                <hr>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="row">
-                                                    <div class="col-12">
-                                                    <span class="small text-gray-500">
-                                                        Rôles
-                                                    </span>
-                                                    </div>
-                                                    <div class="col-12">
-                                                    <span class="text-gray-700 font-weight-bolder">
-                                                        {% for role in user.roles %}
-                                                            {{ role }} {% if loop.last %}{% else %}, {% endif %}
-                                                        {% endfor %}
-                                                    </span>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-12 mt-3">
-                                                        <a href="{{ path('Modifier-Profil', {'id': user.id}) }}"><button class="gradient-btn">Modifier profil</button></a>
-                                                        <a href="{{ path('Modifier-mot-de-passe', {'id': user.id}) }}"><button class="gradient-btn">Changer de mot de passe</button></a>
+                                                <div class="col-12">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-6">
+                                                            <a href="{{ path('Modifier-Profil', {'id': user.id}) }}"><button class="btn btn-orange w-100">Modifier profil</button></a>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6 mt-1 mt-sm-0">
+                                                            <a href="{{ path('Modifier-mot-de-passe', {'id': user.id}) }}"><button class="btn btn-orange w-100">Changer de mot de passe</button></a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-7 mt-3 m-md-0">
-                        <div class="card shadow py-2">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <h5 class="text-orange">Rapports à mon nom</h5>
-                                        <hr>
-                                    </div>
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table" id="data">
-                                                <thead>
-                                                <tr>
-                                                    <th>Rapport</th>
-                                                    <th>Dernière modification</th>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for reports in user.reports %}
-                                                <tr>
-                                                    <td><a href="{{ path('Détails-rapport', {'id': reports.id}) }}">{{ reports.nomRapport }}</a></td>
-                                                    <td>{{ reports.lastUpdate|date('d-m-Y h:i:s', "Indian/Reunion") }}</td>
-                                                    <td>
-                                                        <a href="{{ path('Modifier-rapport', {'id': reports.id}) }}"><button class="btn btn-orange">
-                                                                <i class="fa fa-edit"></i>
-                                                            </button></a>
-                                                    </td>
-                                                </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
+                                        <div class="col-12">
+                                            <hr class="hr-text text-xs" data-content="RAPPORTS A MON NOM">
+                                            <div class="table-responsive">
+                                                <table class="table" id="data">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Rapport</th>
+                                                        <th>Dernière modification</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for reports in user.reports %}
+                                                        <tr>
+                                                            <td><a href="{{ path('Détails-rapport', {'id': reports.id}) }}">{{ reports.nomRapport }}</a></td>
+                                                            <td>{{ reports.lastUpdate|date('d-m-Y h:i:s', "Indian/Reunion") }}</td>
+                                                            <td>
+                                                                <a href="{{ path('Modifier-rapport', {'id': reports.id}) }}"><button class="btn btn-orange">
+                                                                        <i class="fa fa-edit"></i>
+                                                                    </button></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 {% endblock %}
 {% block js %}
     <script>

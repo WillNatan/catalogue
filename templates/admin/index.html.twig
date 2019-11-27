@@ -61,7 +61,6 @@
                 <div class="row align-items-center">
                     <div class="col mr-2 text-center">
                         <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Dernier rapport</p></div>
-                        <hr>
                         <div class="h5 mb-0 font-weight-bold text-gray-800 d-flex justify-content-center align-items-center flex-column">
                             {% if lastReport %}
                                 <a class="text-xs" href="{{ path('Détails-rapport', {'id': lastReport.id}) }}">{{ lastReport.nomRapport }}</a>
@@ -129,15 +128,14 @@
                                     <tbody>
                                     {% for recetteReport in recette %}
                                         {% for prodReport in production %}
-
-                                            {% if recetteReport.Nom_Rapport == prodReport.Nom_Rapport %}
-                                                <tr>
-                                                    <td>{{ prodReport.Nom_Rapport }}</td>
-                                                    <td><a href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}">{{ recetteReport.VersionActuelle }}</a></td>
-                                                    <td><a href="{{ path('Détails-rapport', {'id': prodReport.id}) }}">{{ prodReport.VersionActuelle }}</a></td>
-                                                </tr>
+                                            {% if prodReport.Nom_Rapport == recetteReport.Nom_Rapport %}
+                                        <tr>
+                                            <td>{{ recetteReport.Nom_Rapport }}</td>
+                                            <td><a href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}">{{ recetteReport.VersionActuelle }}</a></td>
+                                            <td><a href="{{ path('Détails-rapport', {'id': prodReport.id}) }}">{{ prodReport.VersionActuelle }}</a></td>
+                                        </tr>
                                             {% endif %}
-                                        {% endfor %}
+                                            {% endfor %}
                                     {% endfor %}
 
                                     </tbody>
@@ -231,6 +229,7 @@
                 }]
             },
             options: {
+                responsive: true,
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -267,6 +266,7 @@
                 }]
             },
             options: {
+                responsive: true,
                 scales: {
                     yAxes: [{
                         ticks: {
