@@ -160,22 +160,22 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Form" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="Symfony2.SettingsForm" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\laragon\www\catalogue\public" />
-      <recent name="C:\laragon\www\catalogue\public\dashboard\js" />
-      <recent name="C:\laragon\www\catalogue\src\Form" />
-      <recent name="C:\laragon\www\catalogue\templates\admin" />
-      <recent name="C:\laragon\www\catalogue\public\dashboard\css\lang" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\laragon\www\catalogue\public\dashboard" />
       <recent name="C:\laragon\www\catalogue\public\dashboard\js" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\catalogue\src\Form" />
+      <recent name="C:\laragon\www\catalogue\public" />
+      <recent name="C:\laragon\www\catalogue\public\dashboard\js" />
+      <recent name="C:\laragon\www\catalogue\templates\admin" />
+      <recent name="C:\laragon\www\catalogue\public\dashboard\css\lang" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -230,7 +230,7 @@
       <workItem from="1574742089897" duration="2941000" />
       <workItem from="1574754643580" duration="7163000" />
       <workItem from="1574826756481" duration="12438000" />
-      <workItem from="1574841552525" duration="1255000" />
+      <workItem from="1574841552525" duration="5280000" />
     </task>
     <servers />
   </component>

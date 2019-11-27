@@ -11,6 +11,10 @@
                 {{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
                 {{ form_end(form) }}
                 {{ include('user/_delete_form.html.twig') }}
+                {% if app.request.get("_route") == 'passwordEdit' %}
+                    {% else %}
+                        <a href="{{ path('passwordEdit', {'id': user.id }) }}"><button type="button" class="btn btn-outline-secondary ml-1">Modifier le mot de passe</button></a>
+                {% endif %}
             </div>
             </div>
         </div>

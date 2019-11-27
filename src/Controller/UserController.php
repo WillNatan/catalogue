@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\adminEditType;
+use App\Form\adminPwEditType;
 use App\Form\adminUserType;
 use App\Form\UserEditType;
 use App\Form\UserType;
@@ -94,15 +95,32 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('Utilisateurs');
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/mot-de-passe", name="passwordEdit", methods={"GET","POST"})
+     */
+    public function passwordEdit(Request $request, User $user, UserPasswordEncoderInterface $encoder): Response
+    {
+        $form = $this->createForm(adminPwEditType::class, $user);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
             if($encoder->isPasswordValid($user,$form->get('oldPassword')->getData())){
                 $newencodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
                 $user->setPassword($newencodedPassword);
                 $this->getDoctrine()->getManager()->flush();
                 return $this->redirectToRoute('Utilisateurs');
             }
-
         }
-
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),

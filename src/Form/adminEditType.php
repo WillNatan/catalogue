@@ -27,28 +27,7 @@ class adminEditType extends AbstractType
                     'multiple'=>true
                 ]
             )
-            ->add('oldPassword', PasswordType::class, ['attr'=>['class'=>'form-control'],'label'=>'Ancien mot de passe','mapped'=>false])
-            ->add('plainPassword', RepeatedType::class,
-                [
-                    'type'=>PasswordType::class,
-                    'options'=>[
-
-                        'attr'=>
-                            [
-                                'class'=>'form-control'
-                            ]
-                    ],
-                    'first_options'=>
-                        [
-                            'label'=>'Mot de passe'
-                        ],
-                    'second_options'=>
-                        [
-                            'label'=>'Retaper mot de passe'
-                        ],
-                    'invalid_message' => 'Les mots de passe de correspondent pas'
-                ]
-            )
+            ->add('username', TextType::class, ['label'=>"Nom d'utilisateur",'attr'=>['class'=>'form-control']])
         ;
     }
 
