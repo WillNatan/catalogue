@@ -24,7 +24,7 @@ class FrontController extends AbstractController
      */
     public function index(ReportCatalogRepository $catalogRepository)
     {
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('Administration');
     }
 
 
