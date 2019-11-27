@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20191107094848 extends AbstractMigration
+final class Version20191127125040 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,7 @@ final class Version20191107094848 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE report_catalog ADD update_nb INT NOT NULL');
+        $this->addSql('ALTER TABLE user DROP plain_password');
     }
 
     public function down(Schema $schema) : void
@@ -30,6 +30,6 @@ final class Version20191107094848 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE report_catalog DROP update_nb');
+        $this->addSql('ALTER TABLE user ADD plain_password VARCHAR(255) NOT NULL COLLATE utf8mb4_unicode_ci');
     }
 }
