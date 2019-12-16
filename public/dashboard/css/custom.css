@@ -1,17 +1,18 @@
-
+input[type=text], input[type=password], textarea, input[type=email], select{
+    background: transparent!important;
+    border:none!important;
+    border-bottom:1px solid white!important;
+    color:white!important;
+}
 
 .sidebar .nav-item .collapse .collapse-inner .collapse-item, .sidebar .nav-item .collapsing .collapse-inner .collapse-item{
-    color: #3d3d3d;
+    color: #FFF;
     transition: .2s ease-in-out;
     border-radius: 0;
+    background-color: transparent;
 }
 .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{
-    background-color: white;
     color:black;
-}
-
-.sidebar{
-    background-color: #101032;
 }
 
 .box-login{
@@ -110,7 +111,8 @@ ul li{
 }
 
 div.collapse{
-    background: white;
+    background: transparent;
+    color:white;
 }
 
 .main-card{
@@ -125,7 +127,8 @@ footer{
 }
 
 #wrapper #content-wrapper{
-    background: white;
+    background: url('../img/login4.jpg') fixed;
+    color:white!important;
 }
 
 
@@ -136,18 +139,87 @@ footer{
 }
 
 .gradient-btn{
-    background: rgb(255,144,0);
-    background: linear-gradient(135deg, rgba(255,144,0,1) 30%, rgba(255,102,0,1) 58%);
+    background-image: linear-gradient(to right, #fc6076, #ff9a44, #ef9d43, #e75516);
+    box-shadow: 0 4px 15px 0 rgba(252, 104, 110, 0.75);
     color:white;
     padding:15px 25px;
     border-radius: 25px;
     border:none;
-    transition: background 1s;
+    transition: .2s ease-in-out;
+    background-size: 300% 100%;
 }
 
 .gradient-btn:hover{
-    background: rgb(255,144,0);
-    background: linear-gradient(135deg, rgba(255,144,0,1) 30%, rgba(255,102,0,1) 90%);
+    color:white;
+    background-position: 100% 0;
+}
+
+.gradient-btn-warning{
+    background-image: linear-gradient(to right, #ed6ea0, #ec8c69, #f7186a , #FBB03B);
+    box-shadow: 0 4px 15px 0 rgba(236, 116, 149, 0.75);
+    color:white;
+    padding:15px 25px;
+    border-radius: 25px;
+    border:none;
+    transition: .2s ease-in-out;
+    background-size: 300% 100%;
+}
+
+.gradient-btn-warning:hover{
+    color:white;
+    background-position: 100% 0;
+}
+
+.gradient-btn-primary{
+    background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
+    box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
+    color:white;
+    padding:15px 25px;
+    border-radius: 25px;
+    border:none;
+    transition: .2s ease-in-out;
+    background-size: 300% 100%;
+}
+
+.gradient-btn-danger{
+    background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  box-shadow: 0 5px 15px rgba(242, 97, 103, .4);
+    color:white;
+    padding:15px 25px;
+    border-radius: 25px;
+    border:none;
+    transition: .2s ease-in-out;
+    background-size: 300% 100%;
+}
+
+.gradient-btn-danger:hover{
+    color:white;
+    background-position: 100% 0;
+}
+
+.gradient-btn-secondary{
+    background-image: linear-gradient(to right, #29323c, #485563, #2b5876, #4e4376);
+    box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+    color:white;
+    padding:15px 25px;
+    border-radius: 25px;
+    border:none;
+    transition: .2s ease-in-out;
+    background-size: 300% 100%;
+}
+
+.gradient-btn-secondary:hover{
+    color:white;
+    background-position: 100% 0;
+}
+
+.bg-darker{
+    background-color: rgba(51, 51, 66, 0.8);
+    ;
+}
+
+.gradient-btn-primary:hover{
+    color:white;
+    background-position: 100% 0;
 }
 
 .blur-load{
@@ -316,10 +388,116 @@ footer{
      content: attr(data-content);
      position: relative;
      display: inline-block;
-     color: black;
+     color: white;
     padding-right: 1em;
      line-height: 1.5em;
- // this is really the only tricky part, you need to specify the background color of the container element...
- color: #818078;
-     background-color: #fcfcfa;
  }
+
+
+.sidebar{
+    background: rgb(0,1,47);
+    background: linear-gradient(0deg, rgba(0,1,47,1) 0%, rgba(149,45,253,1) 100%);
+}
+
+.db-box{
+    border-radius: .2rem;
+    padding: 0 .5rem;
+    -webkit-box-shadow: 0px 9px 13px -4px rgba(0,0,0,0.28);
+    -moz-box-shadow: 0px 9px 13px -4px rgba(0,0,0,0.28);
+    box-shadow: 0px 9px 13px -4px rgba(0,0,0,0.28);
+}
+
+.db-box-body{
+    flex: 1 1 auto;
+    padding: 1.25rem;
+
+}
+
+.db-box-body a{
+    color:white;
+    text-decoration: none;
+    transition: .2s ease-in-out;
+}
+
+.db-box-body a:hover{
+    color:lightgrey;
+}
+
+.gradient-1{
+    background: rgb(147,0,0);
+    background: linear-gradient(90deg, rgba(147,0,0,1) 0%, rgba(255,100,100,1) 100%);
+}
+
+.gradient-2{
+    background: rgb(0,0,93);
+    background: linear-gradient(90deg, rgba(0,0,93,1) 0%, rgba(0,137,194,1) 100%);
+}
+
+.gradient-3{
+    background: rgb(84,0,87);
+    background: linear-gradient(90deg, rgba(84,0,87,1) 0%, rgba(60,0,180,1) 100%);
+}
+
+.gradient-4{
+    background: rgb(83,46,3);
+    background: linear-gradient(90deg, rgba(83,46,3,1) 0%, rgba(255,137,0,1) 100%);
+}
+
+
+
+.container-fluid{
+    padding-left:3rem;
+    padding-right:3rem;
+}
+
+.db-box .fa-stack{
+    position: relative ;
+    transition: .2s ease-out;
+    bottom:0;
+}
+
+.db-box:hover .fa-stack{
+    bottom:30px;
+}
+
+
+div.dataTables_wrapper div.dataTables_filter input{
+    background: transparent;
+    color:white;
+    border:none;
+    border-bottom:1px white solid;
+}
+
+div.dataTables_wrapper div.dataTables_paginate ul.pagination li a{
+    color:white;
+    background:transparent;
+
+}
+
+div.dataTables_wrapper div.dataTables_length select{
+    color:white;
+    background: transparent;
+}
+
+div.dataTables_wrapper div.dataTables_length select option{
+    background: #3a3957;
+    color:white;
+}
+
+div.dataTables_wrapper div.dataTables_filter label{
+    color:white;
+}
+
+div.dataTables_wrapper div.dataTables_length label{
+    color:white;
+}
+
+div.dataTables_wrapper div.dataTables_info{
+    color:white;
+}
+
+.breadcrumb-box{
+    background: url('../img/login2.jpg');
+    background-size: cover;
+
+}

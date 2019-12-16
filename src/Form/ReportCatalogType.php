@@ -34,13 +34,13 @@ class ReportCatalogType extends AbstractType
         
             ->add('Nom_Rapport', TextType::class, ['required'=>false,'label'=>'Nom du rapport','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
             ->add('VersionActuelle', TextType::class, ['required'=>false, 'label'=>'Version actuelle','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
-            ->add('Commentaire', TextareaType::class, ['required'=>false,'label'=>'Commentaire','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
+            ->add('Commentaire', TextareaType::class, ['required'=>false,'label'=>'Commentaire','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
             ->add('Categorie', TextType::class, ['required'=>false,'label'=>'Catégorie','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
-            ->add('Objectifs', TextareaType::class, ['required'=>false,'label'=>'Objectifs','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
-            ->add('Details', TextareaType::class, ['required'=>false,'label'=>'Détails','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
-            ->add('Sources', TextareaType::class, ['required'=>false,'label'=>'Sources','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
-            ->add('Parametres', TextareaType::class, ['required'=>false,'label'=>'Paramètres','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
-            ->add('Historique_Versions', TextareaType::class, ['required'=>false,'label'=>'Historique des versions','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
+            ->add('Objectifs', TextareaType::class, ['required'=>false,'label'=>'Objectifs','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
+            ->add('Details', TextareaType::class, ['required'=>false,'label'=>'Détails','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
+            ->add('Sources', TextareaType::class, ['required'=>false,'label'=>'Sources','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
+            ->add('Parametres', TextareaType::class, ['required'=>false,'label'=>'Paramètres','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
+            ->add('Historique_Versions', TextareaType::class, ['required'=>false,'label'=>'Historique des versions','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
         ; 
 
         /*

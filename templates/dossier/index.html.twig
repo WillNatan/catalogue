@@ -4,11 +4,11 @@
 
 {% block body %}
     <h1>Liste des dossiers</h1>
-    <div class="card border-left-warning shadow h-100 py-2">
-        <div class="card-body">
+    <div class="db-box bg-darker h-100 py-2">
+        <div class="db-box-body">
 
     <div class="table-responsive">
-            <table class="table" id="dataTable">
+            <table class="table text-light" id="dataTable">
                     <thead>
                         <tr>
                             <th>Nom du dossier</th>
@@ -30,8 +30,8 @@
                                 {% endif %}
                         </td>
                             <td>
-                                <a href="{{ path('Détails-dossier', {'id': dossier.id}) }}" class="btn btn-outline-primary" ><i class="fas fa-eye" ></i></a>
-                                <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn btn-outline-warning" ><i class="fas fa-edit" ></i></a>
+                                <a href="{{ path('Détails-dossier', {'id': dossier.id}) }}" class="btn gradient-btn-primary" ><i class="fas fa-eye" ></i></a>
+                                <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn gradient-btn" ><i class="fas fa-edit" ></i></a>
                             </td>
                         </tr>
                     {% else %}
@@ -42,7 +42,7 @@
                     </tbody>
                 </table>
     </div>
-            <a href="{{ path('Nouveau-dossier') }}" class="btn btn-outline-success" ><i class="fas fa-plus" ></i></a>
+            <a href="{{ path('Nouveau-dossier') }}" class="btn gradient-btn-primary" ><i class="fas fa-plus" ></i></a>
     </div>
     </div>
 {% endblock %}

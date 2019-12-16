@@ -4,8 +4,8 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                            <div class="card shadow py-2">
-                                <div class="card-body">
+                            <div class="db-box bg-darker py-2">
+                                <div class="db-box-body">
                                     <div class="row">
                                         <div class="col-3">
                                             <div class="col-12 text-center">
@@ -27,10 +27,10 @@
                                                 <div class="col-12">
                                                     <div class="row">
                                                         <div class="col-12 col-sm-6">
-                                                            <a href="{{ path('Modifier-Profil', {'id': user.id}) }}"><button class="btn btn-orange w-100">Modifier profil</button></a>
+                                                            <a href="{{ path('Modifier-Profil', {'id': user.id}) }}"><button class="btn gradient-btn w-100">Modifier profil</button></a>
                                                         </div>
                                                         <div class="col-12 col-sm-6 mt-1 mt-sm-0">
-                                                            <a href="{{ path('Modifier-mot-de-passe', {'id': user.id}) }}"><button class="btn btn-orange w-100">Changer de mot de passe</button></a>
+                                                            <a href="{{ path('Modifier-mot-de-passe', {'id': user.id}) }}"><button class="btn gradient-btn w-100">Changer de mot de passe</button></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -39,7 +39,7 @@
                                         <div class="col-12">
                                             <hr class="hr-text text-xs" data-content="RAPPORTS A MON NOM">
                                             <div class="table-responsive">
-                                                <table class="table" id="data">
+                                                <table class="table text-light" id="datat">
                                                     <thead>
                                                     <tr>
                                                         <th>Rapport</th>
@@ -48,12 +48,12 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {% for reports in user.reports %}
+                                                    {% for reports in user.createdBy %}
                                                         <tr>
                                                             <td><a href="{{ path('Détails-rapport', {'id': reports.id}) }}">{{ reports.nomRapport }}</a></td>
                                                             <td>{{ reports.lastUpdate|date('d-m-Y h:i:s', "Indian/Reunion") }}</td>
                                                             <td>
-                                                                <a href="{{ path('Modifier-rapport', {'id': reports.id}) }}"><button class="btn btn-orange">
+                                                                <a href="{{ path('Modifier-rapport', {'id': reports.id}) }}"><button class="btn gradient-btn">
                                                                         <i class="fa fa-edit"></i>
                                                                     </button></a>
                                                             </td>
@@ -71,7 +71,7 @@
 {% endblock %}
 {% block js %}
     <script>
-        $('#data').dataTable({
+        $('#datat').dataTable({
             iDisplayLength:5,
             "language":{
                 "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"

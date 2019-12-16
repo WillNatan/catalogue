@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,6 +10,7 @@ use Doctrine\ORM\PersistentCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
@@ -41,10 +43,15 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="createdBy")
      */
-    private $reports;
+    private $createdBy;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="updatedBy")
+     */
+    private $updatedBy;
+    
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
@@ -52,7 +59,8 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->reports = new ArrayCollection();
+        $this->createdBy = new ArrayCollection();
+        $this->updatedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,29 +159,64 @@ class User implements UserInterface
 
         return $this;
     }
+    
 
-    public function getReports(): Collection
+    /**
+     * @return Collection|ReportCatalog[]
+     */
+    public function getCreatedBy(): Collection
     {
-        return $this->reports;
+        return $this->createdBy;
     }
 
-    public function addReport(ReportCatalog $report): self
+    public function addCreatedBy(ReportCatalog $createdBy): self
     {
-        if (!$this->reports->contains($report)) {
-            $this->reports[] = $report;
-            $report->setUser($this);
+        if (!$this->createdBy->contains($createdBy)) {
+            $this->createdBy[] = $createdBy;
+            $createdBy->setCreatedBy($this);
         }
 
         return $this;
     }
 
-    public function removeReport(ReportCatalog $report): self
+    public function removeCreatedBy(ReportCatalog $createdBy): self
     {
-        if ($this->reports->contains($report)) {
-            $this->reports->removeElement($report);
+        if ($this->createdBy->contains($createdBy)) {
+            $this->createdBy->removeElement($createdBy);
             // set the owning side to null (unless already changed)
-            if ($report->getUser() === $this) {
-                $report->setUser(null);
+            if ($createdBy->getCreatedBy() === $this) {
+                $createdBy->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ReportCatalog[]
+     */
+    public function getUpdatedBy(): Collection
+    {
+        return $this->updatedBy;
+    }
+
+    public function addUpdatedBy(ReportCatalog $updatedBy): self
+    {
+        if (!$this->updatedBy->contains($updatedBy)) {
+            $this->updatedBy[] = $updatedBy;
+            $updatedBy->setUpdatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUpdatedBy(ReportCatalog $updatedBy): self
+    {
+        if ($this->updatedBy->contains($updatedBy)) {
+            $this->updatedBy->removeElement($updatedBy);
+            // set the owning side to null (unless already changed)
+            if ($updatedBy->getUpdatedBy() === $this) {
+                $updatedBy->setUpdatedBy(null);
             }
         }
 

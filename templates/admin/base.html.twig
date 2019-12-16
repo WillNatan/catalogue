@@ -46,10 +46,8 @@
 </div>
   <!-- Page Wrapper -->
   <div id="wrapper">
-
     <!-- Sidebar -->
-    <ul class="navbar-nav  sidebar sidebar-dark accordion toggled" id="accordionSidebar">
-
+    <ul class="navbar-nav  sidebar sidebar-dark accordion fixed" id="accordionSidebar">
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ path('Administration') }}">
         <div class="sidebar-brand-icon rotate-n-15">
@@ -116,18 +114,31 @@
       </li>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#parameters" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-wave-square"></i>
           <span>Paramètres</span>
         </a>
         <div id="parameters" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class=" py-2 collapse-inner rounded">
             <h6 class="collapse-header">Exportation</h6>
-            <a class="collapse-item" href=" {{ path('Dossiers') }} ">Exportation des données</a>
           </div>
         </div>
       </li>
-      <!-- Divider -->
       <hr class="sidebar-divider">
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#data" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-database"></i>
+          <span>Données</span>
+        </a>
+        <div id="data" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class=" py-2 collapse-inner rounded">
+            <a class="collapse-item" href=" {{ path('Utilisateurs') }} ">Indicateurs</a>
+            <a class="collapse-item" href=" {{ path('Utilisateurs') }} ">Créer une matrice</a>
+            <a class="collapse-item" href=" {{ path('Utilisateurs') }} ">Dictionnaire de données</a>
+          </div>
+        </div>
+      </li>
+
+
 
       <!--
       <!- - Heading - ->
@@ -172,6 +183,7 @@
       <!- - Divider - ->
       <hr class="sidebar-divider d-none d-md-block">
 -->
+
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -362,8 +374,8 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-12 mb-3">
-              <div class="card border-left-orange shadow h-100">
-                <div class="card-body">
+              <div class="db-box breadcrumb-box">
+                <div class="db-box-body">
                   <p class="text-gray-500 m-0">Dashboard > {{ app.request.get('_route')|replace({'-':' '}) }}</p>
                 </div>
               </div>
@@ -439,27 +451,30 @@
     });
 
 
-  function returnConfirm() {
-    swal.fire({
-      title: 'Attention !',
-      text: 'Voulez-vous vraiment effecturer cette action ?',
-      icon: 'error',
-      confirmButtonColor: '#ff6600',
-      cancelButtonColor: '#f0f0f0',
-      confirmButtonText: 'Oui, supprimer',
-      showCancelButton: true,
-      cancelButtonText: "Non"
-    }).then(
-            function () { $(this).submit()
-            },
-            function () {
-              return false;
-            })
-  }
-
-    $('#deleteItem').submit(function (e) {
+    $('#deleteItem').click(function (e) {
       e.preventDefault();
-      returnConfirm();
+      swal.fire({
+        title: 'Attention !',
+        text: 'Voulez-vous vraiment effectuer cette action ?',
+        icon: 'error',
+        confirmButtonColor: '#f0f0f0',
+        cancelButtonColor: '#ff6600',
+        confirmButtonText: 'Oui, supprimer',
+        showCancelButton: true,
+        cancelButtonText: "Non"
+      }).then(
+              result =>{
+                if(result.value){
+                  swal.fire({
+                    type: 'Success',
+                    html: 'Vous avez supprimé la ligne.'
+                  });
+                  $('#deleteItem').submit();
+                }else{
+                  return false;
+                }
+              }
+              )
     })
 </script>
   {% block js %}

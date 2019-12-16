@@ -5,9 +5,9 @@
 {% block body %}
 
     <div class="row">
-        <div class="col-lg-8 offset-lg-2">
-            <div class="card border-left-orange shadow h-100 p-3">
-                <h1 class="text-gray-600">Modifier les informations du rapport</h1>
+        <div class="col-12">
+            <div class="db-box bg-darker h-100 p-3">
+                <h1 class="text-light">Modifier les informations du rapport</h1>
                 {{ include('report_catalog/_delete_form.html.twig') }}
                 {{ include('report_catalog/_form.html.twig', {'button_label': 'Modifier'}) }}
             </div>

@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ReportCatalogRepository")
  */
 class ReportCatalog
@@ -79,9 +81,11 @@ class ReportCatalog
     private $mainFolder = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="reports")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="createdBy")
      */
-    private $user = null;
+    private  $createdBy= null;
+
+
 
     /**
      * @ORM\Column(type="datetime")
@@ -93,10 +97,22 @@ class ReportCatalog
      */
     private $update_nb = null;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="updatedBy")
+     */
+    private $updatedBy;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $CreationDate;
+
     public function __construct()
     {
-        $this->user = new ArrayCollection();
+        $this->axeAnalyse = new ArrayCollection();
     }
+
+    
 
     public function getId(): ?int
     {
@@ -247,18 +263,6 @@ class ReportCatalog
         return $this;
     }
 
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    public function setUser($user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
     public function getLastUpdate(): ?\DateTimeInterface
     {
         return $this->last_update;
@@ -279,6 +283,42 @@ class ReportCatalog
     public function setUpdateNb(int $update_nb): self
     {
         $this->update_nb = $update_nb;
+
+        return $this;
+    }
+
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    public function setUpdatedBy($updatedBy): self
+    {
+        $this->updatedBy = $updatedBy;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->CreationDate;
+    }
+
+    public function setCreationDate(\DateTimeInterface $CreationDate): self
+    {
+        $this->CreationDate = $CreationDate;
+
+        return $this;
+    }
+
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy($createdBy): self
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }

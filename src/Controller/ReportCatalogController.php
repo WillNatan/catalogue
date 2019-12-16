@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Logs;
 use App\Entity\ReportCatalog;
+use App\Entity\ReportLogs;
 use App\Form\ReportCatalogType;
 use App\Repository\DossierRepository;
 use App\Repository\ReportCatalogRepository;
@@ -34,7 +36,7 @@ class ReportCatalogController extends AbstractController
     {
 
         $reportCatalog = new ReportCatalog();
-
+        $log = new ReportLogs();
         $form = $this->createForm(ReportCatalogType::class, $reportCatalog);
         $form->handleRequest($request);
         
@@ -46,14 +48,17 @@ class ReportCatalogController extends AbstractController
             }else{
                 $reportCatalog->setN(count($reportCatalogRepository->findAll())+1);
             }
-            $reportCatalog->setUser($this->getUser());
+            $reportCatalog->setCreatedBy($this->getUser());
+            $reportCatalog->setUpdatedBy($this->getUser());
+            $reportCatalog->setLastUpdate(new \DateTime('now'));
             $reportCatalog->setLastUpdate(new \DateTime('now'));
             $reportCatalog->setUpdateNb(0);
             $reportCatalog->setMainFolder($form->getData()->getMainFolder());
+
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($reportCatalog);
             $entityManager->flush();
-
             return $this->redirectToRoute('Catalogue-des-rapports');
         }
 
@@ -62,6 +67,8 @@ class ReportCatalogController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
 
     /**
      * @Route("/{id}", name="Détails-rapport", methods={"GET"})
@@ -84,6 +91,7 @@ class ReportCatalogController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $reportCatalog->setLastUpdate(new \DateTime('now'));
             $reportCatalog->setUpdateNb($nbUpdate+1);
+            $reportCatalog->setUpdatedBy($this->getUser());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('Catalogue-des-rapports');
@@ -107,5 +115,23 @@ class ReportCatalogController extends AbstractController
         }
 
         return $this->redirectToRoute('Catalogue-des-rapports');
+    }
+
+
+    public function addLogs(ReportCatalog $catalog, $action){
+        $logLine = new ReportLogs();
+        $logLine->setNumero($catalog->getN());
+        $logLine->setNomRapport($catalog->getNomRapport());
+        $logLine->setVer($catalog->getVersionActuelle());
+        $logLine->setCategory($catalog->getCategorie());
+        $logLine->setCom($catalog->getCommentaire());
+        $logLine->setDetails($catalog->getDetails());
+        $logLine->setParametres($catalog->getParametres());
+        $logLine->setSources($catalog->getSources());
+        $logLine->setObj($catalog->getObjectifs());
+        $logLine->setHistVer($catalog->getHistoriqueVersions());
+        $logLine->setMfolder($catalog->getMainFolder()->getNomDossier());
+        $logLine->setSubfolder($catalog->getSubFolder()->getNomDossier());
+        $logLine->setUpdatedBy($catalog->getUpdatedBy()->getUsername());
     }
 }

@@ -1,5 +1,5 @@
 <form method="post" action="{{ path('Suppression-rapport', {'id': report_catalog.id}) }}" id="deleteItem">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ report_catalog.id) }}">
-    <button class="btn btn-danger no-border-radius"><i class="fa fa-times"></i></button>
+    <button class="btn gradient-btn-danger no-border-radius"><i class="fa fa-times"></i></button>
 </form>

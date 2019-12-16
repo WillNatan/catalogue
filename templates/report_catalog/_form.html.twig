@@ -2,7 +2,7 @@
 {{ form_start(form) }}
 
 
-                    <div class="card-body">
+                    <div class="db-box-body">
                         <nav class="nav nav-tabs flex-column flex-sm-row" id="nav-tab" role="tablist">
                                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-mainInfo" role="tab" aria-controls="nav-home" aria-selected="true">Informations générales</a>
                                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-commentaire" role="tab" aria-controls="nav-profile" aria-selected="false">Commentaires</a>
@@ -100,7 +100,7 @@
                         </div>
                     </div>
     <div class="d-flex p-3">
-                <button class="btn btn-orange">{{ button_label|default('Enregister') }}</button>
-                <a href="{{ path('Catalogue-des-rapports') }}" class="btn btn-primary ml-1"><i class="fas fa-arrow-left"></i></a>
+                <button class="btn gradient-btn">{{ button_label|default('Enregister') }}</button>
+                <a href="{{ path('Catalogue-des-rapports') }}" class="btn gradient-btn-primary ml-1"><i class="fas fa-arrow-left"></i></a>
     </div>
 {{ form_end(form) }}

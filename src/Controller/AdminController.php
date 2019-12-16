@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Dossier;
+use App\Entity\Logs;
 use App\Entity\ReportCatalog;
 use App\Entity\SousDossier;
 use App\Entity\User;
@@ -10,6 +11,7 @@ use App\Form\adminEditType;
 use App\Form\EditPasswordType;
 use App\Form\UserEditType;
 use App\Repository\DossierRepository;
+use App\Repository\LogsRepository;
 use App\Repository\ReportCatalogRepository;
 use App\Repository\SousDossierRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -51,7 +53,7 @@ class AdminController extends AbstractController
             ->getArrayResult();
 
         $qbReportsByUser = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
-            ->leftJoin('r.user', 'p')
+            ->leftJoin('r.createdBy', 'p')
             ->addSelect('p')
             ->select('COUNT(r) AS nombreRapport','p.username')
             ->groupBy('p.username')
@@ -75,6 +77,7 @@ class AdminController extends AbstractController
             ->setParameter('folder','RECETTE')
             ->groupBy('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle');
         $prod = $qbProd->getQuery()->getArrayResult();
+
 
         foreach($allReports as $report){
             $nbUpdate = $nbUpdate + $report->getUpdateNb();
@@ -209,5 +212,4 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
     }
-
 }

@@ -7,14 +7,15 @@
     <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesResponsive.css') }}">
 {% endblock %}
 {% block body %}
-    <h1>Utilisateurs</h1>
+
 
     <div class="row">
         <div class="col-12">
-            <div class="card border-top-primary shadow h-100 py-2">
-                <div class="card-body">
+            <div class="db-box bg-darker h-100 py-2">
+                <div class="db-box-body">
+                    <h1>Utilisateurs</h1>
                     <div class="table-responsive">
-                        <table class="table" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table text-light" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Email</th>
@@ -35,10 +36,10 @@
                                     <td>
                                         <div class="d-flex">
                                             {% if user.id == app.user.id %}
-                                                <a href="{{ path('Profil', {'id': app.user.id}) }}" class="btn btn-outline-primary mr-1">Voir profil</a>
+                                                <a href="{{ path('Profil', {'id': app.user.id}) }}" class="btn gradient-btn-primary mr-1">Voir profil</a>
                                                 {% else %}
-                                                    <a href="{{ path('Détails-utilisateur', {'id': user.id}) }}" class="btn btn-outline-primary mr-1"><i class="fas fa-eye"></i></a>
-                                                    <a href="{{ path('Modifier-utilisateur', {'id': user.id}) }}" class="btn btn-orange"><i class="fas fa-edit"></i></a>
+                                                    <a href="{{ path('Détails-utilisateur', {'id': user.id}) }}" class="btn gradient-btn-primary mr-1"><i class="fas fa-eye"></i></a>
+                                                    <a href="{{ path('Modifier-utilisateur', {'id': user.id}) }}" class="btn gradient-btn"><i class="fas fa-edit"></i></a>
                                             {% endif %}
                                         </div>
                                     </td>
@@ -51,7 +52,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <a href="{{ path('Nouvel-utilisateur') }}" class="btn btn-primary"><i class=" fas fa-plus"></i></a>
+                    <a href="{{ path('Nouvel-utilisateur') }}" class="btn gradient-btn-primary"><i class=" fas fa-plus"></i></a>
                 </div>
             </div>
         </div>
