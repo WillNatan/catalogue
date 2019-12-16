@@ -1,5 +1,8 @@
 {% extends 'admin/base.html.twig' %}
 
+{% block css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+{% endblock %}
 {% block body %}
                 <div class="container">
                     <div class="row">
@@ -7,7 +10,8 @@
                             <div class="db-box bg-darker py-2">
                                 <div class="db-box-body">
                                     <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-12">
+                                            <div class="row">
                                             <div class="col-12 text-center">
                                                 <i class="fa fa-user fa-10x"></i>
                                             </div>
@@ -16,12 +20,12 @@
                                                 <h1 class="text-normal text-orange">Email</h1>
                                                 <p class="text-xs">{{ app.user.email }}</p>
                                             </div>
+                                            </div>
                                         </div>
-                                        <div class="offset-1 col-7">
+                                        <div class="col-12">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <h1>{{ app.user.username }}</h1>
-                                                    <p class="text-xs text-orange">SuperAdmin</p>
+                                                    <h1 class="text-center">{{ app.user.username }}</h1>
                                                     <hr class="hr-text text-xs" data-content="PROFIL">
                                                 </div>
                                                 <div class="col-12">
@@ -39,17 +43,20 @@
                                         <div class="col-12">
                                             <hr class="hr-text text-xs" data-content="RAPPORTS A MON NOM">
                                             <div class="table-responsive">
-                                                <table class="table text-light" id="datat">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Rapport</th>
-                                                        <th>Dernière modification</th>
-                                                        <th></th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for reports in user.createdBy %}
+                                            <table class="table responsive text-light" id="dataTable">
+                                             <thead>
+                                                 <tr>
+                                                    <th>N°</th>
+                                                    <th>Rapport</th>
+                                                    <th>Dernière modification</th>
+                                                    <th></th>
+                                                 </tr>
+                                            </thead>
+                                            <tbody>
+
+                                {% for reports in user.createdBy %}
                                                         <tr>
+                                                            <td>{{ reports.N }}</td>
                                                             <td><a href="{{ path('Détails-rapport', {'id': reports.id}) }}">{{ reports.nomRapport }}</a></td>
                                                             <td>{{ reports.lastUpdate|date('d-m-Y h:i:s', "Indian/Reunion") }}</td>
                                                             <td>
@@ -59,23 +66,32 @@
                                                             </td>
                                                         </tr>
                                                     {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+
+                            </tbody>
+                        </table>
+</div>
                                         </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
 {% endblock %}
 {% block js %}
+<script src="{{ asset('dashboard/js/datatablesResponsive.js') }}"></script>
+    <script src="{{ asset('dashboard/js/datatalesRowOrder.js') }}"></script>
     <script>
-        $('#datat').dataTable({
-            iDisplayLength:5,
-            "language":{
-                "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
-            }
+        $('#dataTable').dataTable({
+        rowReorder: {
+            selector: 'td:nth-child(2)'
+        },
+        iDisplayLength:5,
+         "language":
+         {
+             "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+         },
+         responsive: true,
+            dom: 'Bfrtip',
         });
     </script>
 {% endblock %}
