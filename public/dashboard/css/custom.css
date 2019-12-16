@@ -445,9 +445,11 @@ footer{
 
 
 
-.container-fluid{
-    padding-left:3rem;
-    padding-right:3rem;
+@media screen and (min-width: 768px){
+    .container-fluid{
+        padding-left:3rem;
+        padding-right:3rem;
+    }
 }
 
 .db-box .fa-stack{
