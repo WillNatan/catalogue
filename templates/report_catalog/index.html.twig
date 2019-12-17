@@ -13,8 +13,8 @@
                 <h1 class="mt-5">Catalogue des rapports BO</h1>
                 <div class="db-box-body">
                     <a href="{{ path('spreadsheet') }}"><button class="gradient-btn"><i class="fa fa-file-excel"></i> Excel</button></a>
-                    <div class="table-responsive">
-                        <table class="table text-light" id="dataTable">
+                    <a href="{{ path('Nouveau-rapport') }}" class="btn gradient-btn-primary"><i class=" fas fa-plus"></i></a>
+                        <table class="mdl-data-table" style="width:100%" id="dataTable">
                             <thead>
                             <tr>
                                 <th>N°</th>
@@ -53,8 +53,7 @@
                             {% endfor %}
                             </tbody>
                         </table>
-                    </div>
-                    <a href="{{ path('Nouveau-rapport') }}" class="btn gradient-btn-primary"><i class=" fas fa-plus"></i></a>
+
                 </div>
             </div>
         </div>
@@ -69,9 +68,6 @@
 $(document).ready(function() {
     $('#dataTable').DataTable({
         dom: 'Bfrtip',
-        rowReorder: {
-            selector: 'td:nth-child(2)'
-        },
         "language":{
             "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
         },

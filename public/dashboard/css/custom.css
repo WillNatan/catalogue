@@ -15,6 +15,12 @@ input[type=text], input[type=password], textarea, input[type=email], select{
     color:black;
 }
 
+.sidebar.toggled .nav-item .collapse .collapse-inner{
+    background: rgb(0,1,47);
+    background: linear-gradient(0deg, rgba(0,1,47,1) 0%, rgba(149,45,253,1) 100%);
+    color:white;
+}
+
 .box-login{
     padding:80px 20px;
     background-color: rgba(41, 41, 41, 0.5);
@@ -95,7 +101,7 @@ input[type=text], input[type=password], textarea, input[type=email], select{
 }
 
 .collapse-header{
-    color: #202020!important;
+    color: #ffffff !important;
 }
 
 table td{
@@ -462,48 +468,65 @@ footer{
     bottom:30px;
 }
 
-
-div.dataTables_wrapper div.dataTables_filter input{
-    background: transparent;
-    color:white;
-    border:none;
-    border-bottom:1px white solid;
-}
-
-div.dataTables_wrapper div.dataTables_paginate ul.pagination li a{
-    color:white;
-    background:transparent;
-
-}
-
-div.dataTables_wrapper div.dataTables_length select{
-    color:white;
-    background: transparent;
-}
-
-div.dataTables_wrapper div.dataTables_length select option{
-    background: #3a3957;
-    color:white;
-}
-
-div.dataTables_wrapper div.dataTables_filter label{
-    color:white;
-}
-
-div.dataTables_wrapper div.dataTables_length label{
-    color:white;
-}
-
-div.dataTables_wrapper div.dataTables_info{
-    color:white;
-}
-
 .breadcrumb-box{
     background: url('../img/login2.jpg');
     background-size: cover;
 
 }
 
-div.dataTables_wrapper div.dataTables_paginate ul.pagination li:not(:first-child):not(:last-child){
+
+
+.pagination{
+    display: block;
+}
+
+div.dataTables_wrapper div.dataTables_paginate{
+    align-self: flex-end;
+    position: relative;
+}
+
+div.dataTables_wrapper div.dataTables_info{
+    white-space: unset;
+}
+
+div.dataTables_wrapper div.dataTables_filter input{
+    background: transparent;
+    border:none;
+    border-bottom:1px white solid;
+}
+
+.mdl-data-table{
+
+    background-color: transparent;
+}
+
+.mdl-data-table th{
+    color:white;
+}
+
+div.dataTables_wrapper div.dataTables_paginate .pagination button:not(:first-child):not(:last-child){
     display: none;
+}
+
+div.dataTables_wrapper div.dataTables_filter{
+    text-align: center;
+}
+
+@media (min-width: 576px) {
+    .form-inline label {
+        display: inline;
+    }
+}
+
+div.dataTables_wrapper div.mdl-grid.dt-table{
+    width:100%;
+}
+
+.form-inline select.form-control {
+    background-color: rgba(51, 51, 66, 0.8)!important;
+    color:white!important;
+}
+
+h1{
+    font-size: 3rem;
 }

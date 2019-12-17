@@ -4,6 +4,8 @@
 
 {% block css %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesRowOrder.css') }}">
+    <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesResponsive.css') }}">
 {% endblock %}
 {% block body %}
     <h1 class="h1">Dashboard <span class="text-xs">Vue d'ensemble</span></h1>
@@ -143,11 +145,11 @@
                                     <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Rapports en
                                             RECETTE/PRODUCTION</p></div>
                                     <hr>
-                                    <div class="mb-0 text-gray-800">
-                                        <div class="table-responsive">
-                                            <table class="table text-light" id="table-recette-production">
+                                    <div class="mb-0">
+                                            <table class="mdl-data-table" style="width:100%" id="table-recette-production">
                                                 <thead>
                                                 <tr>
+                                                    <th>Numéro de rapport</th>
                                                     <th>Nom du rapport</th>
                                                     <th>Version en RECETTE</th>
                                                     <th>Version en PRODUCTION</th>
@@ -158,6 +160,7 @@
                                                     {% for prodReport in production %}
                                                         {% if prodReport.Nom_Rapport == recetteReport.Nom_Rapport %}
                                                             <tr>
+                                                                <td>{{ recetteReport.n }}</td>
                                                                 <td>{{ recetteReport.Nom_Rapport }}</td>
                                                                 <td>
                                                                     <a href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}">{{ recetteReport.VersionActuelle }}</a>
@@ -172,7 +175,6 @@
 
                                                 </tbody>
                                             </table>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -187,19 +189,22 @@
                                     <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Rapports en
                                             RECETTE</p></div>
                                     <hr>
-                                    <div class="mb-0 text-gray-800">
-                                        <div class="table-responsive">
-                                            <table class="table text-light" id="table-recette">
+                                    <div class="mb-0">
+                                            <table class="mdl-data-table" style="width:100%" id="table-recette">
                                                 <thead>
                                                 <tr>
+                                                    <th>Numéro de rapport</th>
                                                     <th>Nom du rapport</th>
+                                                    <th>Date de création</th>
                                                     <th>Version</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 {% for recetteReport in recette %}
                                                     <tr>
+                                                        <td>{{ recetteReport.n }}</td>
                                                         <td>{{ recetteReport.Nom_Rapport }}</td>
+                                                        <td>{{ recetteReport.CreationDate|date('d-m-y') }}</td>
                                                         <td>
                                                             <a href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}">{{ recetteReport.VersionActuelle }}</a>
                                                         </td>
@@ -208,7 +213,6 @@
 
                                                 </tbody>
                                             </table>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -223,18 +227,22 @@
 {% block js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script src="{{ asset('dashboard/js/datatablesResponsive.js') }}"></script>
+    <script src="{{ asset('dashboard/js/datatalesRowOrder.js') }}"></script>
     <script>
         $('#table-recette-production').dataTable({
             iDisplayLength: 5,
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
-            }
+            },
+            responsive:true,
         });
         $('#table-recette').dataTable({
             iDisplayLength: 5,
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
-            }
+            },
+            responsive:true,
         });
     </script>
     <script>

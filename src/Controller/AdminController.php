@@ -63,19 +63,19 @@ class AdminController extends AbstractController
         $qbRecette = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
             ->leftJoin('r.mainFolder','p')
             ->addSelect('p')
-            ->select('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle')
+            ->select('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n')
             ->where('p.nomDossier = :folder')
             ->setParameter('folder','RECETTE')
-            ->groupBy('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle');
+            ->groupBy('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n');
         $recette = $qbRecette->getQuery()->getArrayResult();
 
         $qbProd = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
             ->leftJoin('r.mainFolder','p')
             ->addSelect('p')
-            ->select('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle')
+            ->select('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n')
             ->where('p.nomDossier != :folder')
             ->setParameter('folder','RECETTE')
-            ->groupBy('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle');
+            ->groupBy('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n');
         $prod = $qbProd->getQuery()->getArrayResult();
 
 
