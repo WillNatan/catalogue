@@ -9,10 +9,13 @@ input[type=text], input[type=password], textarea, input[type=email], select{
     color: #FFF;
     transition: .2s ease-in-out;
     border-radius: 0;
-    background: linear-gradient(0deg, rgba(0,1,47,1) 0%, rgba(149,45,253,1) 100%);
 }
 .sidebar .nav-item .collapse .collapse-inner .collapse-item:hover, .sidebar .nav-item .collapsing .collapse-inner .collapse-item:hover{
     color:black;
+}
+
+.sidebar .nav-item .collapse{
+    background: linear-gradient(0deg, rgba(0,1,47,1) 0%, rgba(149,45,253,1) 100%);
 }
 
 .sidebar.toggled .nav-item .collapse .collapse-inner{
