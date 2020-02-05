@@ -1,106 +1,94 @@
 
 {{ form_start(form) }}
 
-
-                    <div class="db-box-body">
-                        <nav class="nav nav-tabs flex-column flex-sm-row" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-mainInfo" role="tab" aria-controls="nav-home" aria-selected="true">Informations générales</a>
-                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-commentaire" role="tab" aria-controls="nav-profile" aria-selected="false">Commentaires</a>
-                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-objectifs" role="tab" aria-controls="nav-contact" aria-selected="false">Ojectifs</a>
-                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-details" role="tab" aria-controls="nav-contact" aria-selected="false">Détails</a>
-                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-sources" role="tab" aria-controls="nav-contact" aria-selected="false">Sources</a>
-                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-param" role="tab" aria-controls="nav-contact" aria-selected="false">Paramètres</a>
-                                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-ver" role="tab" aria-controls="nav-contact" aria-selected="false">Historique des versions</a>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-mainInfo" role="tabpanel" aria-labelledby="nav-home-tab">
-                                <div class="row">
-                                    <div class="form-group col-12 col-sm-4">
-                                        {{ form_label(form.mainFolder) }}
-                                        {{ form_widget(form.mainFolder) }}
-                                    </div>
-                                    <div class="form-group col-12 col-sm-4">
-                                        {{ form_label(form.subFolder) }}
-                                        {{ form_widget(form.subFolder) }}
-                                    </div>
-                                    <div class="form-group col-12 col-sm-4">
-                                        {{ form_label(form.VersionActuelle) }}
-                                        {{ form_widget(form.VersionActuelle) }}
-                                    </div>
-                                    <div class="form-group col-12 col-sm-8">
-                                        {{ form_label(form.Nom_Rapport) }}
-                                        {{ form_widget(form.Nom_Rapport) }}
-                                    </div>
-                                    <div class="form-group col-12 col-sm-4">
-                                        {{ form_label(form.Categorie) }}
-                                        {{ form_widget(form.Categorie) }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-commentaire" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            {{ form_label(form.Commentaire) }}
-                                            {{ form_widget(form.Commentaire) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-objectifs" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            {{ form_label(form.Objectifs) }}
-                                            {{ form_widget(form.Objectifs) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-details" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            {{ form_label(form.Details) }}
-                                            {{ form_widget(form.Details) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-sources" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            {{ form_label(form.Sources) }}
-                                            {{ form_widget(form.Sources) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-param" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            {{ form_label(form.Parametres) }}
-                                            {{ form_widget(form.Parametres) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="nav-ver" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-12">
-                                            {{ form_label(form.Historique_Versions) }}
-                                            {{ form_widget(form.Historique_Versions) }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+<div class="card card-nav-tabs card-plain">
+    <div class="card-header card-header-info">
+        <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+                <ul class="nav nav-tabs" data-tabs="tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active " href="#informations-générales" data-toggle="tab">Informations générales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contenu" data-toggle="tab">Contenu</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-body ">
+        <div class="tab-content text-center">
+            <div class="tab-pane active" id="informations-générales">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            {{ form_widget(form.mainFolder) }}
                         </div>
                     </div>
-    <div class="d-flex p-3">
-                <button class="btn gradient-btn">{{ button_label|default('Enregister') }}</button>
-                <a href="{{ path('Catalogue-des-rapports') }}" class="btn gradient-btn-primary ml-1"><i class="fas fa-arrow-left"></i></a>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            {{ form_widget(form.subFolder) }}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            {{ form_label(form.VersionActuelle) }}
+                            {{ form_widget(form.VersionActuelle) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form_label(form.Nom_Rapport) }}
+                            {{ form_widget(form.Nom_Rapport) }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form_label(form.Categorie) }}
+                            {{ form_widget(form.Categorie) }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane" id="contenu">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.Commentaire) }}
+                            {{ form_widget(form.Commentaire) }}
+                        </div>
+                        <div class="form-group col-12">
+                            {{ form_label(form.Objectifs) }}
+                            {{ form_widget(form.Objectifs) }}
+                        </div>
+                        <div class="form-group col-12">
+                            {{ form_label(form.Details) }}
+                            {{ form_widget(form.Details) }}
+                        </div>
+                        <div class="form-group col-12">
+                            {{ form_label(form.Sources) }}
+                            {{ form_widget(form.Sources) }}
+                        </div>
+                        <div class="form-group col-12">
+                            {{ form_label(form.Parametres) }}
+                            {{ form_widget(form.Parametres) }}
+                        </div>
+                        <div class="form-group col-12">
+                            {{ form_label(form.Historique_Versions) }}
+                            {{ form_widget(form.Historique_Versions) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="history">
+                <p> I think that&#x2019;s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at. I will be the leader of a company that ends up being worth billions of dollars, because I got the answers. I understand culture. I am the nucleus. I think that&#x2019;s a responsibility that I have, to push possibilities, to show people, this is the level that things could be at.</p>
+            </div>
+        </div>
     </div>
+    <div class="card-footer justify-content-start flex-wrap">
+        <button class="btn btn-success">{{ button_label|default('Enregister') }}</button>
+        <a href="{{ path('Catalogue-des-rapports') }}" class="btn btn-primary ml-1">Retour</a>
+    </div>
+</div>
 {{ form_end(form) }}

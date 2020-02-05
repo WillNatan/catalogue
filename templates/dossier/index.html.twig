@@ -2,61 +2,75 @@
 
 {% block title %}Liste des dossiers{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+{% endblock %}
 {% block body %}
-    <h1>Liste des dossiers</h1>
-    <div class="db-box bg-darker h-100 py-2">
-        <div class="db-box-body">
+    <div class="card">
+        <div class="card-header-primary">
+            <h4>Liste des dossiers</h4>
 
-    <div class="table-responsive">
-            <table class="table text-light" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>Nom du dossier</th>
-                            <th>Sous-dossiers</th>
-                            <th>actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for dossier in dossiers %}
-                        <tr>
-                            <td>{{ dossier.nomDossier }}</td>
-                           <td>
-                                {% if dossier.subFolders %}
-                                    <ul>
-                                        {% for subfolder in dossier.subFolders %}
-                                            <li>{{ subfolder.nomDossier }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
+        </div>
+        <div class="card-body">
+            <a href="{{ path('Nouveau-dossier') }}" class="btn btn-success" >Ajouter</a>
+            <table class="table" id="dataTable">
+                <thead>
+                <tr>
+                    <th>Nom du dossier</th>
+                    <th>Sous-dossiers</th>
+                    <th class="text-center">actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for dossier in dossiers %}
+                    <tr>
+                        <td>{{ dossier.nomDossier }}</td>
+                        <td>
+                            {% if dossier.subFolders %}
+                                <ul>
+                                    {% for subfolder in dossier.subFolders %}
+                                        <li>{{ subfolder.nomDossier }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                         </td>
-                            <td>
-                                <a href="{{ path('Détails-dossier', {'id': dossier.id}) }}" class="btn gradient-btn-primary" ><i class="fas fa-eye" ></i></a>
-                                <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn gradient-btn" ><i class="fas fa-edit" ></i></a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="3">Aucun Résultat</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-    </div>
-            <a href="{{ path('Nouveau-dossier') }}" class="btn gradient-btn-primary" ><i class="fas fa-plus" ></i></a>
-    </div>
+                        <td class="text-center">
+                            <a href="{{ path('Détails-dossier', {'id': dossier.id}) }}" class="btn btn-primary" >Voir</a>
+                            <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn btn-warning" >Modifier</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="3">Aucun Résultat</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('Nouveau-dossier') }}" class="btn btn-success" >Ajouter</a>
+        </div>
     </div>
 {% endblock %}
 
 {% block js %}
-  <script>
-      // Call the dataTables jQuery plugin
-$(document).ready(function() {
-    $('#dataTable').DataTable({
-        "language":{
-            "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
-        }
-    });
-  });
-  
-  </script>
-  {% endblock %}
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script>
+        // Call the dataTables jQuery plugin
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                dom: 'Bfrtip',
+                "language":{
+                    "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+                },
+                rowReorder: {
+                    selector: 'td:nth-child(2)'
+                },
+                responsive: true,
+            });
+        });
+
+    </script>
+{% endblock %}

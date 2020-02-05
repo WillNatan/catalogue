@@ -1,5 +1,5 @@
 <form method="post" action="{{ path('Suppression-utilisateur', {'id': user.id}) }}" id="deleteItem">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-    <button class="btn gradient-btn-danger"><i class="fa fa-times"></i></button>
+    <button class="btn btn-danger"><i class="fa fa-times"></i></button>
 </form>

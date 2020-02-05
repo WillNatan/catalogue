@@ -3,133 +3,110 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block css %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesRowOrder.css') }}">
-    <link rel="stylesheet" href="{{ asset('dashboard/css/datatablesResponsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/responsive.bootstrap4.min.css') }}">
 {% endblock %}
 {% block body %}
-    <h1 class="h1">Dashboard <span class="text-xs">Vue d'ensemble</span></h1>
     <div class="row">
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="db-box gradient-1">
-                <div class="db-box-body">
-                    <div class="row no-gutters justify-content-between align-items-center pr-1">
-                                   <div class="col-6">
-                                        <span class="fa-stack fa-2x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-calendar text-dark fa-stack-1x"></i>
-                                    </span>
-                                   </div>
-                       <div class="col-6">
-                           <a href="{{ path('Catalogue-des-rapports') }}">
-                               <div class="text-xs font-weight-bold text-uppercase mb-1"><p class="m-0">Accéder au
-                                       catalogue</p></div>
-                           </a>
-                       </div>
+            <a class="text-warning" href="{{ path('Catalogue-des-rapports') }}">
+            <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">content_paste</i>
+                    </div>
+                    <p class="card-category text-uppercase text-dark">Accéder au catalogue</p>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                    </div>
+                </div>
+            </div>
+            </a>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card card-stats">
+                    <div class="card-header card-header-info card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">content_paste</i>
+                        </div>
+                        <p class="card-category text-uppercase text-dark">Nombre de rapports</p>
+                        <h4 class="card-title">{{ nbRapport }}</h4>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card card-stats">
+                <div class="card-header card-header-primary card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">content_paste</i>
+                    </div>
+                    <p class="card-category text-uppercase text-dark">Modifs. Rapports</p>
+                    <h4 class="card-title">{{ nbUpdate }}</h4>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-xl-3 col-md-6 mb-4">
-            <div class="db-box gradient-2">
-                <div class="db-box-body">
-                    <div class="row no-gutters justify-content-between align-items-center pr-1">
-                                    <div class="col-6">
-                                        <span class="fa-stack fa-2x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-file text-dark fa-stack-1x"></i>
-                                    </span>
-                                    </div>
-                        <div class="col-6">
-                            <div class=" font-weight-bold text-uppercase mb-1">
-                                <p class="text-xs m-0 text-right">Nombre de rapports</p>
-                                <p class="text-gray-500 text-right m-0">{{ nbRapport }}</p>
-                            </div>
-                        </div>
+            <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">content_paste</i>
                     </div>
+                    <p class="card-category text-uppercase text-dark">Dernier rapport</p>
+                    <h4 class="card-title">
+                        {% if lastReport %}
+                        <small><a class="text-warning"
+                                  href="{{ path('Détails-rapport', {'id': lastReport.id}) }}">{{ lastReport.nomRapport }} - {{ lastReport.creationDate|date('d.m.Y') }}</a></small>
+                        {% else %}
+                            <p class="text-light">Aucun résultat</p>
+                        {% endif %}
+                    </h4>
                 </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="db-box gradient-3">
-                <div class="db-box-body">
-                    <div class="row no-gutters">
-                        <div class="col-6">
-                            <span class="fa-stack fa-2x">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-file-alt text-dark fa-stack-1x"></i>
-                                    </span>
-                        </div>
-                        <div class="col-6">
-                            <div class=" font-weight-bold text-uppercase mb-1">
-                                <p class="text-xs m-0 text-right mb-1">
-                                    Modif. rapports
-                                </p>
-                                <p class="text-gray-500 text-right m-0">{{ nbUpdate }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="db-box h-100 gradient-4">
-                <div class="db-box-body">
-                    <div class="row align-items-center">
-                        <div class="col mr-2 text-center">
-                            <div class="text-xs font-weight-bold text-uppercase mb-1"><p>Dernier rapport</p>
-                            </div>
-                            <div class="h5 mb-0 font-weight-bold text-light row">
-                                {% if lastReport %}
-                                    <div class="col-5">
-                                        <a class="text-xs"
-                                           href="{{ path('Détails-rapport', {'id': lastReport.id}) }}">{{ lastReport.nomRapport }}</a>
-                                    </div>
-                                    <div class="col-7">
-                                        <span class="text-xs">{{ lastReport.creationDate|date('d-m-Y') }}</span>
-                                    </div>
-                                {% else %}
-                                    <div class="col-12">
-                                        <p class="text-light">Aucun résultat</p>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
+                <div class="card-footer">
+                    <div class="stats">
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-xl-12 mb-4">
             <div class="row">
-                <div class="col-12 col-lg-6">
-                    <div class="db-box bg-darker">
-                        <div class="db-box-body">
-                            <div class="row align-items-center">
-                                <div class="col mr-2 text-center">
-                                    <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Nombre de
-                                            rapports par dossier</p></div>
-                                    <hr>
-                                    <div class="mb-0 text-gray-800">
-                                        <canvas id="ReportsByFolders"></canvas>
-                                    </div>
-                                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="card card-stats bg-dark">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-icon">
+
                             </div>
+                            <h4 class="card-title text-light">
+                                Nombre de rapports par dossier
+                            </h4>
+                        </div>
+                        <div class="card-body ">
+                            <canvas id="ReportsByFolders"></canvas>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-lg-6">
-                    <div class="db-box bg-darker">
-                        <div class="db-box-body">
-                            <div class="row align-items-center">
-                                <div class="col mr-2 text-center">
-                                    <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Nombre de
-                                            rapports par utilisateur</p></div>
-                                    <hr>
-                                    <div class="mb-0 text-gray-800">
-                                        <canvas id="ReportsByUsers"></canvas>
-                                    </div>
-                                </div>
+                <div class="col-12 col-lg-12">
+                    <div class="card card-stats bg-dark">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-icon">
+
                             </div>
+                            <h4 class="card-title text-light">
+                                Nombre de
+                                rapports par utilisateur
+                            </h4>
+                        </div>
+                        <div class="card-body ">
+                            <canvas id="ReportsByUsers"></canvas>
                         </div>
                     </div>
                 </div>
@@ -137,110 +114,66 @@
         </div>
         <div class="col-12 mb-4">
             <div class="row">
-                <div class="col-12 col-lg-6">
-                    <div class="db-box bg-darker">
-                        <div class="db-box-body">
-                            <div class="row align-items-center">
-                                <div class="col mr-2 text-center">
-                                    <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Rapports en
-                                            RECETTE/PRODUCTION</p></div>
-                                    <hr>
-                                    <div class="mb-0">
-                                            <table class="mdl-data-table" style="width:100%" id="table-recette-production">
-                                                <thead>
-                                                <tr>
-                                                    <th>Numéro de rapport</th>
-                                                    <th>Nom du rapport</th>
-                                                    <th>Version en RECETTE</th>
-                                                    <th>Version en PRODUCTION</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for recetteReport in recette %}
-                                                    {% for prodReport in production %}
-                                                        {% if prodReport.Nom_Rapport == recetteReport.Nom_Rapport %}
-                                                            <tr>
-                                                                <td>{{ recetteReport.n }}</td>
-                                                                <td>{{ recetteReport.Nom_Rapport }}</td>
-                                                                <td>
-                                                                    <a href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}">{{ recetteReport.VersionActuelle }}</a>
-                                                                </td>
-                                                                <td>
-                                                                    <a href="{{ path('Détails-rapport', {'id': prodReport.id}) }}">{{ prodReport.VersionActuelle }}</a>
-                                                                </td>
-                                                            </tr>
-                                                        {% endif %}
-                                                    {% endfor %}
-                                                {% endfor %}
-
-                                                </tbody>
-                                            </table>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header card-header-warning">
+                            <h4 class="card-title text-light">
+                                Rapports en RECETTE/PRODUCTION
+                            </h4>
                         </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="db-box bg-darker">
-                        <div class="db-box-body">
-                            <div class="row align-items-center">
-                                <div class="col mr-2 text-center">
-                                    <div class="text-xs font-weight-bold text-orange text-uppercase mb-1"><p>Rapports en
-                                            RECETTE</p></div>
-                                    <hr>
-                                    <div class="mb-0">
-                                            <table class="mdl-data-table" style="width:100%" id="table-recette">
-                                                <thead>
-                                                <tr>
-                                                    <th>Numéro de rapport</th>
-                                                    <th>Nom du rapport</th>
-                                                    <th>Date de création</th>
-                                                    <th>Version</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for recetteReport in recette %}
-                                                    <tr>
-                                                        <td>{{ recetteReport.n }}</td>
-                                                        <td>{{ recetteReport.Nom_Rapport }}</td>
-                                                        <td>{{ recetteReport.CreationDate|date('d-m-y') }}</td>
-                                                        <td>
-                                                            <a href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}">{{ recetteReport.VersionActuelle }}</a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
+                        <div class="card-body table-responsive">
+                            <table class="table" id="table-recette-production">
+                                <thead>
+                                <tr>
+                                    <th>Numéro de rapport</th>
+                                    <th>Nom du rapport</th>
+                                    <th>Version en RECETTE</th>
+                                    <th>Version en PRODUCTION</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for recetteReport in recette %}
+                                    {% for prodReport in production %}
+                                        {% if prodReport.Nom_Rapport == recetteReport.Nom_Rapport %}
+                                            <tr>
+                                                <td>{{ recetteReport.n }}</td>
+                                                <td>{{ recetteReport.Nom_Rapport }}</td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-warning">Recette</span>
+                                                    <a class="text-warning" href="{{ path('Détails-rapport', {'id': recetteReport.id}) }}" class="text-warning">{{ recetteReport.VersionActuelle }}</a>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-success">Production</span>
+                                                    <a href="{{ path('Détails-rapport', {'id': prodReport.id}) }}" class="text-success">{{ prodReport.VersionActuelle }}</a>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
 
-                                                </tbody>
-                                            </table>
-                                    </div>
-                                </div>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 {% endblock %}
 
 {% block js %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-    <script src="{{ asset('dashboard/js/datatablesResponsive.js') }}"></script>
-    <script src="{{ asset('dashboard/js/datatalesRowOrder.js') }}"></script>
+    <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatables/responsive.bootstrap4.min.js') }}"></script>
     <script>
+
         $('#table-recette-production').dataTable({
             iDisplayLength: 5,
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
-            },
-            responsive:true,
-        });
-        $('#table-recette').dataTable({
-            iDisplayLength: 5,
-            "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+                "url": "{{ asset('datatables/languages/french.json') }}"
             },
             responsive:true,
         });
@@ -256,11 +189,11 @@
         gradient.addColorStop(1, random_rgba());
         let myChart = new Chart(ctx, {
 
-            type: 'bar',
+            type: 'horizontalBar',
             data: {
                 labels: [
                     {% for report in reportsByFolder %}
-                    '{{ report.nomDossier|raw }}'{% if loop.last %}{% else %},{% endif %}
+                    '{{ report.nomDossier }}'{% if loop.last %}{% else %},{% endif %}
                     {% endfor %}
                 ],
 
@@ -293,11 +226,17 @@
                 ,
                 scales: {
                     yAxes: [{
+                        gridLines: {
+                            display: false
+                        },
                         ticks: {
                             fontColor: "white",
                         }
                     }],
                     xAxes: [{
+                        gridLines: {
+                            display: false
+                        },
                         ticks: {
                             fontColor: "white",
                         }
@@ -349,11 +288,19 @@
                 ,
                 scales: {
                     yAxes: [{
+                        display:false,
+                        gridLines: {
+                            display: false
+                        },
                         ticks: {
                             fontColor: "white",
                         }
                     }],
                     xAxes: [{
+                        display:false,
+                        gridLines: {
+                            display: false
+                        },
                         ticks: {
                             fontColor: "white",
                         }

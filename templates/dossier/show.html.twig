@@ -5,11 +5,13 @@
 {% block body %}
     <div class="row">
         <div class="col-12">
-            <div class="db-box bg-darker h-100 py-2">
-                <div class="db-box-body">
-                    <h1>{{ dossier.nomDossier }}</h1>
+            <div class="card">
+                <div class="card-header-primary">
+                    <h4>{{ dossier.nomDossier }}</h4>
+                </div>
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table text-light">
+                        <table class="table">
                             <tbody>
                             <tr>
                                 <th>Nom du dossier</th>
@@ -22,12 +24,11 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="d-flex flex-wrap">
-                        <a href="{{ path('Dossiers') }}" class="btn gradient-btn-primary mr-1"><i class="fa fa-arrow-left"></i></a>
-                        <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn gradient-btn mr-1"><i class="fa fa-edit"></i></a>
-                        {{ include('dossier/_delete_form.html.twig') }}
-                    </div>
+                </div>
+                <div class="card-footer justify-content-start flex-wrap">
+                    <a href="{{ path('Dossiers') }}" class="btn btn-primary mr-1"><i class="fa fa-arrow-left"></i></a>
+                    <a href="{{ path('Modifier-dossier', {'id': dossier.id}) }}" class="btn btn-warning mr-1"><i class="fa fa-edit"></i></a>
+                    {{ include('dossier/_delete_form.html.twig') }}
                 </div>
             </div>
         </div>

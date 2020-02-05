@@ -1,83 +1,84 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block css %}
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('datatables/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/responsive.bootstrap4.min.css') }}">
 {% endblock %}
 {% block body %}
 <div class="row">
-    <div class="col-12">
-        <div class="db-box bg-darker py-2">
-            <div class="db-box-body">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header-warning">
+                <h4>
+                    Profil
+                </h4>
+            </div>
+            <div class="card-body text-center">
                 <div class="row">
                     <div class="col-12">
                         <div class="row">
-                            <div class="col-12 text-center">
-                                <i class="fa fa-user fa-10x"></i>
+                            <div class="col-12">
+                                <h3 class="text-warning">{{ app.user.username }}</h3>
+                                <hr class="hr-text text-xs" data-content="PROFIL">
                             </div>
                             <div class="col-12 mt-3">
-                                <hr class="hr-text text-xs" data-content="DETAILS">
-                                <h1 class="text-normal text-orange">Email</h1>
+                                <h3 class="text-warning">Email</h3>
                                 <p class="text-xs">{{ app.user.email }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-12">
-                                <h1 class="text-center">{{ app.user.username }}</h1>
-                                <hr class="hr-text text-xs" data-content="PROFIL">
-                            </div>
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="col-12 col-sm-6">
-                                        <a href="{{ path('Modifier-Profil', {'id': user.id}) }}"><button class="btn gradient-btn w-100">Modifier profil</button></a>
-                                    </div>
-                                    <div class="col-12 col-sm-6 mt-1 mt-sm-0">
-                                        <a href="{{ path('Modifier-mot-de-passe', {'id': user.id}) }}"><button class="btn gradient-btn w-100">Changer de mot de passe</button></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <hr class="hr-text text-xs" data-content="RAPPORTS A MON NOM">
-                        <div class="table-responsive">
-                            <table class="mdl-data-table" style="width:100%" id="dataTable">
-                                <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Rapport</th>
-                                    <th>Dernière modification</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for reports in user.createdBy %}
-                                    <tr>
-                                        <td>{{ reports.N }}</td>
-                                        <td><a href="{{ path('Détails-rapport', {'id': reports.id}) }}">{{ reports.nomRapport }}</a></td>
-                                        <td>{{ reports.lastUpdate|date('d-m-Y h:i:s', "Indian/Reunion") }}</td>
-                                        <td>
-                                            <a href="{{ path('Modifier-rapport', {'id': reports.id}) }}"><button class="btn gradient-btn">
-                                                    <i class="fa fa-edit"></i>
-                                                </button></a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
                 </div>
             </div>
+            <div class="card-footer justify-content-center flex-wrap">
+                <a class="text-warning" href="{{ path('Modifier-Profil', {'id': app.user.id}) }}"><button class="btn btn-warning">Modifier mon profil</button></a>
+                <a class="text-warning" href="{{ path('Modifier-mot-de-passe') }}"><button class="btn btn-warning">Changer de mot de passe</button></a>
+            </div>
         </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header-warning">
+                <h4>Mes rapports</h4>
+            </div>
+            <div class="card-body">
+                <table class="table" id="dataTable">
+                    <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Rapport</th>
+                        <th>Dernière modification</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for reports in app.user.createdBy %}
+                        <tr>
+                            <td>{{ reports.N }}</td>
+                            <td><a class="text-warning" href="{{ path('Détails-rapport', {'id': reports.id}) }}">{{ reports.nomRapport }}</a></td>
+                            <td>{{ reports.lastUpdate|date('d-m-Y h:i:s', "Indian/Reunion") }}</td>
+                            <td>
+                                <a class="text-warning" href="{{ path('Modifier-rapport', {'id': reports.id}) }}"><button class="btn btn-warning">
+                                        <i class="material-icons">edit</i>
+                                    </button></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock %}
 {% block js %}
-<script src="{{ asset('dashboard/js/datatablesResponsive.js') }}"></script>
-    <script src="{{ asset('dashboard/js/datatalesRowOrder.js') }}"></script>
+    <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatables/responsive.bootstrap4.min.js') }}"></script>
     <script>
         $('#dataTable').dataTable({
         rowReorder: {
@@ -86,8 +87,9 @@
         iDisplayLength:5,
          "language":
          {
-             "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+             "url":"{{ asset('datatables/languages/french.json') }}"
          },
+            buttons:[],
          responsive: true,
             dom: 'Bfrtip',
         });

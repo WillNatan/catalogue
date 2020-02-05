@@ -2,111 +2,228 @@
 
 {% block title %}Rapport - {{ report_catalog.nomRapport }}{% endblock %}
 {% block css %}
-    <link rel="stylesheet" href="{{ asset('dashboard/css/custom.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 {% endblock %}
 {% block body %}
 
     <div class="row">
         <div class="col-12">
-
                 <div class="row">
-                    <div class="col-12 col-sm-4">
-                    <div class="db-box bg-darker h-100">
-
-                        <div class="db-box-body">
-                            <h1 class="text-normal">{{ report_catalog.nomRapport }}</h1>
+                    <div class="col-12 col-sm-3">
+                    <div class="card">
+                        <div class="card-header-primary">
+                            <h4>
+                                {{ report_catalog.NomRapport|nl2br }}
+                            </h4>
+                        </div>
+                        <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <p class="text-orange">Dossier</p>
+                                    <p class="text-warning">Dossier</p>
                                     <p class="text-xs">{% if report_catalog.mainFolder %}{{ report_catalog.mainFolder.nomDossier|nl2br }}{% endif %}</p>
                                 </div>
                                 <div class="col-12">
                                     <hr>
-                                    <p class="text-orange">Sous-Dossier</p>
+                                    <p class="text-warning">Sous-Dossier</p>
                                     <p class="text-xs">{% if report_catalog.subFolder %}{{ report_catalog.subFolder|nl2br }}{% else %}Aucun{% endif %}</p>
                                 </div>
                                 <div class="col-12">
                                     <hr>
-                                    <p class="text-orange">Créateur de la ligne</p>
+                                    <p class="text-warning">Créateur de la ligne</p>
                                     <p class="text-xs">{{ report_catalog.createdBy.username|nl2br }}</p>
                                 </div>
                                 <div class="col-12">
                                     <hr>
-                                    <p class="text-orange">Nom du rapport</p>
-                                    <p class="text-xs">{{ report_catalog.NomRapport|nl2br }}</p>
-                                </div>
-                                <div class="col-12">
-                                    <hr>
-                                    <p class="text-orange">Version actuelle</p>
+                                    <p class="text-warning">Version actuelle</p>
                                     <p class="text-xs">{{ report_catalog.VersionActuelle|nl2br }}</p>
                                 </div>
                                 <div class="col-12">
                                     <hr>
-                                    <p class="text-orange">Catégorie</p>
+                                    <p class="text-warning">Catégorie</p>
                                     <p class="text-xs">{{ report_catalog.Categorie|nl2br }}</p>
                                 </div>
                             </div>
+                            <div class="card-footer justify-content-center flex-wrap">
+                                <a href="{{ path('Catalogue-des-rapports') }}" class="btn btn-primary"><i
+                                            class="fa fa-arrow-left"></i></a>
+                                <a href="{{ path('Modifier-rapport', {'id': report_catalog.id}) }}" class="btn btn-warning"><i
+                                            class="fa fa-edit"></i></a>
+                                {{ include('report_catalog/_delete_form.html.twig') }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-8">
-                    <div class="db-box bg-darker">
-                        <div class="db-box-body">
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    <hr class="d-sm-none d-block">
-                                    <p class="text-orange">Commentaire</p>
-                                    <p class="text-xs">{{ report_catalog.Commentaire|nl2br }}</p>
+                <div class="col-sm-9">
+                    <div class="card card-nav-tabs">
+                        <div class="card-header card-header-primary">
+                            <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+                            <div class="nav-tabs-navigation">
+                                <div class="nav-tabs-wrapper">
+                                    <ul class="nav nav-tabs" data-tabs="tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#commentaire" data-toggle="tab">Commentaire</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#objectifs" data-toggle="tab">Objectifs</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#details" data-toggle="tab">Détails</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#sources" class="nav-link" data-toggle="tab">Sources</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#parametres" class="nav-link" data-toggle="tab">Paramètres</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#hist" class="nav-link" data-toggle="tab">Historique des versions</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#sql" class="nav-link" data-toggle="tab">SQL</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#ref" class="nav-link" data-toggle="tab">Référentiel objets</a>
+                                        </li>
+                                    </ul>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr class="d-lg-none d-block">
-                                    <p class="text-orange">Objectifs</p>
-                                    <p class="text-xs">{{ report_catalog.Objectifs|nl2br }}</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content text-center">
+                                <div class="tab-pane active" id="commentaire">
+                                    <p >
+                                        {{ report_catalog.Commentaire|nl2br ? report_catalog.Commentaire|nl2br : 'Aucun commentaire' }}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr>
-                                    <p class="text-orange">Détails</p>
-                                    <p class="text-xs">{{ report_catalog.Details|nl2br }}</p>
+                                <div class="tab-pane" id="objectifs">
+                                    <p>
+                                        {{ report_catalog.Objectifs|nl2br ? report_catalog.Objectifs|nl2br : 'Aucun objectif' }}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr>
-                                    <p class="text-orange">Sources</p>
-                                    <p class="text-xs">{{ report_catalog.Sources|nl2br }}</p>
+                                <div class="tab-pane" id="details">
+                                    <p>
+                                        {{ report_catalog.Details|nl2br ? report_catalog.Details|nl2br : 'Aucun détail' }}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr>
-                                    <p class="text-orange">Paramètres</p>
-                                    <p class="text-xs">{{ report_catalog.Parametres|nl2br }}</p>
+                                <div class="tab-pane" id="sources">
+                                    <p>
+                                        {{ report_catalog.Sources|nl2br ? report_catalog.Sources|nl2br : 'Aucune source' }}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr>
-                                    <p class="text-orange">Historique des versions</p>
-                                    <p class="text-xs">{{ report_catalog.HistoriqueVersions|nl2br }}</p>
+                                <div class="tab-pane" id="parametres">
+                                    <p>
+                                        {{ report_catalog.Parametres|nl2br ? report_catalog.Parametres|nl2br : 'Aucun paramètre' }}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr>
-                                    <p class="text-orange">Dernière modification</p>
-                                    <p class="text-xs">{% if report_catalog.lastUpdate %}{{ report_catalog.lastUpdate|date('d/m/Y à H:i:s') }}{% endif %}</p>
+                                <div class="tab-pane" id="hist">
+                                    <p>
+                                        {{ report_catalog.HistoriqueVersions|nl2br ? report_catalog.HistoriqueVersions|nl2br : 'Aucune historique' }}
+                                    </p>
                                 </div>
-                                <div class="col-12 col-lg-6">
-                                    <hr>
-                                    <p class="text-orange">Modifié par: </p>
-                                    <p class="text-xs">{{ report_catalog.updatedBy.username }}</p>
+                                <div class="tab-pane" id="sql">
+                                    {{ form_start(form) }}
+                                    <div class="form-group">
+                                        {{ form_widget(form.sqltext) }}
+                                    </div>
+                                    <button type="submit" class="btn btn-success">VALIDER la (les) requête(s)</button>
+                                    {{ form_end(form) }}
+                                </div>
+                                <div class="tab-pane" id="ref">
+                                    <div class="table-responsive">
+                                        <table class="table" width="100%" id="refTable">
+                                            <thead class="text-left">
+                                            <tr>
+                                                <th>Nom de l'objet</th>
+                                                <th>Utilisateur</th>
+                                                <th>Table</th>
+                                                <th>Champ</th>
+                                                <th>Actions</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody class="text-left">
+                                            {% for ref in report_catalog.refObjRapports %}
+                                                <tr>
+                                                    <td>{{ ref.nomObjet }}</td>
+                                                    <td>{{ ref.objet.schemaObj }}</td>
+                                                    <td>{{ ref.objet.tableobj }}</td>
+                                                    <td>{{ ref.objet.champ }}</td>
+                                                    <td><button class="btn btn-primary editBtn" data-toggle="modal" data-target="#exampleModalLong" data-object="{{ ref.objet.id }}">Modifier</button></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <p>Nombre d'objets référencés: {{ report_catalog.refObjRapports|length }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-            <div class="d-flex flex-wrap mt-3">
-                <a href="{{ path('Catalogue-des-rapports') }}" class="btn gradient-btn-primary mr-1"><i
-                            class="fa fa-arrow-left"></i></a>
-                <a href="{{ path('Modifier-rapport', {'id': report_catalog.id}) }}" class="btn gradient-btn mr-1"><i
-                            class="fa fa-edit"></i></a>
-                {{ include('report_catalog/_delete_form.html.twig') }}
+        </div>
+    </div>
+    <form id="objForm" action="" method="post">
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Informations de l'objet</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="objDesc">Description de l'objet</label>
+                                <textarea name="description" id="objDesc" cols="30" rows="10" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Type</label>
+                                <input type="text" id="type" name="type" class="form-control" placeholder="EX: VARCHAR(50)" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="qualifier">Qualification</label>
+                                <select name="qualifier" id="qualifier" class="form-control" required>
+                                    <option value="" disabled selected>Choisssez une valeur</option>
+                                    <option value="indicateur">Indicateur</option>
+                                    <option value="axe d'analyse">Axe d'analyse</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                </div>
             </div>
         </div>
     </div>
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script>
+        $('#refTable').dataTable({
+            iDisplayLength: 5,
+            "language": {
+                "url": "{{ asset('datatables/languages/french.json') }}"
+            },
+            responsive:true,
+        });
+        let editBtn = $('.editBtn');
+
+        editBtn.click(function () {
+            let objId = $(this).data('object');
+            let route = "{{ path('edit_object', {'id': 'obj'}) }}";
+            route = route.replace('obj', objId);
+            $('#objForm').attr('action', route)
+        })
+    </script>
 {% endblock %}

@@ -1,30 +1,47 @@
-<!DOCTYPE html>
-{% if app.request.attributes.get('_route') == 'app_login' %}
-<html class="h-100 w-100">
-{% else %}
-<html>
-{% endif %}
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/sb-admin-2.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('dashboard/css/custom.css') }}">
-        {% block stylesheets %}{% endblock %}
-    </head>
-    {% if app.request.attributes.get('_route') == 'app_login' %}
-    <body class="h-100 w-100" style="background-image: url('{{ asset('dashboard/img/'~ random(['login1.jpg', 'login2.jpg', 'login3.jpg', 'login4.jpg'])) }}')">
-    <div class="container h-100 w-100 d-flex justify-content-center align-items-center">
-    {% else %}
-        <body>
-        <div class="container">
-    {% endif %}
+<!--
+ =========================================================
+ * Material Kit - v2.0.6
+ =========================================================
 
-            {% block body %}{% endblock %}
+ * Product Page: https://www.creative-tim.com/product/material-kit
+ * Copyright 2019 Creative Tim (http://www.creative-tim.com)
+   Licensed under MIT (https://github.com/creativetimofficial/material-kit/blob/master/LICENSE.md)
+
+
+ =========================================================
+
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <title>Dashboard</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" href="{{ asset('back/css/materialIcons+fonts.css') }}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <!-- Material Kit CSS -->
+    <link href="{{ asset('front/css/material-kit.min.css') }}?v=2.0.6" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('front/css/main.css') }}">
+</head>
+
+<body>
+<nav class="navbar navbar-color-on-scroll navbar-transparent fixed-top navbar-expand-lg" color-on-scroll="100">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="https://demos.creative-tim.com/material-kit/index.html">
+                Catalogue </a>
         </div>
-        <script src="{{ asset('dashboard/vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('dashboard/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('dashboard/js/sb-admin-2.min.js') }}"></script>
-        {% block javascripts %}{% endblock %}
-    </body>
+    </div>
+</nav>
+{% block body %}
+{% endblock %}
+
+</body>
+
 </html>

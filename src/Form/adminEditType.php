@@ -18,7 +18,7 @@ class adminEditType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, ['attr'=>['class'=>'form-control']])
-            ->add('roles', ChoiceType::class, ['attr'=>['class'=>'form-control'], 'choices'=>
+            ->add('roles', ChoiceType::class, ['attr'=>['class'=>'form-control multi-select'], 'choices'=>
                     [
                         'Administrateur'=>'ROLE_ADMIN',
                         'SuperAdmin'=>'ROLE_SUPER_ADMIN',

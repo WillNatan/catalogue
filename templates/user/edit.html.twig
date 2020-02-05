@@ -6,17 +6,26 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="db-box bg-darker h-100 py-2">
+        <div class="card">
+            <div class="card-header-primary">
+                <h4>Modifier Utilisateur</h4>
+            </div>
             <div class="card-body">
-                <h1>Modifier Utilisateur</h1>
+
                 {{ include('user/_form.html.twig', {'button_label': 'Modifier'}) }}
-                {{ form_end(form) }}
+
+
+            </div>
+            <div class="card-footer justify-content-start flex-wrap">
                 {{ include('user/_delete_form.html.twig') }}
                 {% if app.request.get("_route") == 'passwordEdit' %}
-                    {% else %}
-                        <a href="{{ path('passwordEdit', {'id': user.id }) }}"><button type="button" class="btn gradient-btn-secondary ml-1">Modifier le mot de passe</button></a>
+                {% else %}
+                    <a href="{{ path('passwordEdit', {'id': user.id }) }}"><button type="button" class="btn btn-primary ml-1">Modifier le mot de passe</button></a>
                 {% endif %}
             </div>
+        </div>
+        <div class="db-box bg-darker h-100 py-2">
+
             </div>
         </div>
     </div>

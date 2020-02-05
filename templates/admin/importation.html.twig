@@ -1,0 +1,100 @@
+{% extends 'admin/base.html.twig' %}
+
+
+{% block css %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header-primary">
+            <h4>Importation des rapports</h4>
+        </div>
+        <div class="card-body table-responsive">
+            <table class="table" id="table-imports">
+                <thead>
+                <tr>
+                    <th>Date d'importation</th>
+                    <th class="text-center">-</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for import in imports %}
+                    <tr>
+                        <td>
+                            {{ import.LastDate|date('d-m-Y') }}
+                        </td>
+                        <td>
+                            <a href="{{ asset('file/imports/'~import.excelFile) }}"><button class="btn btn-primary">Télécharger le fichier excel</button></a>
+                        </td>
+                        <td>
+                            <a href="" class="text text-danger">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-warning" data-toggle="modal" data-target="#ImportModal">Nouvelle importation</button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ImportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog longwidth" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Nouvelle importation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {{ form_start(form) }}
+                <div class="modal-body">
+                    <img src="{{ asset('back/img/importExample.png') }}" class="img-fluid" alt="Exemple importation">
+                    <blockquote class="blockquote">
+                        <p>Vous pouvez importer tous les rapports du catalogue via le fichier excel (Exemple sur l'image ci-dessus)</p>
+                    </blockquote>
+
+                        <div class="form-group">
+                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                <div>
+                                    <button type="button" class="btn btn-raised btn-round btn-default btn-file">
+                                        <label for="import_excelFile" class="mb-0 text-light">Upload du fichier excel
+                                            {{ form_widget(form.excelFile) }}
+                                        </label>
+                                    </button>
+                                    <a class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i> Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="alert alert-danger">
+                        <p><i class="material-icons text-light">warning</i> Lors de l'importation, tous les rapports déjà enregistrés dans l'application seront supprimés et remplacés. Toutes les données seront réinitialisées (EX: Nombre de modifications). Il est préférable d'utiliser cette fonctionnalité lors d'un rollback, ou lors d'une première installation.</p>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-danger">Importer</button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script>
+        $('#table-imports').dataTable({
+            iDisplayLength: 5,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+            },
+            responsive:true,
+        });
+    </script>
+{% endblock %}

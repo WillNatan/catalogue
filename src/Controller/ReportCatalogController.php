@@ -3,9 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Logs;
+use App\Entity\ReferentielObjets;
+use App\Entity\RefObjRapport;
 use App\Entity\ReportCatalog;
 use App\Entity\ReportLogs;
+use App\Form\ObjectType;
 use App\Form\ReportCatalogType;
+use App\Form\SQLTextType;
 use App\Repository\DossierRepository;
 use App\Repository\ReportCatalogRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +29,7 @@ class ReportCatalogController extends AbstractController
     public function index(ReportCatalogRepository $reportCatalogRepository): Response
     {
         return $this->render('report_catalog/index.html.twig', [
-            'report_catalogs' => $reportCatalogRepository->findAll(),
+            'report_catalogs' => $reportCatalogRepository->findAll()
         ]);
     }
 
@@ -36,7 +40,6 @@ class ReportCatalogController extends AbstractController
     {
 
         $reportCatalog = new ReportCatalog();
-        $log = new ReportLogs();
         $form = $this->createForm(ReportCatalogType::class, $reportCatalog);
         $form->handleRequest($request);
         
@@ -71,12 +74,68 @@ class ReportCatalogController extends AbstractController
 
 
     /**
-     * @Route("/{id}", name="Détails-rapport", methods={"GET"})
+     * @Route("/{id}", name="Détails-rapport", methods={"GET","POST"})
      */
-    public function show(ReportCatalog $reportCatalog): Response
+    public function show(ReportCatalog $reportCatalog, Request $request): Response
     {
+        $form = $this->createForm(SQLTextType::class, $reportCatalog);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $pattern='/[a-zA-Z_0-9]+\.+[a-zA-Z_0-9]+\.+[a-zA-Z_0-9]+/';
+            preg_match_all($pattern, $reportCatalog->getSqltext(), $match);
+            $matches = array_unique($match[0]);
+            $allrefs = $this->getDoctrine()->getRepository(RefObjRapport::class)->findBy(['nomRapport'=>$reportCatalog->getNomRapport()]);
+            $em = $this->getDoctrine()->getManager();
+            foreach ($allrefs as $ref)
+            {
+                $em->remove($ref);
+                $em->flush();
+            }
+            foreach ($matches as $m)
+            {
+                if($this->getDoctrine()->getRepository(ReferentielObjets::class)->findOneBy(['nomObjet'=>$m]))
+                {
+                    $objet =$this->getDoctrine()->getRepository(ReferentielObjets::class)->findOneBy(['nomObjet'=>$m]);
+                    if($this->getDoctrine()->getRepository(RefObjRapport::class)->findOneBy(['rapport'=>$reportCatalog, 'objet'=>$objet])){
+                        $split = explode('.', $m, 3);
+                        $objet->setSchemaObj($split[0]);
+                        $objet->setTableobj($split[1]);
+                        $objet->setChamp($split[2]);
+                        $em->flush();
+                    }else{
+                        $referentiel = new RefObjRapport();
+                        $referentiel->setObjet($objet);
+                        $referentiel->setRapport($reportCatalog);
+                        $referentiel->setNomObjet($m);
+                        $referentiel->setNomRapport($reportCatalog->getNomRapport());
+                        $em->persist($referentiel);
+                        $em->flush();
+                    }
+                }
+                else{
+                    $objet = new ReferentielObjets();
+                    $objet->setNomObjet(strtoupper($m));
+                    $split = explode('.', $m, 3);
+                    $objet->setSchemaObj($split[0]);
+                    $objet->setTableobj($split[1]);
+                    $objet->setChamp($split[2]);
+                    $referentiel = new RefObjRapport();
+                    $referentiel->setObjet($objet);
+                    $referentiel->setRapport($reportCatalog);
+                    $referentiel->setNomObjet($m);
+                    $referentiel->setNomRapport($reportCatalog->getNomRapport());
+                    $em->persist($referentiel);
+                    $em->persist($objet);
+                    $em->flush();
+                }
+            }
+            return $this->redirectToRoute('Détails-rapport', ['id'=>$request->get('id')]);
+        }
+
         return $this->render('report_catalog/show.html.twig', [
             'report_catalog' => $reportCatalog,
+            'form'=>$form->createView()
         ]);
     }
 
@@ -115,23 +174,5 @@ class ReportCatalogController extends AbstractController
         }
 
         return $this->redirectToRoute('Catalogue-des-rapports');
-    }
-
-
-    public function addLogs(ReportCatalog $catalog, $action){
-        $logLine = new ReportLogs();
-        $logLine->setNumero($catalog->getN());
-        $logLine->setNomRapport($catalog->getNomRapport());
-        $logLine->setVer($catalog->getVersionActuelle());
-        $logLine->setCategory($catalog->getCategorie());
-        $logLine->setCom($catalog->getCommentaire());
-        $logLine->setDetails($catalog->getDetails());
-        $logLine->setParametres($catalog->getParametres());
-        $logLine->setSources($catalog->getSources());
-        $logLine->setObj($catalog->getObjectifs());
-        $logLine->setHistVer($catalog->getHistoriqueVersions());
-        $logLine->setMfolder($catalog->getMainFolder()->getNomDossier());
-        $logLine->setSubfolder($catalog->getSubFolder()->getNomDossier());
-        $logLine->setUpdatedBy($catalog->getUpdatedBy()->getUsername());
     }
 }

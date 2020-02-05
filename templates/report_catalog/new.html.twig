@@ -7,10 +7,13 @@
 {% block body %}
     <div class="row">
         <div class="col-12">
-            <div class="db-box bg-darker h-100">
-                <h1 class="text-light text-center mt-2">Nouvelle ligne catalogue des rapports BO</h1>
-
-                {{ include('report_catalog/_form.html.twig') }}
+            <div class="card">
+                <div class="card-header-primary">
+                    <h4>Nouveau rapport</h4>
+                </div>
+                <div class="card-body">
+                    {{ include('report_catalog/_form.html.twig') }}
+                </div>
             </div>
         </div>
     </div>

@@ -5,9 +5,11 @@
 {% block body %}
     <div class="row">
         <div class="col-lg-8 offset-lg-2">
-            <div class="db-box bg-darker h-100 py-2">
-                <div class="db-box-body">
-                    <h1 class="text-gray-500">Modification dossier</h1>
+            <div class="card">
+                <div class="card-header-primary">
+                    <h4 class="text-gray-500">Modification dossier</h4>
+                </div>
+                <div class="card-body">
                     {{ include('dossier/_delete_form.html.twig') }}
                     {{ include('dossier/_form.html.twig', {'button_label': 'Modifier'}) }}
                 </div>
@@ -24,7 +26,7 @@
                     let collectionHolder;
 
 // setup an "add a tag" link
-let addTagButton = $('<button type="button" class="add_tag_link btn gradient-btn-warning">Ajouter un sous-dossier</button>');
+let addTagButton = $('<button type="button" class="add_tag_link btn btn-warning">Ajouter un sous-dossier</button>');
 let newLinkLi = $('<div class="buttons m-1"></div>').append(addTagButton);
 
 jQuery(document).ready(function() {
@@ -79,7 +81,7 @@ function addTagForm(collectionHolder, newLinkLi) {
     addTagFormDeleteLink(newFormLi);
 }
 function addTagFormDeleteLink(tagFormLi) {
-    var removeFormButton = $('<button type="button" class="btn gradient-btn-danger mt-1">Supprimer</button>');
+    var removeFormButton = $('<button type="button" class="btn btn-danger mt-1">Supprimer</button>');
     tagFormLi.append(removeFormButton);
 
     removeFormButton.on('click', function(e) {

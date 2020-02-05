@@ -17,8 +17,8 @@ class User implements UserInterface
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid", unique=true)
      */
     private $id;
 
@@ -57,13 +57,23 @@ class User implements UserInterface
      */
     private $username;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $responseSecrete;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $questionSecrete;
+
     public function __construct()
     {
         $this->createdBy = new ArrayCollection();
         $this->updatedBy = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -219,6 +229,30 @@ class User implements UserInterface
                 $updatedBy->setUpdatedBy(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getResponseSecrete(): ?string
+    {
+        return $this->responseSecrete;
+    }
+
+    public function setResponseSecrete(string $responseSecrete): self
+    {
+        $this->responseSecrete = $responseSecrete;
+
+        return $this;
+    }
+
+    public function getQuestionSecrete(): ?string
+    {
+        return $this->questionSecrete;
+    }
+
+    public function setQuestionSecrete(string $questionSecrete): self
+    {
+        $this->questionSecrete = $questionSecrete;
 
         return $this;
     }

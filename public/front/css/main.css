@@ -1,0 +1,31 @@
+.card-login .card-body{
+    padding:1.25rem;
+    margin-top:50px;
+}
+
+div.dataTables_wrapper div.dataTables_info{
+    white-space: unset!important;
+}
+
+.pagination{
+    flex-wrap: wrap;
+}
+
+form .form-group select.form-control{
+    position: relative;
+}
+
+.multi-select{
+    height:100px!important;
+}
+
+@media (min-width: 576px){
+    .longwidth {
+        max-width: 1200px;
+        margin: 1.75rem auto;
+    }
+}
+
+.sidebar .nav li .dropdown-menu a, .sidebar .nav li a{
+    color:white!important;
+}

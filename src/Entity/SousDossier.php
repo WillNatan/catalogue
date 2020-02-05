@@ -15,8 +15,8 @@ class SousDossier
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid", unique=true)
      */
     private $id;
 
@@ -42,7 +42,7 @@ class SousDossier
         $this->rapport = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
@@ -73,7 +73,7 @@ class SousDossier
 
     public function __toString()
     {
-        return $this->getNomDossier();
+        return (string) $this->getId();
         // TODO: Implement __toString() method.
     }
 
@@ -107,4 +107,5 @@ class SousDossier
 
         return $this;
     }
+
 }

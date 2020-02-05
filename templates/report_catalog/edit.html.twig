@@ -6,10 +6,14 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="db-box bg-darker h-100 p-3">
-                <h1 class="text-light">Modifier les informations du rapport</h1>
-                {{ include('report_catalog/_delete_form.html.twig') }}
-                {{ include('report_catalog/_form.html.twig', {'button_label': 'Modifier'}) }}
+            <div class="card">
+                <div class="card-header-primary">
+                    <h1>Modifier les informations du rapport</h1>
+                </div>
+                <div class="card-body">
+                    {{ include('report_catalog/_delete_form.html.twig') }}
+                    {{ include('report_catalog/_form.html.twig', {'button_label': 'Modifier'}) }}
+                </div>
             </div>
         </div>
     </div>

@@ -38,6 +38,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -164,22 +165,24 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../uiadmin" />
+    <property name="last_opened_file_path" value="C:/Program Files/Git/bin/git.exe" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="web-ide.project.structure" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\laragon\www\catalogue\src\Form" />
-      <recent name="C:\laragon\www\catalogue\public" />
-      <recent name="C:\laragon\www\catalogue\public\dashboard\js" />
-      <recent name="C:\laragon\www\catalogue\templates\admin" />
-      <recent name="C:\laragon\www\catalogue\public\dashboard\css\lang" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\catalogue\public" />
+      <recent name="C:\laragon\www\catalogue\public\datatables" />
       <recent name="C:\laragon\www\catalogue\public\dashboard" />
       <recent name="C:\laragon\www\catalogue\public\dashboard\js" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\laragon\www\catalogue\public\googlefonts" />
+      <recent name="C:\laragon\www\catalogue\src\Form" />
+      <recent name="C:\laragon\www\catalogue\templates\admin" />
+      <recent name="C:\laragon\www\catalogue\public\front" />
+      <recent name="C:\laragon\www\catalogue\public\back\img" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -239,7 +242,21 @@
       <workItem from="1575001052937" duration="11658000" />
       <workItem from="1576129857643" duration="699000" />
       <workItem from="1576473714845" duration="22934000" />
-      <workItem from="1576556257524" duration="4265000" />
+      <workItem from="1576556257524" duration="18853000" />
+      <workItem from="1578283031388" duration="16204000" />
+      <workItem from="1578368502054" duration="6592000" />
+      <workItem from="1578384073052" duration="2857000" />
+      <workItem from="1578455522886" duration="6047000" />
+      <workItem from="1578563284202" duration="39000" />
+      <workItem from="1578563381654" duration="2662000" />
+      <workItem from="1578566072616" duration="2496000" />
+      <workItem from="1578629130590" duration="12342000" />
+      <workItem from="1578648386879" duration="16000" />
+      <workItem from="1578885994877" duration="20844000" />
+      <workItem from="1579493926640" duration="19416000" />
+      <workItem from="1579580663584" duration="10622000" />
+      <workItem from="1579601098650" duration="4330000" />
+      <workItem from="1580876699471" duration="18371000" />
     </task>
     <servers />
   </component>

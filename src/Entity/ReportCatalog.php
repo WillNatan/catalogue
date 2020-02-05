@@ -15,8 +15,8 @@ class ReportCatalog
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid", unique=true)
      */
     private $id;
 
@@ -107,19 +107,30 @@ class ReportCatalog
      */
     private $CreationDate;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $sqltext;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RefObjRapport", mappedBy="rapport", cascade={"remove"})
+     */
+    private $refObjRapports;
+
     public function __construct()
     {
-        $this->axeAnalyse = new ArrayCollection();
+        $this->referentielObjets = new ArrayCollection();
+        $this->refObjRapports = new ArrayCollection();
     }
 
     
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getN(): ?int
+    public function getN()
     {
         return $this->n;
     }
@@ -321,5 +332,81 @@ class ReportCatalog
         $this->createdBy = $createdBy;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|ReferentielObjets[]
+     */
+    public function getReferentielObjets(): Collection
+    {
+        return $this->referentielObjets;
+    }
+
+    public function addReferentielObjet(ReferentielObjets $referentielObjet): self
+    {
+        if (!$this->referentielObjets->contains($referentielObjet)) {
+            $this->referentielObjets[] = $referentielObjet;
+            $referentielObjet->addRapport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReferentielObjet(ReferentielObjets $referentielObjet): self
+    {
+        if ($this->referentielObjets->contains($referentielObjet)) {
+            $this->referentielObjets->removeElement($referentielObjet);
+            $referentielObjet->removeRapport($this);
+        }
+
+        return $this;
+    }
+
+    public function getSqltext(): ?string
+    {
+        return $this->sqltext;
+    }
+
+    public function setSqltext(?string $sqltext): self
+    {
+        $this->sqltext = $sqltext;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RefObjRapport[]
+     */
+    public function getRefObjRapports(): Collection
+    {
+        return $this->refObjRapports;
+    }
+
+    public function addRefObjRapport(RefObjRapport $refObjRapport): self
+    {
+        if (!$this->refObjRapports->contains($refObjRapport)) {
+            $this->refObjRapports[] = $refObjRapport;
+            $refObjRapport->setRapport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefObjRapport(RefObjRapport $refObjRapport): self
+    {
+        if ($this->refObjRapports->contains($refObjRapport)) {
+            $this->refObjRapports->removeElement($refObjRapport);
+            // set the owning side to null (unless already changed)
+            if ($refObjRapport->getRapport() === $this) {
+                $refObjRapport->setRapport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->getId();
     }
 }

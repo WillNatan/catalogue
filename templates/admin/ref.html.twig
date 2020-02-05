@@ -1,0 +1,77 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    Tableau de bord - Objets
+{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{{ asset('datatables/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatables/responsive.bootstrap4.min.css') }}">
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header-primary">
+                    <h4>Objets</h4>
+                </div>
+                <div class="card-body">
+                    <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-success">Ajouter</button></a>
+                    <div class="table-responsive">
+                        <table class="table" width="100%" id="refTable">
+                            <thead>
+                            <tr>
+                                <th data-priority="1">Nom de l'objet</th>
+                                <th>Utilisateur</th>
+                                <th>Table</th>
+                                <th>Champ</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for ref in refetentiels %}
+                                <tr>
+                                    <td>{{ ref.nomObjet }}</td>
+                                    <td>{{ ref.schemaObj }}</td>
+                                    <td>{{ ref.tableobj }}</td>
+                                    <td>{{ ref.champ }}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div class="flex-wrap justify-content-center">
+                                                <a href="{{ path('objets_details', {'id': ref.id}) }}" class="btn btn-primary">Voir</a>
+                                                <a href="{{ path('Modifier-rapport', {'id': ref.id}) }}" class="btn btn-warning">Modifier</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-success">Ajouter</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script>
+        $('#refTable').dataTable({
+            iDisplayLength: 5,
+            "language": {
+                "url": "{{ asset('datatables/languages/french.json') }}"
+            },
+            responsive:false,
+            columnDefs: [
+                { responsivePriority: 1, targets: 0 }
+            ]
+        });
+
+    </script>
+{% endblock %}
