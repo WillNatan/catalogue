@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="543b6b0e-47c6-4f6c-b8fe-54c8b86568b2" name="Default Changelist" comment="" />
+    <list default="true" id="543b6b0e-47c6-4f6c-b8fe-54c8b86568b2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/DWH_Catalogue Rapports BO.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/DWH_Catalogue_Rapports_BO.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/objects/show.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/objects/show.html.twig" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -256,7 +262,8 @@
       <workItem from="1579493926640" duration="19416000" />
       <workItem from="1579580663584" duration="10622000" />
       <workItem from="1579601098650" duration="4330000" />
-      <workItem from="1580876699471" duration="18874000" />
+      <workItem from="1580876699471" duration="20789000" />
+      <workItem from="1580963095441" duration="3333000" />
     </task>
     <servers />
   </component>

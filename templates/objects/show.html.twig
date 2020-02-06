@@ -30,11 +30,15 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
+
                                 {% for report in objets.refObjRapports %}
-                                <td><a href="{{ path('Détails-rapport', {'id': report.rapport.id}) }}">{{ report.nomRapport }}</a></td>
+                                <tr>
+                                    <td>
+                                        <a href="{{ path('Détails-rapport', {'id': report.rapport.id}) }}">{{ report.nomRapport }}</a>
+                                    </td>
+                                </tr>
                                 {% endfor %}
-                            </tr>
+
                             </tbody>
                         </table>
                     </div>
