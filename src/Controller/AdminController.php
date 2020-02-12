@@ -319,10 +319,16 @@ class AdminController extends AbstractController
 
                 $arr = $sp->getActiveSheet()->toArray();
                 unset($arr[0]);
+                foreach ($catalogRepository->findAll() as $report)
+                {
+                    $em->remove($report);
+                    $em->flush();
+                };
                 for($i = 1; $i<count($arr);$i++) {
 
                     if (!$catalogRepository->findOneBy(['Nom_Rapport' => $arr[$i][3]])) {
                         $report = new ReportCatalog();
+                        $report->setNomRapport($arr[$i][3]);
                         $report->setN($arr[$i][0]);
                         if(!is_null($arr[$i][4]))
                         {
@@ -365,19 +371,21 @@ class AdminController extends AbstractController
                             $mainf->setNomDossier($arr[$i][1]);
                             $em->persist($mainf);
                             $em->flush();
-                            if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
-                                $subf = new SousDossier();
-                                $subf->setNomDossier($arr[$i][2]);
-                                $subf->setMainFolder($mainf);
-                                $em->persist($subf);
-                                $em->flush();
-                                $report->setSubFolder($subf);
-                                $report->setMainFolder($mainf);
-                            } else {
-                                $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
-                                $subf->setMainFolder($mainf);
-                                $em->flush();
-                                $report->setSubFolder($subf);
+                            if (!is_null($arr[$i][2])) {
+                                if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
+                                    $subf = new SousDossier();
+                                    $subf->setNomDossier($arr[$i][2]);
+                                    $subf->setMainFolder($mainf);
+                                    $em->persist($subf);
+                                    $em->flush();
+                                    $report->setSubFolder($subf);
+                                    $report->setMainFolder($mainf);
+                                } else {
+                                    $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
+                                    $subf->setMainFolder($mainf);
+                                    $em->flush();
+                                    $report->setSubFolder($subf);
+                                }
                             }
                         } else {
                             $mainf = $dossierRepository->findOneBy(['nomDossier' => $arr[$i][1]]);

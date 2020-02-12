@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="543b6b0e-47c6-4f6c-b8fe-54c8b86568b2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.symfony.cloud.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AdminController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -263,7 +266,7 @@
       <workItem from="1580963095441" duration="5199000" />
       <workItem from="1581049072042" duration="7205000" />
       <workItem from="1581058900863" duration="41000" />
-      <workItem from="1581484203727" duration="10102000" />
+      <workItem from="1581484203727" duration="12755000" />
     </task>
     <servers />
   </component>
