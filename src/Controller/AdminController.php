@@ -23,6 +23,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -308,148 +309,179 @@ class AdminController extends AbstractController
                 }
 
                 $import->setExcelFile($newFileName);
-
                 $em->persist($import);
                 $em->flush();
+                $fileType = 'Xlsx';
 
+                $reader = IOFactory::createReader($fileType);
 
-                $type = 'Xlsx';
+                $sp = $reader->load($this->getParameter('excel_imports').'/'.$import->getExcelFile());
 
-                $reader = IOFactory::createReader($type);
-                $spreadsheet = $reader->load($this->getParameter('excel_imports') . '/' . $import->getExcelFile());
-                $activesheet = $spreadsheet->getActiveSheet()->toArray();
-                foreach ($catalogRepository->findAll() as $report) {
-                    $em->remove($report);
-                    $em->flush();
-                }
-                foreach ($sousDossierRepository->findAll() as $sub) {
-                    $em->remove($sub);
-                    $em->flush();
-                }
-                foreach ($dossierRepository->findAll() as $folder) {
-                    $em->remove($folder);
-                    $em->flush();
-                }
-                unset($activesheet[0]);
-                foreach ($activesheet as $line) {
-                    $report = new ReportCatalog();
+                $arr = $sp->getActiveSheet()->toArray();
+                unset($arr[0]);
+                for($i = 1; $i<count($arr);$i++) {
 
-
-                        $report->setN((int)$line[0]);
-
-
-                    if (!is_null($dossierRepository->findOneBy(['nomDossier' => $line[1]]))) {
-                        //alors ajoute dans le rapport le nom du dossier (OBJET)
-                        $report->setMainFolder($dossierRepository->findOneBy(['nomDossier' => $line[1]]));
-                        //Si Le sous dossier existe
-                        if (!is_null($sousDossierRepository->findOneBy(['nomDossier' => $line[2]]))) {
-                            //alors insere le sous dossier dans le rapport (OBJET)
-                            $report->setSubFolder($sousDossierRepository->findOneBy(['nomDossier' => $line[2]]));
-                        } else if(!is_null($line[2])){
-                            //Sinon créer un sous dossier
-                            $sousDossier = new SousDossier();
-                            $sousDossier->setNomDossier($line[2]);
-                            //ajoute le dossier parent qui existe déjà
-                            $sousDossier->setMainFolder($dossierRepository->findOneBy(['nomDossier' => $line[1]]));
-                            $em->persist($sousDossier);
+                    if (!$catalogRepository->findOneBy(['Nom_Rapport' => $arr[$i][3]])) {
+                        $report = new ReportCatalog();
+                        $report->setN($arr[$i][0]);
+                        if(!is_null($arr[$i][4]))
+                        {
+                            $report->setVersionActuelle($arr[$i][4]);
+                        }
+                        if(!is_null($arr[$i][5]))
+                        {
+                            $report->setCommentaire($arr[$i][5]);
+                        }
+                        if(!is_null($arr[$i][6]))
+                        {
+                            $report->setCategorie($arr[$i][6]);
+                        }
+                        if(!is_null($arr[$i][7]))
+                        {
+                            $report->setObjectifs($arr[$i][7]);
+                        }
+                        if(!is_null($arr[$i][8]))
+                        {
+                            $report->setDetails($arr[$i][8]);
+                        }
+                        if(!is_null($arr[$i][9]))
+                        {
+                            $report->setSources($arr[$i][9]);
+                        }
+                        if(!is_null($arr[$i][10]))
+                        {
+                            $report->setParametres($arr[$i][10]);
+                        }
+                        if(!is_null($arr[$i][11]))
+                        {
+                            $report->setHistoriqueVersions($arr[$i][11]);
+                        }
+                        $report->setLastUpdate(new \DateTime('now'));
+                        $report->setCreatedBy($this->getUser());
+                        $report->setCreationDate(new \DateTime('now'));
+                        $report->setUpdateNb(0);
+                        if (!$dossierRepository->findBy(['nomDossier' => $arr[$i][1]])) {
+                            $mainf = new Dossier();
+                            $mainf->setNomDossier($arr[$i][1]);
+                            $em->persist($mainf);
                             $em->flush();
-                            //Ajoute le sous dossier dans le rapport (OBJET)
-                            $report->setSubFolder($sousDossier);
+                            if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
+                                $subf = new SousDossier();
+                                $subf->setNomDossier($arr[$i][2]);
+                                $subf->setMainFolder($mainf);
+                                $em->persist($subf);
+                                $em->flush();
+                                $report->setSubFolder($subf);
+                                $report->setMainFolder($mainf);
+                            } else {
+                                $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
+                                $subf->setMainFolder($mainf);
+                                $em->flush();
+                                $report->setSubFolder($subf);
+                            }
+                        } else {
+                            $mainf = $dossierRepository->findOneBy(['nomDossier' => $arr[$i][1]]);
+                            $report->setMainFolder($mainf);
+                            if (!is_null($arr[$i][2])) {
+                                if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
+                                    $subf = new SousDossier();
+                                    $subf->setNomDossier($arr[$i][2]);
+                                    $subf->setMainFolder($mainf);
+                                    $em->persist($subf);
+                                    $em->flush();
+                                    $report->setSubFolder($subf);
+                                } else {
+                                    $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
+                                    $subf->setMainFolder($mainf);
+                                    $em->flush();
+                                    $report->setSubFolder($subf);
+                                }
+                            }
                         }
-                    } else {
-                        //Sinon créer un dossier
-                        $dossier = new Dossier();
-                        if (!is_null($line[1])) {
-                            $dossier->setNomDossier($line[1]);
-                        }
-                        $em->persist($dossier);
+                        $em->persist($report);
                         $em->flush();
-                        //Ajouter le dossier dans le rapport (OBJET)
-                        $report->setMainFolder($dossier);
-                        //CONDITION SI SOUS DOSSIER EXISTE, SINON NOUVEAU SOUS DOSSIER
-                        if (!is_null($sousDossierRepository->findOneBy(['nomDossier' => $line[2]]))) {
-                            $report->setSubFolder($sousDossierRepository->findOneBy(['nomDossier' => $line[2]]));
-                        } else if(!is_null($line[2])){
-                            $sousDossier = new SousDossier();
-                            $sousDossier->setNomDossier($line[2]);
-                            $sousDossier->setMainFolder($dossier);
-                            $em->persist($sousDossier);
-                            $em->flush();
-                            $report->setSubFolder($sousDossier);
+                    }else{
+                        $report = $catalogRepository->findOneBy(['Nom_Rapport' => $arr[$i][3]]);
+                        $report->setN($arr[$i][0]);
+                        if(!is_null($arr[$i][4]))
+                        {
+                            $report->setVersionActuelle($arr[$i][4]);
                         }
+                        if(!is_null($arr[$i][5]))
+                        {
+                            $report->setCommentaire($arr[$i][5]);
+                        }
+                        if(!is_null($arr[$i][6]))
+                        {
+                            $report->setCategorie($arr[$i][6]);
+                        }
+                        if(!is_null($arr[$i][7]))
+                        {
+                            $report->setObjectifs($arr[$i][7]);
+                        }
+                        if(!is_null($arr[$i][8]))
+                        {
+                            $report->setDetails($arr[$i][8]);
+                        }
+                        if(!is_null($arr[$i][9]))
+                        {
+                            $report->setSources($arr[$i][9]);
+                        }
+                        if(!is_null($arr[$i][10]))
+                        {
+                            $report->setParametres($arr[$i][10]);
+                        }
+                        if(!is_null($arr[$i][11]))
+                        {
+                            $report->setHistoriqueVersions($arr[$i][11]);
+                        }
+                        $report->setLastUpdate(new \DateTime('now'));
+                        $report->setCreatedBy($this->getUser());
+                        $report->setUpdateNb(0);
+                        if (!$dossierRepository->findBy(['nomDossier' => $arr[$i][1]])) {
+                            $mainf = new Dossier();
+                            $mainf->setNomDossier($arr[$i][1]);
+                            $em->persist($mainf);
+                            $em->flush();
+                            if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
+                                $subf = new SousDossier();
+                                $subf->setNomDossier($arr[$i][2]);
+                                $subf->setMainFolder($mainf);
+                                $em->persist($subf);
+                                $em->flush();
+                                $report->setSubFolder($subf);
+                                $report->setMainFolder($mainf);
+                            } else {
+                                $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
+                                $subf->setMainFolder($mainf);
+                                $em->flush();
+                                $report->setSubFolder($subf);
+                            }
+                        } else {
+                            $mainf = $dossierRepository->findOneBy(['nomDossier' => $arr[$i][1]]);
+                            $report->setMainFolder($mainf);
+                            if (!is_null($arr[$i][2])) {
+                                if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
+                                    $subf = new SousDossier();
+                                    $subf->setNomDossier($arr[$i][2]);
+                                    $subf->setMainFolder($mainf);
+                                    $em->persist($subf);
+                                    $em->flush();
+                                    $report->setSubFolder($subf);
+                                } else {
+                                    $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
+                                    $subf->setMainFolder($mainf);
+                                    $em->flush();
+                                    $report->setSubFolder($subf);
+                                }
+                            }
+                        }
+                        $em->flush();
                     }
-
-                    // ------------                 CAS DES DOSSIERS ET SOUS-DOSSIERS         ---------------
-                    if (!is_null($line[1])) {
-                        $report->setMainFolder($dossierRepository->findOneBy(['nomDossier' => $line[1]]));
-                    }
-                    if (!is_null($line[2])) {
-                        $report->setSubFolder($sousDossierRepository->findOneBy(['nomDossier' => $line[2]]));
-                    }
-                    //Si le dossier existe déjà
-
-
-                    // ------------                FIN DU CAS DES DOSSIERS ET SOUS-DOSSIERS         ---------------
-
-                    if(!is_null($line[3]))
-                    {
-                        $report->setNomRapport($line[3]);
-                    }
-                    if(!is_null($line[4]))
-                    {
-                        $report->setVersionActuelle($line[4]);
-                    }
-                    if(!is_null($line[5]))
-                    {
-                        $report->setCommentaire($line[5]);
-                    }
-                    if(!is_null($line[6]))
-                    {
-                        $report->setCategorie($line[6]);
-                    }
-                    if(!is_null($line[7]))
-                    {
-                        $report->setObjectifs($line[7]);
-                    }
-                    if(!is_null($line[8]))
-                    {
-                        $report->setDetails($line[8]);
-                    }
-                    if(!is_null($line[9]))
-                    {
-                        $report->setSources($line[9]);
-                    }
-                    if(!is_null($line[10]))
-                    {
-                        $report->setParametres($line[10]);
-                    }
-                    if(!is_null($line[11]))
-                    {
-                        $report->setHistoriqueVersions($line[11]);
-                    }
-                    $report->setCreatedBy($this->getUser());
-                    $report->setCreationDate(new \DateTime('now'));
-                    $report->setUpdateNb(0);
-                    $report->setLastUpdate(new \DateTime('now'));
-                    $em->persist($report);
-                    $em->flush();
-
-
                 }
-
-
-
-
-
-                }
-
-
-
-
-            /*
-             * $this->addFlash('success',"L'importation s'est bien dérouléee.");
-            return $this->redirectToRoute("Importation");
-             */
+                $this->addFlash('success',"L'importation s'est bien dérouléee.");
+                return $this->redirectToRoute("Importation");
+            }
         }
         return $this->render('admin/importation.html.twig', [
             'imports'=>$importsRepository->findAll(),
@@ -458,15 +490,19 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/supprimer-importation/{id}", name="supprimer-importation")
+     * @Route("/supprimer-importation/{id}", name="supprimer-importation", methods={"DELETE"})
      */
-    public function deleteImport(Request $request)
+    public function deleteImport(Request $request, Imports $imports)
     {
-        if($request->isMethod('POST'))
-        {
-
+        if ($this->isCsrfTokenValid('delete'.$imports->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $fs = new FileSystem();
+            $fs->remove($this->getParameter('excel_imports').'/'.$imports->getExcelFile());
+            $entityManager->remove($imports);
+            $entityManager->flush();
         }
-        return $this->render('admin/profile.html.twig');
+
+        return $this->redirectToRoute('Importation');
     }
 
 }

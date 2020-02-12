@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('supprimer-importation', {'id': import.id}) }}" id="deleteItem">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ import.id) }}">
+    <button class="btn btn-danger"><i class="fa fa-times"></i></button>
+</form>

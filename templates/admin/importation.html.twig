@@ -29,7 +29,7 @@
                             <a href="{{ asset('file/imports/'~import.excelFile) }}"><button class="btn btn-primary">Télécharger le fichier excel</button></a>
                         </td>
                         <td>
-                            <a href="" class="text text-danger">Supprimer</a>
+                            {% include 'admin/_deleteImport.html.twig' %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -50,7 +50,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                {{ form_start(form) }}
+                {{ form_start(form, {'attr':{'class':'importform'}}) }}
                 <div class="modal-body">
                     <img src="{{ asset('back/img/importExample.png') }}" class="img-fluid" alt="Exemple importation">
                     <blockquote class="blockquote">
@@ -76,7 +76,7 @@
                 </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                        <button type="submit" class="btn btn-danger">Importer</button>
+                        <button type="submit" class="btn btn-danger importbtn">Importer</button>
                     </div>
                 {{ form_end(form) }}
             </div>
