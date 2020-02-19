@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Logs;
 use App\Entity\ReferentielObjets;
 use App\Entity\RefObjRapport;
 use App\Entity\ReportCatalog;
-use App\Entity\ReportLogs;
-use App\Form\ObjectType;
 use App\Form\ReportCatalogType;
 use App\Form\SQLTextType;
 use App\Repository\DossierRepository;
@@ -15,8 +12,10 @@ use App\Repository\ReportCatalogRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 
 /**
  * @Route("/dashboard/catalogue-rapports-bo")
@@ -36,9 +35,13 @@ class ReportCatalogController extends AbstractController
     /**
      * @Route("/nouveau", name="Nouveau-rapport", methods={"GET","POST"})
      */
-    public function new(Request $request, ReportCatalogRepository $reportCatalogRepository): Response
+    public function new(AccessDecisionManagerInterface $accessDecisionManager, Request $request, ReportCatalogRepository $reportCatalogRepository): Response
     {
-
+        $user= $this->getUser();
+        $token = new UsernamePasswordToken($user, 'none', 'none', $user->getRoles());
+        if (!$accessDecisionManager->decide($token, ['ROLE_SUPER_ADMIN'])) {
+            return $this->redirectToRoute('Administration');
+        };
         $reportCatalog = new ReportCatalog();
         $form = $this->createForm(ReportCatalogType::class, $reportCatalog);
         $form->handleRequest($request);
@@ -142,8 +145,13 @@ class ReportCatalogController extends AbstractController
     /**
      * @Route("/{id}/modifier-rapport", name="Modifier-rapport", methods={"GET","POST"})
      */
-    public function edit(Request $request, ReportCatalog $reportCatalog, DossierRepository $dossierRepository): Response
+    public function edit(AccessDecisionManagerInterface $accessDecisionManager, Request $request, ReportCatalog $reportCatalog, DossierRepository $dossierRepository): Response
     {
+        $user= $this->getUser();
+        $token = new UsernamePasswordToken($user, 'none', 'none', $user->getRoles());
+        if (!$accessDecisionManager->decide($token, ['ROLE_SUPER_ADMIN'])) {
+            return $this->redirectToRoute('Administration');
+        };
         $nbUpdate = $reportCatalog->getUpdateNb();
         $form = $this->createForm(ReportCatalogType::class, $reportCatalog);
         $form->handleRequest($request);

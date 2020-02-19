@@ -1,0 +1,93 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modifier Matrice{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header-primary">
+            <h4 class="card-title">Modifier matrice</h4>
+        </div>
+        <div class="card-body">
+            {{ include('matrice/_form.html.twig', {'button_label': 'Modifier'}) }}
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('matrice_index') }}">back to list</a>
+
+            {{ include('matrice/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+{% block js %}
+    <script>
+        let collectionHolder;
+
+        // setup an "add a tag" link
+        let addTagButton = $('<button type="button" class="add_tag_link btn btn-warning">Ajouter un indicateur</button>');
+        let newLinkLi = $('<div class="buttons m-1"></div>').append(addTagButton);
+
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            collectionHolder = $('div.liens');
+
+            // add the "add a tag" anchor and li to the tags ul
+            collectionHolder.append(newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            collectionHolder.data('index', collectionHolder.find(':input').length);
+            let editFormInputs = collectionHolder.find('.form-group');
+            editFormInputs.each(function () {
+                addTagFormDeleteLink($(this));
+            });
+            addTagButton.on('click', function(e) {
+                // add a new tag form (see next code block)
+                addTagForm(collectionHolder, newLinkLi);
+            });
+
+            // add a delete link to all of the existing tag form li elements
+            collectionHolder.find('div.liens div').each(function() {
+                addTagFormDeleteLink($(this).not(':first'));
+            });
+        });
+
+
+        function addTagForm(collectionHolder, newLinkLi) {
+            // Get the data-prototype explained earlier
+            let prototype = collectionHolder.data('prototype');
+
+            // get the new index
+            let index = collectionHolder.data('index');
+
+            let newForm = prototype;
+            // You need this only if you didn't set 'label' => false in your tags field in TaskType
+            // Replace '__name__label__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            // newForm = newForm.replace(/__name__label__/g, index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            newForm = newForm.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            let newFormLi = $('<div class="form-group"></div>').append(newForm);
+            newLinkLi.before(newFormLi);
+            addTagFormDeleteLink(newFormLi);
+        }
+        function addTagFormDeleteLink(tagFormLi) {
+            var removeFormButton = $('<button type="button" class="btn btn-danger mt-1">Supprimer</button>');
+            tagFormLi.append(removeFormButton);
+
+            removeFormButton.on('click', function(e) {
+                // remove the li for the tag form
+                tagFormLi.remove();
+            });
+        }
+    </script>
+{% endblock %}

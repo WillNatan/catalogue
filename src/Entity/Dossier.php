@@ -35,11 +35,18 @@ class Dossier
      */
     private $rapport;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Matrice", mappedBy="domaine")
+     */
+    private $matrices;
+
+
     public function __construct()
     {
-        $this->sousDossiers = new ArrayCollection();
         $this->subFolders = new ArrayCollection();
         $this->rapport = new ArrayCollection();
+        $this->matrices = new ArrayCollection();
+
     }
 
     public function getId()
@@ -123,5 +130,36 @@ class Dossier
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    /**
+     * @return Collection|Matrice[]
+     */
+    public function getMatrices(): Collection
+    {
+        return $this->matrices;
+    }
+
+    public function addMatrix(Matrice $matrix): self
+    {
+        if (!$this->matrices->contains($matrix)) {
+            $this->matrices[] = $matrix;
+            $matrix->setDomaine($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatrix(Matrice $matrix): self
+    {
+        if ($this->matrices->contains($matrix)) {
+            $this->matrices->removeElement($matrix);
+            // set the owning side to null (unless already changed)
+            if ($matrix->getDomaine() === $this) {
+                $matrix->setDomaine(null);
+            }
+        }
+
+        return $this;
     }
 }

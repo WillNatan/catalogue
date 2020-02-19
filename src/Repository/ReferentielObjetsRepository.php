@@ -19,6 +19,28 @@ class ReferentielObjetsRepository extends ServiceEntityRepository
         parent::__construct($registry, ReferentielObjets::class);
     }
 
+    public function findByIndicateurs()
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.nomObjet', 'ASC')
+            ->where('u.qualification = :qualification')
+            ->setParameter('qualification','indicateur')
+            ->getQuery()
+            ->execute()
+            ;
+    }
+
+    public function findByAxes()
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.nomObjet', 'ASC')
+            ->where('u.qualification = :qualification')
+            ->setParameter('qualification',"axe d'analyse")
+            ->getQuery()
+            ->execute()
+            ;
+    }
+
     // /**
     //  * @return ReferentielObjets[] Returns an array of ReferentielObjets objects
     //  */

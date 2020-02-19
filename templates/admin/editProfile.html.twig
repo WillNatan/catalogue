@@ -29,11 +29,13 @@
                                                         Rôles
                                                     </span>
                                                     </div>
-                                                    <div class="col-12">
-                                                        <div class="text-gray-700 form-group">
-                                                            {{ form_widget(form.roles) }}
+                                                    {% if is_granted('ROLE_SUPER_ADMIN') == true %}
+                                                        <div class="col-12">
+                                                            <div class="text-gray-700 form-group">
+                                                                {{ form_widget(form.roles) }}
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             <div class="col-12">

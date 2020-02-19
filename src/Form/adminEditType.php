@@ -21,8 +21,7 @@ class adminEditType extends AbstractType
             ->add('roles', ChoiceType::class, ['attr'=>['class'=>'form-control multi-select'], 'choices'=>
                     [
                         'Administrateur'=>'ROLE_ADMIN',
-                        'SuperAdmin'=>'ROLE_SUPER_ADMIN',
-                        'Utilisateur'=>'ROLE_USER'
+                        'SuperAdmin'=>'ROLE_SUPER_ADMIN'
                     ],
                     'multiple'=>true
                 ]

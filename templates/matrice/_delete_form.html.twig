@@ -1,0 +1,5 @@
+<form method="post" action="{{ path('matrice_delete', {'id': matrice.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_method" value="DELETE">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ matrice.id) }}">
+    <button class="btn btn-youtube">Supprimer</button>
+</form>

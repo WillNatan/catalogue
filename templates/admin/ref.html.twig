@@ -17,7 +17,6 @@
                     <h4>Objets</h4>
                 </div>
                 <div class="card-body">
-                    <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-success">Ajouter</button></a>
                     <div class="table-responsive">
                         <table class="table" width="100%" id="refTable">
                             <thead>
@@ -26,6 +25,8 @@
                                 <th>Utilisateur</th>
                                 <th>Table</th>
                                 <th>Champ</th>
+                                <th>Dénomination</th>
+                                <th>Etat</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -36,11 +37,30 @@
                                     <td>{{ ref.schemaObj }}</td>
                                     <td>{{ ref.tableobj }}</td>
                                     <td>{{ ref.champ }}</td>
+                                    <td>{{ ref.denomination }}</td>
                                     <td>
-                                        <div class="d-flex">
+                                        <ul>
+                                            {% if ref.qualification is null or ref.qualification is empty %}
+                                                <li>Aucune qualification définie</li>
+                                            {% endif %}
+                                            {% if ref.type is null or ref.type is empty %}
+                                                <li>Aucun type défini</li>
+                                            {% endif %}
+                                            {% if ref.description is null or ref.description is empty %}
+                                                <li>Aucune description définie</li>
+                                            {% endif %}
+                                            {% if ref.denomination is null or ref.denomination is empty %}
+                                                <li>Aucune dénomination définie</li>
+                                            {% endif %}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex flex-wrap">
                                             <div class="flex-wrap justify-content-center">
                                                 <a href="{{ path('objets_details', {'id': ref.id}) }}" class="btn btn-primary">Voir</a>
-                                                <a href="{{ path('Modifier-rapport', {'id': ref.id}) }}" class="btn btn-warning">Modifier</a>
+                                                {% if is_granted('ROLE_SUPER_ADMIN') == true %}
+                                                    <button class="btn btn-warning editBtn" data-target="#exampleModalLong" data-object="{{ ref.id }}">Modifier</button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </td>
@@ -50,12 +70,49 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-success">Ajouter</button></a>
-                </div>
             </div>
         </div>
     </div>
+    <form id="objForm" method="post">
+        <div class="modal fade" id="objectDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Informations de l'objet</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                       <div class="form-group">
+                            <label for="description">Description</label>
+                           <textarea name="" id="description" cols="30" rows="10" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type</label>
+                            <input type="text" id="type" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="qualification">Qualification</label>
+                            <select name="Qualification" id="qualification" class="form-control">
+                                <option value="" disabled selected>Choisissez une qualification</option>
+                                <option value="indicateur">Indicateur</option>
+                                <option value="axe d'analyse">Axe d'analyse</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="denomination">Dénomination</label>
+                            <input type="text" id="denomination" name="denomination" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button"  class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 {% endblock %}
 {% block js %}
     <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
@@ -73,5 +130,27 @@
             ]
         });
 
+        $('.editBtn').each(function () {
+            $(this).click(function () {
+                let refID = $(this).data('object');
+                let url = "{{ path('getObjectsDetails', {'id':'refID'}) }}";
+                url = url.replace('refID',refID);
+                $('.loader-wrapper').fadeIn();
+                $.post(url,
+                function (data, err) {
+                    $('.loader-wrapper').fadeOut();
+                    $('#objectDialog').modal();
+                    $('#denomination').val(data.denomination);
+                    $('#type').val(data.type);
+                    $('#qualification').val(data.qualification);
+                    $('#description').val(data.description);
+                })
+            })
+        });
+
+        $('#objForm').onsubmit(function (e) {
+            e.preventDefault();
+
+        })
     </script>
 {% endblock %}

@@ -15,10 +15,12 @@
                     <h4>Catalogue des rapports</h4>
                 </div>
                 <div class="card-body">
-                    <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-info">Ajouter</button></a>
+                    {% if is_granted('ROLE_SUPER_ADMIN')== true %}
+                        <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-info">Ajouter</button></a>
+                    {% endif %}
                     <a href="{{ path('spreadsheet') }}"><button class="btn btn-primary">Exporter</button></a>
                     <div class="table-responsive">
-                        <table class="table" width="100%" id="dataTabletest">
+                        <table class="table" width="100%" id="reportDatatable">
                             <thead>
                             <tr>
                                 <th>N°</th>
@@ -49,9 +51,11 @@
                                         <a href="{{ path('Détails-rapport', {'id': report.id}) }}">
                                             <button class="btn btn-primary">Voir</button>
                                         </a>
-                                        <a href="{{ path('Modifier-rapport', {'id': report.id}) }}">
-                                            <button class="btn btn-warning">Modifier</button>
-                                        </a>
+                                        {% if is_granted('ROLE_SUPER_ADMIN') == true %}
+                                            <a href="{{ path('Modifier-rapport', {'id': report.id}) }}">
+                                                <button class="btn btn-warning">Modifier</button>
+                                            </a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -60,9 +64,11 @@
                     </div>
                 </div>
 
-                <div class="card-footer">
-                    <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-info">Ajouter</button></a>
-                </div>
+                {% if is_granted('ROLE_SUPER_ADMIN') == true %}
+                    <div class="card-footer">
+                        <a href="{{ path('Nouveau-rapport') }}"><button class="btn btn-info">Ajouter</button></a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -75,7 +81,7 @@
   <script>
       // Call the dataTables jQuery plugin
 $(document).ready(function() {
-    $('#dataTabletest').DataTable({
+    $('#reportDatatable').DataTable({
         dom: 'Bfrtip',
         "language":{
             "url":"{{ asset('datatables/languages/french.json') }}"

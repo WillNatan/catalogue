@@ -1,0 +1,18 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <h1>Indic</h1>
+    {% for ind in indic %}
+        <ul>
+            <li>{{ ind.nomObjet }}</li>
+            <li>{{ ind.qualification }}</li>
+        </ul>
+    {% endfor %}
+    <h1>Axes</h1>
+    {% for axe in axe %}
+        <ul>
+            <li>{{ axe.nomObjet }}</li>
+            <li>{{ axe.qualification }}</li>
+        </ul>
+    {% endfor %}
+{% endblock %}

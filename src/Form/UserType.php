@@ -19,8 +19,8 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, ['attr'=>['class'=>'form-control']])
             ->add('roles', ChoiceType::class, [['attr'=>['class'=>'form-control']],
                 'choices'=>[
-                    'Utilisateur'=>'ROLE_USER',
-                    'Administrateur'=>'ROLE_ADMIN'
+                    'Administrateur'=>'ROLE_ADMIN',
+                    'SuperAdmin'=>'ROLE_SUPER_ADMIN'
                 ],
                 'multiple'=> true
             ])

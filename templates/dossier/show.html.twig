@@ -14,11 +14,11 @@
                         <table class="table">
                             <tbody>
                             <tr>
-                                <th>Nom du dossier</th>
+                                <th>Nom du domaine</th>
                                 <td>{{ dossier.nomDossier }}</td>
                             </tr>
                             <tr>
-                                <th>Sous Dossiers</th>
+                                <th>Sous-domaine(s)</th>
                                 <td>{% for sousDossier in dossier.subFolders %}{{ sousDossier.nomDossier }}{% if loop.last %}{% else %}, {% endif %}{% endfor %}</td>
                             </tr>
                             </tbody>

@@ -23,7 +23,7 @@
                 {% for import in imports %}
                     <tr>
                         <td>
-                            {{ import.LastDate|date('d-m-Y') }}
+                            {{ import.LastDate|date('d-m-Y H:i:s', "Indian/Reunion") }}
                         </td>
                         <td>
                             <a href="{{ asset('file/imports/'~import.excelFile) }}"><button class="btn btn-primary">Télécharger le fichier excel</button></a>

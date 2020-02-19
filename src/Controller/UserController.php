@@ -29,9 +29,8 @@ class UserController extends AbstractController
     {
 
         $user= $this->getUser();
-
         $token = new UsernamePasswordToken($user, 'none', 'none', $user->getRoles());
-        if (!$accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
+        if (!$accessDecisionManager->decide($token, ['ROLE_SUPER_ADMIN'])) {
             return $this->redirectToRoute('Administration');
         };
         return $this->render('user/index.html.twig', [

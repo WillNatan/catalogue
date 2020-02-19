@@ -16,8 +16,8 @@
             <table class="table" id="dataTable">
                 <thead>
                 <tr>
-                    <th>Nom du dossier</th>
-                    <th>Sous-dossiers</th>
+                    <th>Nom du domaine</th>
+                    <th>Sous-domaine(s)</th>
                     <th class="text-center">actions</th>
                 </tr>
                 </thead>
@@ -63,7 +63,7 @@
             $('#dataTable').DataTable({
                 dom: 'Bfrtip',
                 "language":{
-                    "url":"//cdn.datatables.net/plug-ins/1.10.20/i18n/French.json"
+                    "url":"{{ asset('datatables/languages/french.json') }}"
                 },
                 rowReorder: {
                     selector: 'td:nth-child(2)'

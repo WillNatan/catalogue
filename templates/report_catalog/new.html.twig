@@ -61,13 +61,13 @@
             var data = {};
             data[$sport.attr('name')] = $sport.val();
             // Submit data via AJAX to the form's action path.
-            $('.blur-load').fadeIn(200);
+            $('.loader-wrapper').fadeIn(200);
             $.ajax({
                 url : $form.attr('action'),
                 type: $form.attr('method'),
                 data : data,
                 success: function(html) {
-                    $('.blur-load').fadeOut(200);
+                    $('.loader-wrapper').fadeOut(200);
                     // Replace current position field ...
                     $('#report_catalog_subFolder').replaceWith(
                         // ... with the returned one from the AJAX response.

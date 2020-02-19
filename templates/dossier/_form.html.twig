@@ -8,8 +8,9 @@
                  </div>
 
                  <div class="subfolders" data-prototype="{{ form_widget(form.subFolders.vars.prototype)|e('html_attr') }}">
-                     <h1 class="small">Sous-dossiers</h1>
+                     <h1 class="small">Sous-domaine(s)</h1>
                      {% for subfolder in form.subFolders %}
+
                          <div class="form-group">
                              {{ form_widget(subfolder.nomDossier) }}
                          </div>

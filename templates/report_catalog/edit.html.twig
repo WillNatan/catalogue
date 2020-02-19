@@ -8,7 +8,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header-primary">
-                    <h1>Modifier les informations du rapport</h1>
+                    <h4>Modifier les informations du rapport</h4>
                 </div>
                 <div class="card-body">
                     {{ include('report_catalog/_delete_form.html.twig') }}
@@ -51,14 +51,14 @@
             data[$param.attr('name')] = $param.val();
             data[$HistVer.attr('name')] = $HistVer.val();
 
-            $('.blur-load').fadeIn(200);
+            $('.loader-wrapper').fadeIn(200);
             // Submit data via AJAX to the form's action path.
             $.ajax({
                 url : $form.attr('action'),
                 type: $form.attr('method'),
                 data : data,
                 success: function(html) {
-                    $('.blur-load').fadeOut(200);
+                    $('.loader-wrapper').fadeOut(200);
                     console.log($(html).find('#report_catalog_subFolder'));
                     // Replace current position field ...
                     $('#report_catalog_subFolder').replaceWith(

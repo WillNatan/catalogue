@@ -1,0 +1,47 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Axes d'analyse{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header-primary">
+            <h4 class="card-title">Axes d'analyse </h4>
+        </div>
+        <div class="card-body">
+            <table class="table" id="matriceTable">
+                <thead>
+                <tr>
+                    <th>Nom axe d'analyse</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for axe in lien.axes %}
+                    <tr>
+                        <td>{{ axe.nomObjet }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script>
+        // Call the dataTables jQuery plugin
+        $(document).ready(function() {
+            $('#matriceTable').DataTable({
+                dom: 'Bfrtip',
+                "language":{
+                    "url":"{{ asset('datatables/languages/french.json') }}"
+                },
+                buttons: [],
+                responsive: true,
+            });
+        });
+
+    </script>
+{% endblock %}

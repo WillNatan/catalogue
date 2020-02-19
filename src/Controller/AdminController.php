@@ -2,16 +2,18 @@
 
 namespace App\Controller;
 
+
 use App\Entity\Dossier;
 use App\Entity\Imports;
 use App\Entity\ReferentielObjets;
 use App\Entity\ReportCatalog;
+
 use App\Entity\SousDossier;
-use App\Entity\User;
-use App\Form\adminEditType;
 use App\Form\EditPasswordType;
 use App\Form\ImportType;
+use App\Form\ObjectType;
 use App\Form\UserEditType;
+use App\Form\UserNotGrantedEditType;
 use App\Repository\DossierRepository;
 use App\Repository\ImportsRepository;
 use App\Repository\ReferentielObjetsRepository;
@@ -28,13 +30,16 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints\Json;
-
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 
 /**
@@ -119,57 +124,80 @@ class AdminController extends AbstractController
     /**
      * @Route("/objets", name="objets")
      */
-    public function objets(ReferentielObjetsRepository $objetsRepository)
+    public function objets(Request $request, ReferentielObjetsRepository $objetsRepository)
     {
 
         return $this->render('admin/ref.html.twig', ['refetentiels'=>$objetsRepository->findAll()]);
     }
 
+
     /**
-     * @Route("/objets/{id}", name="objets_details")
+     * @Route("/getObjectDetails/{id}", name="getObjectsDetails", methods={"POST"})
      */
-    public function detailsObjets(ReferentielObjets $objets)
+    public function getObjectsDetails(ReferentielObjets $objets)
     {
-        return $this->render('objects/show.html.twig', ['objets'=>$objets]);
+
+        return new JsonResponse([
+            'description'=>$objets->getDescription(),
+            'type'=>$objets->getType(),
+            'qualification'=>$objets->getQualification(),
+            'denomination'=>$objets->getDenomination()
+        ]);
     }
 
     /**
-     * @Route("e/{id}", name="edit_object", methods={"GET", "POST"})
+     * @Route("/objets/{id}", name="objets_details")
      */
-    public function editObject(ReferentielObjets $objets, Request $request)
+    public function detailsObjets(Request $request,AccessDecisionManagerInterface $accessDecisionManager, ReferentielObjets $objets)
     {
-        if($request->isMethod("POST"))
-        {
-            $description = $request->request->get('description');
-            $type = $request->request->get('type');
-            $qualification = $request->request->get('qualifier');
+        $form = $this->createForm(ObjectType::class, $objets);
+        $form->handleRequest($request);
 
-            $objets->setDescription($description);
-            $objets->setType($type);
-            $objets->setQualification($qualification);
+        if($request->isMethod('post')){
+            $object = $request->request->all();
+            var_dump($object);
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
             return new RedirectResponse($request->headers->get('referer'));
         }
-        else
-            {
-            return $this->redirectToRoute("Administration");
-        }
+
+        return $this->render('objects/show.html.twig', [
+            'objets'=>$objets,
+            'form'=>$form->createView()
+        ]);
     }
 
     /**
      * @Route("/profil/{id}", name="Modifier-Profil")
      */
-    public function editProfile(Request $request, UserPasswordEncoderInterface $encoder, UserInterface $user, EntityManagerInterface $entityManager)
+    public function editProfile(AccessDecisionManagerInterface $accessDecisionManager, Request $request, UserPasswordEncoderInterface $encoder, UserInterface $user, EntityManagerInterface $entityManager)
     {
         $currentPw = $user->getPassword();
-        $form = $this->createForm(UserEditType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($currentPw);
-            $this->getDoctrine()->getManager()->flush();
-            return $this->redirectToRoute('app_logout');
-        }
+
+        $token = new UsernamePasswordToken($user, 'none', 'none', $user->getRoles());
+        if (!$accessDecisionManager->decide($token, ['ROLE_SUPER_ADMIN'])) {
+            $form = $this->createForm(UserNotGrantedEditType::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                    $user->setPassword($currentPw);
+                    $this->getDoctrine()->getManager()->flush();
+                    return $this->redirectToRoute('app_logout');
+
+            }
+        }else{
+            $form = $this->createForm(UserEditType::class, $user);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                    $user->setPassword($currentPw);
+                    $this->getDoctrine()->getManager()->flush();
+                    return $this->redirectToRoute('app_logout');
+            }
+
+        };
+
+
 
 
         return $this->render('admin/editProfile.html.twig', [
@@ -187,13 +215,18 @@ class AdminController extends AbstractController
         $form = $this->createForm(EditPasswordType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($encoder->isPasswordValid($user,$form->get('oldPassword')->getData())){
-                $newencodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
-                $user->setPassword($newencodedPassword);
-                $this->getDoctrine()->getManager()->flush();
-                return $this->redirectToRoute('app_logout');
+            if($user->getResponseSecrete() == $form->get('reponsesecrete')->getData()) {
+                if ($encoder->isPasswordValid($user, $form->get('oldPassword')->getData())) {
+                    $newencodedPassword = $encoder->encodePassword($user, $user->getPlainPassword());
+                    $user->setPassword($newencodedPassword);
+                    $this->getDoctrine()->getManager()->flush();
+                    return $this->redirectToRoute('app_logout');
+                } else {
+                    $this->addFlash('err', "L'ancien mot de passe ne correspond pas");
+                    return $this->redirectToRoute('Modifier-mot-de-passe');
+                }
             }else{
-                $this->addFlash('err',"L'ancien mot de passe ne correspond pas");
+                $this->addFlash('err', "La réponse secrète ne correspond pas");
                 return $this->redirectToRoute('Modifier-mot-de-passe');
             }
         }
@@ -292,12 +325,21 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $conn = $em->getConnection();
+            $platform   = $conn->getDatabasePlatform();
+            $conn->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
+            $truncateSql1 = $platform->getTruncateTableSQL('report_catalog');
+            $truncateSql2 = $platform->getTruncateTableSQL('dossier');
+            $truncateSql3 = $platform->getTruncateTableSQL('sous_dossier');
+            $conn->executeUpdate($truncateSql1);
+            $conn->executeUpdate($truncateSql2);
+            $conn->executeUpdate($truncateSql3);
+            $conn->executeQuery('SET FOREIGN_KEY_CHECKS = 1;');
             $import->setLastDate(new \DateTime('now'));
             $excelFile = $import->getExcelFile();
             if ($excelFile) {
                 $excelFileName = pathinfo($excelFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFileName = $excelFileName . '-' . $import->getLastDate()->format('d-m-Y') . '.' . $excelFile->guessExtension();
+                $newFileName = $excelFileName . '-' . $import->getLastDate()->format('d-m-Y h:i:s') . '.' . $excelFile->guessExtension();
 
                 try {
                     $excelFile->move(
@@ -319,173 +361,97 @@ class AdminController extends AbstractController
 
                 $arr = $sp->getActiveSheet()->toArray();
                 unset($arr[0]);
-                foreach ($catalogRepository->findAll() as $report)
+                for($i = 1;$i<count($arr);$i++)
                 {
-                    $em->remove($report);
-                    $em->flush();
-                };
-                for($i = 1; $i<count($arr);$i++) {
+                    $report = new ReportCatalog();
 
-                    if (!$catalogRepository->findOneBy(['Nom_Rapport' => $arr[$i][3]])) {
-                        $report = new ReportCatalog();
-                        $report->setNomRapport($arr[$i][3]);
-                        $report->setN($arr[$i][0]);
-                        if(!is_null($arr[$i][4]))
+                    $report->setN($arr[$i][0]);
+                    $report->setNomRapport($arr[$i][3]);
+                    $report->setLastUpdate(new \DateTime('now'));
+                    $report->setCreatedBy($this->getUser());
+                    $report->setCreationDate(new \DateTime('now'));
+                    $report->setUpdateNb(0);
+                    if(!is_null($arr[$i][4]))
+                    {
+                        $report->setVersionActuelle($arr[$i][4]);
+                    }
+                    if(!is_null($arr[$i][5]))
+                    {
+                        $report->setCommentaire($arr[$i][5]);
+                    }
+                    if(!is_null($arr[$i][6]))
+                    {
+                        $report->setCategorie($arr[$i][6]);
+                    }
+                    if(!is_null($arr[$i][7]))
+                    {
+                        $report->setObjectifs($arr[$i][7]);
+                    }
+                    if(!is_null($arr[$i][8]))
+                    {
+                        $report->setDetails($arr[$i][8]);
+                    }
+                    if(!is_null($arr[$i][9]))
+                    {
+                        $report->setSources($arr[$i][9]);
+                    }
+                    if(!is_null($arr[$i][10]))
+                    {
+                        $report->setParametres($arr[$i][10]);
+                    }
+                    if(!is_null($arr[$i][11]))
+                    {
+                        $report->setHistoriqueVersions($arr[$i][11]);
+                    }
+                    if($dossierRepository->findOneBy(['nomDossier'=>$arr[$i][1]]))
+                    {
+                        $mainf = $dossierRepository->findOneBy(['nomDossier'=>$arr[$i][1]]);
+                        $report->setMainFolder($mainf);
+
+                        if(!is_null($arr[$i][2]))
                         {
-                            $report->setVersionActuelle($arr[$i][4]);
-                        }
-                        if(!is_null($arr[$i][5]))
-                        {
-                            $report->setCommentaire($arr[$i][5]);
-                        }
-                        if(!is_null($arr[$i][6]))
-                        {
-                            $report->setCategorie($arr[$i][6]);
-                        }
-                        if(!is_null($arr[$i][7]))
-                        {
-                            $report->setObjectifs($arr[$i][7]);
-                        }
-                        if(!is_null($arr[$i][8]))
-                        {
-                            $report->setDetails($arr[$i][8]);
-                        }
-                        if(!is_null($arr[$i][9]))
-                        {
-                            $report->setSources($arr[$i][9]);
-                        }
-                        if(!is_null($arr[$i][10]))
-                        {
-                            $report->setParametres($arr[$i][10]);
-                        }
-                        if(!is_null($arr[$i][11]))
-                        {
-                            $report->setHistoriqueVersions($arr[$i][11]);
-                        }
-                        $report->setLastUpdate(new \DateTime('now'));
-                        $report->setCreatedBy($this->getUser());
-                        $report->setCreationDate(new \DateTime('now'));
-                        $report->setUpdateNb(0);
-                        if (!$dossierRepository->findBy(['nomDossier' => $arr[$i][1]])) {
-                            $mainf = new Dossier();
-                            $mainf->setNomDossier($arr[$i][1]);
-                            $em->persist($mainf);
-                            $em->flush();
-                            if (!is_null($arr[$i][2])) {
-                                if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
-                                    $subf = new SousDossier();
-                                    $subf->setNomDossier($arr[$i][2]);
-                                    $subf->setMainFolder($mainf);
-                                    $em->persist($subf);
-                                    $em->flush();
-                                    $report->setSubFolder($subf);
-                                    $report->setMainFolder($mainf);
-                                } else {
-                                    $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
-                                    $subf->setMainFolder($mainf);
-                                    $em->flush();
-                                    $report->setSubFolder($subf);
-                                }
-                            }
-                        } else {
-                            $mainf = $dossierRepository->findOneBy(['nomDossier' => $arr[$i][1]]);
-                            $report->setMainFolder($mainf);
-                            if (!is_null($arr[$i][2])) {
-                                if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
-                                    $subf = new SousDossier();
-                                    $subf->setNomDossier($arr[$i][2]);
-                                    $subf->setMainFolder($mainf);
-                                    $em->persist($subf);
-                                    $em->flush();
-                                    $report->setSubFolder($subf);
-                                } else {
-                                    $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
-                                    $subf->setMainFolder($mainf);
-                                    $em->flush();
-                                    $report->setSubFolder($subf);
-                                }
-                            }
-                        }
-                        $em->persist($report);
-                        $em->flush();
-                    }else{
-                        $report = $catalogRepository->findOneBy(['Nom_Rapport' => $arr[$i][3]]);
-                        $report->setN($arr[$i][0]);
-                        if(!is_null($arr[$i][4]))
-                        {
-                            $report->setVersionActuelle($arr[$i][4]);
-                        }
-                        if(!is_null($arr[$i][5]))
-                        {
-                            $report->setCommentaire($arr[$i][5]);
-                        }
-                        if(!is_null($arr[$i][6]))
-                        {
-                            $report->setCategorie($arr[$i][6]);
-                        }
-                        if(!is_null($arr[$i][7]))
-                        {
-                            $report->setObjectifs($arr[$i][7]);
-                        }
-                        if(!is_null($arr[$i][8]))
-                        {
-                            $report->setDetails($arr[$i][8]);
-                        }
-                        if(!is_null($arr[$i][9]))
-                        {
-                            $report->setSources($arr[$i][9]);
-                        }
-                        if(!is_null($arr[$i][10]))
-                        {
-                            $report->setParametres($arr[$i][10]);
-                        }
-                        if(!is_null($arr[$i][11]))
-                        {
-                            $report->setHistoriqueVersions($arr[$i][11]);
-                        }
-                        $report->setLastUpdate(new \DateTime('now'));
-                        $report->setCreatedBy($this->getUser());
-                        $report->setUpdateNb(0);
-                        if (!$dossierRepository->findBy(['nomDossier' => $arr[$i][1]])) {
-                            $mainf = new Dossier();
-                            $mainf->setNomDossier($arr[$i][1]);
-                            $em->persist($mainf);
-                            $em->flush();
-                            if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
+                            if($sousDossierRepository->findOneBy(['nomDossier'=>$arr[$i][2]]))
+                            {
+                                $subf = $sousDossierRepository->findOneBy(['nomDossier'=>$arr[$i][2]]);
+                                $report->setSubFolder($subf);
+                            }else{
                                 $subf = new SousDossier();
                                 $subf->setNomDossier($arr[$i][2]);
                                 $subf->setMainFolder($mainf);
                                 $em->persist($subf);
                                 $em->flush();
+
                                 $report->setSubFolder($subf);
-                                $report->setMainFolder($mainf);
-                            } else {
-                                $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
-                                $subf->setMainFolder($mainf);
-                                $em->flush();
-                                $report->setSubFolder($subf);
-                            }
-                        } else {
-                            $mainf = $dossierRepository->findOneBy(['nomDossier' => $arr[$i][1]]);
-                            $report->setMainFolder($mainf);
-                            if (!is_null($arr[$i][2])) {
-                                if (!$sousDossierRepository->findBy(['nomDossier' => $arr[$i][2]])) {
-                                    $subf = new SousDossier();
-                                    $subf->setNomDossier($arr[$i][2]);
-                                    $subf->setMainFolder($mainf);
-                                    $em->persist($subf);
-                                    $em->flush();
-                                    $report->setSubFolder($subf);
-                                } else {
-                                    $subf = $sousDossierRepository->findOneBy(['nomDossier' => $arr[$i][2]]);
-                                    $subf->setMainFolder($mainf);
-                                    $em->flush();
-                                    $report->setSubFolder($subf);
-                                }
                             }
                         }
+                    }else{
+                        $mainf = new Dossier();
+                        $mainf->setNomDossier($arr[$i][1]);
+                        $em->persist($mainf);
                         $em->flush();
+                        $report->setMainFolder($mainf);
+
+                        if(!is_null($arr[$i][2]))
+                        {
+                            if($sousDossierRepository->findOneBy(['nomDossier'=>$arr[$i][2]]))
+                            {
+                                $subf = $sousDossierRepository->findOneBy(['nomDossier'=>$arr[$i][2]]);
+                                $report->setSubFolder($subf);
+                            }else{
+                                $subf = new SousDossier();
+                                $subf->setNomDossier($arr[$i][2]);
+                                $subf->setMainFolder($mainf);
+                                $em->persist($subf);
+                                $em->flush();
+
+                                $report->setSubFolder($subf);
+                            }
+                        }
                     }
+
+
+                    $em->persist($report);
+                    $em->flush();
                 }
                 $this->addFlash('success',"L'importation s'est bien dérouléee.");
                 return $this->redirectToRoute("Importation");
@@ -511,6 +477,25 @@ class AdminController extends AbstractController
         }
 
         return $this->redirectToRoute('Importation');
+    }
+
+
+    /**
+     * @Route("/recherche-rapport", name="recherche-rapport", methods={"POST"})
+     */
+    public function searchReport(Request $request, ReportCatalogRepository $catalogRepository)
+    {
+        if($request->isMethod("POST"))
+        {
+            $query = $catalogRepository->createQueryBuilder('a')
+                ->select('a.Nom_Rapport','a.id')
+                ->where('a.Nom_Rapport LIKE :rapport')
+                ->setParameter('rapport','%'.$request->get('t').'%')
+                ->getQuery();
+
+            $result = $query->getArrayResult();
+            return new JsonResponse($result);
+        }
     }
 
 }

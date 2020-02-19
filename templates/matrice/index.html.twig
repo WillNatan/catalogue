@@ -1,0 +1,64 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Matrices{% endblock %}
+
+{% block body %}
+
+<div class="card">
+    <div class="card-header-primary">
+        <h4 class="card-title">Matrices</h4>
+    </div>
+    <div class="card-body">
+        <table class="table" id="matriceTable">
+            <thead>
+            <tr>
+                <th>Identifiant matrice</th>
+                <th>domaine</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for matrice in matrices %}
+                <tr>
+                    <td>{{ matrice.id }}</td>
+                    <td>{{ matrice.domaine.nomDossier }}</td>
+                    <td>
+                        <a href="{{ path('matrice_show', {'id': matrice.id}) }}" class="btn btn-primary">Voir</a>
+                        <a href="{{ path('matrice_edit', {'id': matrice.id}) }}" class="btn btn-behance">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <a href="{{ path('matrice_new') }}" class="btn btn-xs btn-primary">Nouvelle matrice</a>
+    </div>
+</div>
+
+
+
+{% endblock %}
+{% block js %}
+    <script src="{{ asset('back/js/plugins/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('datatables/responsive.bootstrap4.min.js') }}"></script>
+    <script>
+        // Call the dataTables jQuery plugin
+        $(document).ready(function() {
+            $('#matriceTable').DataTable({
+                dom: 'Bfrtip',
+                "language":{
+                    "url":"{{ asset('datatables/languages/french.json') }}"
+                },
+                buttons: [],
+                responsive: true,
+            });
+        });
+
+    </script>
+{% endblock %}

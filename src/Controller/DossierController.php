@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("admin/dossiers")
+ * @Route("dashboard/domaines")
  */
 class DossierController extends AbstractController
 {
@@ -28,12 +28,11 @@ class DossierController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="Nouveau-dossier", methods={"GET","POST"})
+     * @Route("/nouveau-domaine", name="Nouveau-dossier", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
         $dossier = new Dossier();
-        $subFolder = new SousDossier();
         $subfolders = new ArrayCollection();
 
         foreach ($dossier->getSubFolders() as $subfolder){
@@ -76,7 +75,7 @@ class DossierController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="Modifier-dossier", methods={"GET","POST"})
+     * @Route("/{id}/modifier-domaine", name="Modifier-dossier", methods={"GET","POST"})
      */
     public function edit(Request $request, Dossier $dossier): Response
     {

@@ -1,0 +1,17 @@
+{{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.domaine) }}
+        {{ form_widget(form.domaine) }}
+    </div>
+<div class="liens" data-prototype="{{ form_widget(form.liens.vars.prototype)|e('html_attr') }}">
+    {% for lien in form.liens %}
+       <div class="form-group">
+           <h4 class="title">Indicateur</h4>
+           {{ form_widget(lien.Indicateur) }}
+           <h4 class="title">Axes d'analyse</h4>
+           {{ form_widget(lien.Axes) }}
+       </div>
+    {% endfor %}
+</div>
+<button class="btn btn-info">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

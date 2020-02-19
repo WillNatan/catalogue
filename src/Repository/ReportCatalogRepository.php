@@ -19,6 +19,18 @@ class ReportCatalogRepository extends ServiceEntityRepository
         parent::__construct($registry, ReportCatalog::class);
     }
 
+
+    public function findEntitiesByString($str){
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT e
+                FROM ReportCatalog::class e
+                WHERE e.foo LIKE :str'
+            )
+            ->setParameter('str', '%'.$str.'%')
+            ->getResult();
+    }
+
     // /**
     //  * @return ReportCatalog[] Returns an array of ReportCatalog objects
     //  */

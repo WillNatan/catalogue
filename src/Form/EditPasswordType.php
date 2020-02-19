@@ -40,6 +40,7 @@ class EditPasswordType extends AbstractType
                     'invalid_message' => 'Les mots de passe de correspondent pas'
                 ]
                 )
+            ->add('reponsesecrete', TextType::class, ['mapped'=>false, 'attr'=>['class'=>'form-control']])
         ;
     }
 

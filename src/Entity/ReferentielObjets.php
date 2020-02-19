@@ -58,10 +58,27 @@ class ReferentielObjets
      */
     private $refObjRapports;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Liens", mappedBy="Indicateur")
+     */
+    private $liens;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Liens", mappedBy="Axes")
+     */
+    private $liensAxes;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $denomination;
+
 
     public function __construct()
     {
         $this->refObjRapports = new ArrayCollection();
+        $this->liens = new ArrayCollection();
+        $this->liensAxes = new ArrayCollection();
     }
 
     public function getId()
@@ -69,36 +86,36 @@ class ReferentielObjets
         return $this->id;
     }
 
-    public function getNomObjet(): ?string
+    public function getNomObjet()
     {
         return $this->nomObjet;
     }
 
-    public function setNomObjet(string $nomObjet): self
+    public function setNomObjet($nomObjet): self
     {
         $this->nomObjet = $nomObjet;
 
         return $this;
     }
 
-    public function getSchemaObj(): ?string
+    public function getSchemaObj()
     {
         return $this->schemaObj;
     }
 
-    public function setSchemaObj(string $schemaObj): self
+    public function setSchemaObj($schemaObj): self
     {
         $this->schemaObj = $schemaObj;
 
         return $this;
     }
 
-    public function getChamp(): ?string
+    public function getChamp()
     {
         return $this->champ;
     }
 
-    public function setChamp(string $champ): self
+    public function setChamp($champ): self
     {
         $this->champ = $champ;
 
@@ -136,48 +153,48 @@ class ReferentielObjets
         return $this;
     }
 
-    public function getTableobj(): ?string
+    public function getTableobj()
     {
         return $this->tableobj;
     }
 
-    public function setTableobj(?string $tableobj): self
+    public function setTableobj($tableobj): self
     {
         $this->tableobj = $tableobj;
 
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType()
     {
         return $this->type;
     }
 
-    public function setType(?string $type): self
+    public function setType($type): self
     {
         $this->type = $type;
 
         return $this;
     }
 
-    public function getQualification(): ?string
+    public function getQualification()
     {
         return $this->qualification;
     }
 
-    public function setQualification(?string $qualification): self
+    public function setQualification($qualification): self
     {
         $this->qualification = $qualification;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription()
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription($description): self
     {
         $this->description = $description;
 
@@ -187,5 +204,76 @@ class ReferentielObjets
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    /**
+     * @return Collection|Liens[]
+     */
+    public function getLiens(): Collection
+    {
+        return $this->liens;
+    }
+
+    public function addLien(Liens $lien): self
+    {
+        if (!$this->liens->contains($lien)) {
+            $this->liens[] = $lien;
+            $lien->setIndicateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLien(Liens $lien): self
+    {
+        if ($this->liens->contains($lien)) {
+            $this->liens->removeElement($lien);
+            // set the owning side to null (unless already changed)
+            if ($lien->getIndicateur() === $this) {
+                $lien->setIndicateur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Liens[]
+     */
+    public function getLiensAxes(): Collection
+    {
+        return $this->liensAxes;
+    }
+
+    public function addLiensAxe(Liens $liensAxe): self
+    {
+        if (!$this->liensAxes->contains($liensAxe)) {
+            $this->liensAxes[] = $liensAxe;
+            $liensAxe->addAxe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLiensAxe(Liens $liensAxe): self
+    {
+        if ($this->liensAxes->contains($liensAxe)) {
+            $this->liensAxes->removeElement($liensAxe);
+            $liensAxe->removeAxe($this);
+        }
+
+        return $this;
+    }
+
+    public function getDenomination()
+    {
+        return $this->denomination;
+    }
+
+    public function setDenomination($denomination): self
+    {
+        $this->denomination = $denomination;
+
+        return $this;
     }
 }

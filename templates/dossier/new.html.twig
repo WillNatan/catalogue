@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}Nouveau dossier{% endblock %}
+{% block title %}Nouveau domaine{% endblock %}
 
 {% block css %}
 
@@ -12,7 +12,7 @@
         <div class="col-12 mb-3">
             <div class="card">
                 <div class="card-header-primary">
-                    <h4>Créer un nouveau dossier</h4>
+                    <h4>Créer un nouveau domaine</h4>
                 </div>
                 <div class="card-body">
                     {{ include('dossier/_form.html.twig') }}
@@ -31,7 +31,7 @@
                     let collectionHolder;
 
 // setup an "add a tag" link
-let addTagButton = $('<button type="button" class="add_tag_link btn btn-warning">Ajouter un sous-dossier</button>');
+let addTagButton = $('<button type="button" class="add_tag_link btn btn-warning">Ajouter un sous-domaine</button>');
 let newLinkLi = $('<div class="form-group buttons"></div>').append(addTagButton);
 
 jQuery(document).ready(function() {

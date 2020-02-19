@@ -42,12 +42,26 @@
                                     <p class="text-warning">Catégorie</p>
                                     <p class="text-xs">{{ report_catalog.Categorie|nl2br }}</p>
                                 </div>
+                                <div class="col-12">
+                                    <hr>
+                                    <p class="text-warning">Denière modification</p>
+                                    <p class="text-xs">{{ report_catalog.lastUpdate|date('d-m-y à H:i:s') }}</p>
+                                </div>
+                                <div class="col-12">
+                                    <hr>
+                                    <p class="text-warning">Modifié par</p>
+                                    <p class="text-xs">{% if report_catalog.updatedBy %}
+                                            {{ report_catalog.updatedBy.username }}
+                                        {% endif %}</p>
+                                </div>
                             </div>
                             <div class="card-footer justify-content-center flex-wrap">
                                 <a href="{{ path('Catalogue-des-rapports') }}" class="btn btn-primary"><i
                                             class="fa fa-arrow-left"></i></a>
-                                <a href="{{ path('Modifier-rapport', {'id': report_catalog.id}) }}" class="btn btn-warning"><i
-                                            class="fa fa-edit"></i></a>
+                                {% if is_granted('ROLE_SUPER_ADMIN') == true %}
+                                    <a href="{{ path('Modifier-rapport', {'id': report_catalog.id}) }}" class="btn btn-warning"><i
+                                                class="fa fa-edit"></i></a>
+                                {% endif %}
                                 {{ include('report_catalog/_delete_form.html.twig') }}
                             </div>
                         </div>
@@ -78,9 +92,11 @@
                                         <li class="nav-item">
                                             <a href="#hist" class="nav-link" data-toggle="tab">Historique des versions</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a href="#sql" class="nav-link" data-toggle="tab">SQL</a>
-                                        </li>
+                                        {% if is_granted('ROLE_SUPER_ADMIN')==true %}
+                                            <li class="nav-item">
+                                                <a href="#sql" class="nav-link" data-toggle="tab">SQL</a>
+                                            </li>
+                                        {% endif %}
                                         <li class="nav-item">
                                             <a href="#ref" class="nav-link" data-toggle="tab">Référentiel objets</a>
                                         </li>
@@ -217,13 +233,5 @@
             },
             responsive:true,
         });
-        let editBtn = $('.editBtn');
-
-        editBtn.click(function () {
-            let objId = $(this).data('object');
-            let route = "{{ path('edit_object', {'id': 'obj'}) }}";
-            route = route.replace('obj', objId);
-            $('#objForm').attr('action', route)
-        })
     </script>
 {% endblock %}

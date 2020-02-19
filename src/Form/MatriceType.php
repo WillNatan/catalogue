@@ -3,24 +3,29 @@
 namespace App\Form;
 
 use App\Entity\Dossier;
+use App\Entity\Matrice;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-class DossierType extends AbstractType
+class MatriceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nomDossier', TextType::class, ['attr'=>['class'=>'form-control'],'label'=>'Nom du domaine']);
-            $builder->add('subFolders', CollectionType::class, ['label'=>false,
-                'entry_type' => SubFolderType::class,
+            ->add('domaine', EntityType::class, ['class'=>Dossier::class,
+                'choice_label'=>'nomDossier',
+                'attr'=>['class'=>'form-control']
+            ])
+            ->add('liens', CollectionType::class, ['label'=>false,
+                'entry_type' => LiensType::class,
                 'entry_options' => ['label' => null],
                 'allow_add' => true,
                 'by_reference' => false,
-                'allow_delete' => true,
+                'allow_delete' => true
+
             ]);
         ;
     }
@@ -28,7 +33,7 @@ class DossierType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Dossier::class,
+            'data_class' => Matrice::class,
         ]);
     }
 }
