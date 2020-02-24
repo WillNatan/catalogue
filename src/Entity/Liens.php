@@ -19,12 +19,12 @@ class Liens
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ReferentielObjets", inversedBy="liens" ,cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\ReferentielObjets", inversedBy="liens",cascade={"persist"})
      */
     private $Indicateur;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\ReferentielObjets", inversedBy="liensAxes" ,cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="App\Entity\ReferentielObjets", inversedBy="liensAxes",cascade={"persist"})
      * @ORM\JoinTable(name="LiensAxes_Objets")
      */
     private $Axes;

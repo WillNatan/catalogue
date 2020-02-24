@@ -37,7 +37,6 @@
 
   <link href="{{ asset('back/css/loader-1.css') }}" rel="stylesheet"/>
   <link href="{{ asset('front/css/main.css') }}" rel="stylesheet"/>
-
   {% block css %}
 
   {% endblock %}
@@ -234,6 +233,7 @@
 <script src="{{ asset('back/js/plugins/jasny-bootstrap.min.js') }}"></script>
 <script src="{{ asset('back/js/material-dashboard.min40a0.js') }}"></script>
 <script src="{{ asset('back/js/admin-custom.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
   {% if app.user.responseSecrete is null %}
   $('#secretResponseModal').modal(

@@ -17,8 +17,9 @@
                 </thead>
                 <tbody>
                         {% for lien in matrice.liens %}
+                            {% dump lien.indicateur %}
                         <tr>
-                           <td>{{ lien.indicateur.nomObjet }}</td>
+                           <td>{{ lien.indicateur.denomination }}</td>
                             <td>
                                 <a href="{{ path('axes_show', {'id': lien.id}) }}">Axes d'analyse</a>
                             </td>

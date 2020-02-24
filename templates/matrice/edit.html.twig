@@ -9,9 +9,10 @@
         </div>
         <div class="card-body">
             {{ include('matrice/_form.html.twig', {'button_label': 'Modifier'}) }}
+            <p class="text-danger">Si la liste des indicateurs ainsi que des axes d'analyse paraissent incomplètes, vérifiez leur dénomination.</p>
         </div>
         <div class="card-footer">
-            <a href="{{ path('matrice_index') }}">back to list</a>
+            <a href="{{ path('matrice_index') }}" class="btn btn-primary">Retour</a>
 
             {{ include('matrice/_delete_form.html.twig') }}
         </div>

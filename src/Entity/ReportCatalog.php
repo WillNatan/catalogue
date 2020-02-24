@@ -117,6 +117,11 @@ class ReportCatalog
      */
     private $refObjRapports;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $statut;
+
     public function __construct()
     {
         $this->referentielObjets = new ArrayCollection();
@@ -408,5 +413,17 @@ class ReportCatalog
     public function __toString()
     {
         return (string) $this->getId();
+    }
+
+    public function getStatut(): ?bool
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(bool $statut): self
+    {
+        $this->statut = $statut;
+
+        return $this;
     }
 }

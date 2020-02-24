@@ -27,14 +27,14 @@ class LiensType extends AbstractType
         $builder
             ->add('Indicateur', EntityType::class, ['class'=>ReferentielObjets::class,
                 'choices'=>$this->indicateurRepo->findByIndicateurs(),
-                'choice_label'=>'nomObjet',
+                'choice_label'=>'denomination',
                 'attr'=>['class'=>'form-control']
             ])
             ->add('Axes', EntityType::class,
                 [
                     'class'=>ReferentielObjets::class,
                     'choices'=>$this->indicateurRepo->findByAxes(),
-                    'choice_label'=>'nomObjet',
+                    'choice_label'=>'denomination',
                     'multiple'=>true,
                     'attr'=>['class'=>'form-control','style'=>'height:100%','size'=>10]
                 ])

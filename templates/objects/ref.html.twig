@@ -26,18 +26,18 @@
                                 <th>Table</th>
                                 <th>Champ</th>
                                 <th>Dénomination</th>
-                                <th>Etat</th>
+                                <th class="text-center">Etat</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for ref in refetentiels %}
                                 <tr>
-                                    <td>{{ ref.nomObjet }}</td>
-                                    <td>{{ ref.schemaObj }}</td>
-                                    <td>{{ ref.tableobj }}</td>
-                                    <td>{{ ref.champ }}</td>
-                                    <td>{{ ref.denomination }}</td>
+                                    <td>{% if ref.nomObjet %}{{ ref.nomObjet }}{% else %}Aucun objet lié{% endif %}</td>
+                                    <td>{% if ref.schemaObj %}{{ ref.schemaObj }}{% else %}Aucun utilisateur{% endif %}</td>
+                                    <td>{% if ref.tableobj %}{{ ref.tableobj }}{% else %}Aucune table{% endif %}</td>
+                                    <td>{% if ref.champ %}{{ ref.champ }}{% else %}Aucun champ{% endif %}</td>
+                                    <td>{% if ref.denomination %}{{ ref.denomination }}{% else %}<span class="text-danger">Aucun</span>{% endif %}</td>
                                     <td>
                                         <ul>
                                             {% if ref.qualification is null or ref.qualification is empty %}
@@ -52,14 +52,18 @@
                                             {% if ref.denomination is null or ref.denomination is empty %}
                                                 <li>Aucune dénomination définie</li>
                                             {% endif %}
+                                            {% if ref.denomination and ref.description and ref.type and ref.qualification %}
+                                                <p class="text-success text-center font-weight-bold">OK</p>
+                                            {% endif %}
                                         </ul>
                                     </td>
                                     <td>
                                         <div class="d-flex flex-wrap">
                                             <div class="flex-wrap justify-content-center">
-                                                <a href="{{ path('objets_details', {'id': ref.id}) }}" class="btn btn-primary">Voir</a>
+                                                <a href="{{ path('objets_details', {'id': ref.id}) }}" class="btn btn-primary btn-sm"><i class="material-icons">forward</i></a>
                                                 {% if is_granted('ROLE_SUPER_ADMIN') == true %}
-                                                    <button class="btn btn-warning editBtn" data-target="#exampleModalLong" data-object="{{ ref.id }}">Modifier</button>
+                                                    <button class="btn btn-warning btn-sm editBtn" data-target="#exampleModalLong" data-object="{{ ref.id }}"><i class="material-icons">edit</i></button>
+                                                    <button class="btn btn-danger btn-sm" id="deleteBtn" ><i class="material-icons">delete</i></button>
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -70,10 +74,13 @@
                         </table>
                     </div>
                 </div>
+                <div class="card-footer">
+                    <a href="{{ path('newobject') }}"><button class="btn btn-info">Ajouter</button></a>
+                </div>
             </div>
         </div>
     </div>
-    <form id="objForm" method="post">
+    <form id="objForm" method="post" data-object="">
         <div class="modal fade" id="objectDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -86,15 +93,16 @@
                     <div class="modal-body">
                        <div class="form-group">
                             <label for="description">Description</label>
-                           <textarea name="" id="description" cols="30" rows="10" class="form-control"></textarea>
+                           <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
                         </div>
                         <div class="form-group">
                             <label for="type">Type</label>
-                            <input type="text" id="type" class="form-control">
+                            <input type="text" name="type" id="type" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="qualification">Qualification</label>
-                            <select name="Qualification" id="qualification" class="form-control">
+                            <p class="text-danger d-none danger-text">Vous ne pouvez plus changer la qualification de cet objet, car il est utilisé dans une matrice. Supprimez la ligne de la(les) matrice(s) afin de procéder à la modification.<p/>
+                            <select name="qualification" id="qualification" class="form-control">
                                 <option value="" disabled selected>Choisissez une qualification</option>
                                 <option value="indicateur">Indicateur</option>
                                 <option value="axe d'analyse">Axe d'analyse</option>
@@ -140,17 +148,43 @@
                 function (data, err) {
                     $('.loader-wrapper').fadeOut();
                     $('#objectDialog').modal();
+                    $('#objForm').attr('data-object', refID);
                     $('#denomination').val(data.denomination);
                     $('#type').val(data.type);
-                    $('#qualification').val(data.qualification);
+                    if(data.qualification === 'disabled')
+                    {
+                        $('#qualification').prop('disabled','disabled').val(data.defaultQual).css({'background-color':'grey'});
+                        $('.danger-text').removeClass('d-none');
+                    }else{
+                        $('#qualification').removeAttr('disabled','disabled').val(data.qualification).css({'background-color':'transparent'});
+                        $('.danger-text').addClass('d-none');
+                    }
                     $('#description').val(data.description);
                 })
             })
         });
 
-        $('#objForm').onsubmit(function (e) {
+        $('#objForm').submit(function (e) {
             e.preventDefault();
+            let url = '{{ path('objets_details', {'id':'refID'}) }}';
+            url = url.replace('refID', $('#objForm').data('object'));
+            $(this).attr('action',url);
+            $('#objForm')[0].submit();
 
+        });
+        $('#deleteBtn').click(function () {
+            Swal.fire({
+                title: 'Custom width, padding, background.',
+                width: 600,
+                padding: '3em',
+                background: '#fff url(/images/trees.png)',
+                backdrop: `
+    rgba(0,0,123,0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `
+            })
         })
     </script>
 {% endblock %}

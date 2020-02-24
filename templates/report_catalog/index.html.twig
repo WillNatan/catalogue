@@ -30,6 +30,7 @@
                                 <th>Nom du rapport</th>
                                 <th>Version actuelle</th>
                                 <th>Catégorie</th>
+                                <th>Statut</th>
                                 <th>actions</th>
                             </tr>
                             </thead>
@@ -47,6 +48,7 @@
                                     <td>{{ report.nomRapport }}</td>
                                     <td>{{ report.versionActuelle }}</td>
                                     <td>{{ report.categorie }}</td>
+                                    <td>{% if report.statut %}<span class="text-success">Actif</span>{% else %}<span class="text-danger">Decommissionné</span>{% endif %}</td>
                                     <td class="d-flex">
                                         <a href="{{ path('Détails-rapport', {'id': report.id}) }}">
                                             <button class="btn btn-primary">Voir</button>

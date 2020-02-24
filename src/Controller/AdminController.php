@@ -5,18 +5,14 @@ namespace App\Controller;
 
 use App\Entity\Dossier;
 use App\Entity\Imports;
-use App\Entity\ReferentielObjets;
 use App\Entity\ReportCatalog;
-
 use App\Entity\SousDossier;
 use App\Form\EditPasswordType;
 use App\Form\ImportType;
-use App\Form\ObjectType;
 use App\Form\UserEditType;
 use App\Form\UserNotGrantedEditType;
 use App\Repository\DossierRepository;
 use App\Repository\ImportsRepository;
-use App\Repository\ReferentielObjetsRepository;
 use App\Repository\ReportCatalogRepository;
 use App\Repository\SousDossierRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +24,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,10 +31,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 
 /**
@@ -121,53 +113,7 @@ class AdminController extends AbstractController
     }
 
 
-    /**
-     * @Route("/objets", name="objets")
-     */
-    public function objets(Request $request, ReferentielObjetsRepository $objetsRepository)
-    {
 
-        return $this->render('admin/ref.html.twig', ['refetentiels'=>$objetsRepository->findAll()]);
-    }
-
-
-    /**
-     * @Route("/getObjectDetails/{id}", name="getObjectsDetails", methods={"POST"})
-     */
-    public function getObjectsDetails(ReferentielObjets $objets)
-    {
-
-        return new JsonResponse([
-            'description'=>$objets->getDescription(),
-            'type'=>$objets->getType(),
-            'qualification'=>$objets->getQualification(),
-            'denomination'=>$objets->getDenomination()
-        ]);
-    }
-
-    /**
-     * @Route("/objets/{id}", name="objets_details")
-     */
-    public function detailsObjets(Request $request,AccessDecisionManagerInterface $accessDecisionManager, ReferentielObjets $objets)
-    {
-        $form = $this->createForm(ObjectType::class, $objets);
-        $form->handleRequest($request);
-
-        if($request->isMethod('post')){
-            $object = $request->request->all();
-            var_dump($object);
-        }
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            return new RedirectResponse($request->headers->get('referer'));
-        }
-
-        return $this->render('objects/show.html.twig', [
-            'objets'=>$objets,
-            'form'=>$form->createView()
-        ]);
-    }
 
     /**
      * @Route("/profil/{id}", name="Modifier-Profil")
@@ -331,15 +277,25 @@ class AdminController extends AbstractController
             $truncateSql1 = $platform->getTruncateTableSQL('report_catalog');
             $truncateSql2 = $platform->getTruncateTableSQL('dossier');
             $truncateSql3 = $platform->getTruncateTableSQL('sous_dossier');
+            $truncateSql4 = $platform->getTruncateTableSQL('ref_obj_rapport');
+            $truncateSql5 = $platform->getTruncateTableSQL('referentiel_objets');
+            $truncateSql6 = $platform->getTruncateTableSQL('matrice');
+            $truncateSql7 = $platform->getTruncateTableSQL('liensaxes_objets');
+            $truncateSql8 = $platform->getTruncateTableSQL('liens');
             $conn->executeUpdate($truncateSql1);
             $conn->executeUpdate($truncateSql2);
             $conn->executeUpdate($truncateSql3);
+            $conn->executeUpdate($truncateSql4);
+            $conn->executeUpdate($truncateSql5);
+            $conn->executeUpdate($truncateSql6);
+            $conn->executeUpdate($truncateSql7);
+            $conn->executeUpdate($truncateSql8);
             $conn->executeQuery('SET FOREIGN_KEY_CHECKS = 1;');
             $import->setLastDate(new \DateTime('now'));
             $excelFile = $import->getExcelFile();
             if ($excelFile) {
                 $excelFileName = pathinfo($excelFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $newFileName = $excelFileName . '-' . $import->getLastDate()->format('d-m-Y h:i:s') . '.' . $excelFile->guessExtension();
+                $newFileName = $excelFileName . '-' . $import->getLastDate()->format('dmYhis') . '.' . $excelFile->guessExtension();
 
                 try {
                     $excelFile->move(
@@ -497,5 +453,4 @@ class AdminController extends AbstractController
             return new JsonResponse($result);
         }
     }
-
 }

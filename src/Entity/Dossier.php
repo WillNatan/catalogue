@@ -26,17 +26,17 @@ class Dossier
     private $nomDossier;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SousDossier", mappedBy="mainFolder", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\SousDossier", mappedBy="mainFolder", cascade={"remove"})
      */
     private $subFolders;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="mainFolder", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="mainFolder", cascade={"remove"})
      */
     private $rapport;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Matrice", mappedBy="domaine")
+     * @ORM\OneToMany(targetEntity="App\Entity\Matrice", mappedBy="domaine", cascade={"remove"})
      */
     private $matrices;
 

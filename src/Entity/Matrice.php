@@ -19,12 +19,12 @@ class Matrice
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dossier", inversedBy="matrices" ,cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Dossier", inversedBy="matrices" ,cascade={"remove"})
      */
     private $domaine;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Liens", mappedBy="matrice" ,cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Liens", mappedBy="matrice" ,cascade={"remove", "persist"})
      */
     private $liens;
 

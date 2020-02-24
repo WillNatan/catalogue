@@ -20,21 +20,36 @@
         <div class="tab-content text-center">
             <div class="tab-pane active" id="informations-générales">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             {{ form_widget(form.mainFolder) }}
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             {{ form_widget(form.subFolder) }}
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             {{ form_label(form.VersionActuelle) }}
                             {{ form_widget(form.VersionActuelle) }}
                         </div>
+                    </div>
+                    <div class="col-md-3">
+                                {% for check in form.statut %}
+                        <div class="form-check form-check-radio">
+                            <label class="form-check-label">
+                                    {{ form_widget(check) }}
+                                    {{ form_label(check) }}
+                                <span class="circle">
+                                    <span class="check"></span>
+                                </span>
+                            </label>
+                        </div>
+                                {% endfor %}
+
+
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">

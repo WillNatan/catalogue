@@ -1,0 +1,16 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header-primary">
+            <h4 class="card-title">Nouvel objet</h4>
+        </div>
+        <div class="card-body">
+            {{ include('objects/_form.html.twig') }}
+        </div>
+        <div class="card-footer">
+            <input type="submit" value="Enregistrer" class="btn btn-primary">
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

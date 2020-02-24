@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Dossier;
 use App\Entity\SousDossier;
 use App\Entity\ReportCatalog;
+use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -25,7 +26,7 @@ class ReportCatalogType extends AbstractType
         $builder
         ->add('mainFolder', EntityType::class, [
             'class' => Dossier::class,
-            'placeholder'=>'Sélectionnez un dossier',
+            'placeholder'=>'Sélectionnez un domaine',
             'choice_label' => 'nomDossier',
             'label_attr'=>['class'=>'small'],
             'label'=>'Dossier',
@@ -33,6 +34,17 @@ class ReportCatalogType extends AbstractType
         ])
         
             ->add('Nom_Rapport', TextType::class, ['required'=>false,'label'=>'Nom du rapport','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
+            ->add('statut', ChoiceType::class, ['choices'=>
+        [
+            'Actif'=>true,
+            'Décommissionné'=>false
+        ],
+                'expanded'=>true,
+                'choice_attr'=>[
+                    'Actif'=>['class'=>'form-check-input'],
+                    'Décommissionné'=>['class'=>'form-check-input']
+                ]
+            ])
             ->add('VersionActuelle', TextType::class, ['required'=>false, 'label'=>'Version actuelle','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
             ->add('Commentaire', TextareaType::class, ['required'=>false,'label'=>'Commentaire','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control','rows'=>8]])
             ->add('Categorie', TextType::class, ['required'=>false,'label'=>'Catégorie','label_attr'=>['class'=>'small'],'attr'=>['class'=>'form-control']])
@@ -75,7 +87,7 @@ class ReportCatalogType extends AbstractType
             $subfolders = null === $folder ? [] : $folder->getSubFolders();
             $form->add('subFolder', EntityType::class, ['required'=>false,
                 'class' => SousDossier::class,
-                'placeholder' => 'Sous-dossier (si existant)',
+                'placeholder' => 'Sous-domaine (si existant)',
                 'attr'=>['class'=>'form-control mainFolder'],
                 'label_attr'=>['class'=>'small'],
                 'choices' => $subfolders,
