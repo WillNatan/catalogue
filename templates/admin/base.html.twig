@@ -37,6 +37,7 @@
 
   <link href="{{ asset('back/css/loader-1.css') }}" rel="stylesheet"/>
   <link href="{{ asset('front/css/main.css') }}" rel="stylesheet"/>
+  <link href="{{ asset('back/css/search.css') }}" rel="stylesheet"/>
   {% block css %}
 
   {% endblock %}
@@ -65,7 +66,7 @@
       </a></div>
 
     <div class="sidebar-wrapper ">
-      <ul class="nav">
+      <ul class="nav" id="navbar">
         <li class="nav-item ">
           <a class="nav-link" href="{{ path('Administration') }}">
             <i class="material-icons">web</i>
@@ -117,8 +118,6 @@
           </a>
         </li>
       </ul>
-
-
     </div>
   </div>
 
@@ -137,11 +136,19 @@
           <span class="navbar-toggler-icon icon-bar"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end">
-            <div class="input-group no-border">
-              <button type="button" id="search-btn" class="btn btn-white btn-round btn-just-icon">
-                <i class="material-icons">search</i>
-                <div class="ripple-container"></div>
-              </button>
+
+            <div id="wrap">
+              <form action="" autocomplete="on">
+                <input id="search-input" onfocusout="hideList()" name="search" type="text" placeholder="Votre recherche...">
+                <button type="button" id="search_submit" class="btn btn-white btn-round btn-just-icon">
+                  <i class="material-icons">search</i>
+                  <div class="ripple-container"></div>
+                </button>
+              </form>
+            </div>
+            <div class="list" id="list">
+              <ul class="results">
+              </ul>
             </div>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
@@ -205,26 +212,6 @@
   </div>
 </div>
 
-<div class="modal fade " id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog longwidth" role="document">
-    <div class="modal-content card">
-      <div class="modal-header card-header-warning">
-        <h5 class="modal-title" id="exampleModalLabel">Résultats de votre recherche</h5>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <input type="text" class="form-control" id="search-input" placeholder="Rechercher un rapport...">
-        </div>
-        <hr>
-        <h4 class="modal-title text-warning text-center">Résultats</h4>
-        <div class="row results">
-
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!--   Core JS Files   -->
 <script src="{{ asset('back/js/core/jquery.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('back/js/core/popper.min.js') }}" type="text/javascript"></script>
@@ -235,51 +222,58 @@
 <script src="{{ asset('back/js/admin-custom.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 <script>
-  {% if app.user.responseSecrete is null %}
-  $('#secretResponseModal').modal(
-          {backdrop: 'static', keyboard: false}
-  );
-  {% endif %}
-
-  $('#search-btn').click(function () {
-    $('#searchModal').modal(
-    );
+  $('#navbar li').click(function () {
+    $('.loader-wrapper').fadeIn(200)
   });
-  $('#search-input').keyup(function () {
-    $.post('{{ path('recherche-rapport') }}',
-            {
-              t : $('#search-input').val()
-            },
-            function (data) {
-              $('.results').empty();
-              if($('#search-input').val() === "")
-              {
-                $('.results').empty();
-              }
-              else{
-                data.map((report, index) =>(
+  $('.loader-wrapper').fadeIn(200);
+  $(document).ready(function () {
+    $('.loader-wrapper').fadeOut(200);
+    {% if app.user.responseSecrete is null %}
+    $('#secretResponseModal').modal(
+            {backdrop: 'static', keyboard: false}
+    );
+    {% endif %}
+    let searchInput = document.getElementById('search-input');
+    let timeout = null;
 
-                        $('.results').append(
-                                '<div class="col">' +
-                                '<div class="card">' +
-                                ' <div class="card-body text-center">' +
-                                '<div class="row">' +
-                                '<div class="col-12">' +
-                                '<i class="material-icons">description</i>' +
-                                '</div>' +
-                                '<div class="col-12">' +
-                                '<a href="{{ path('Catalogue-des-rapports') }}'+report.id+'">'+report.Nom_Rapport+'</a>' +
-                                '</div>' +
-                                '</div>' +
-                                ' </div>' +
-                                '</div>' +
-                                '</div>'
-                        )
-                ))
-              }
-            }
-    )
+    searchInput.addEventListener('keyup', function (e) {
+      if(searchInput.value === "")
+      {
+        hideList()
+      }
+      clearTimeout(timeout);
+
+
+      timeout = setTimeout(function () {
+        $.post('{{ path('recherche-rapport') }}',
+                {
+                  t : $('#search-input').val()
+                },
+                function (data) {
+                  $('.results').empty();
+                  if($('#search-input').val() === "")
+                  {
+                    hideList();
+                    $('.results').empty();
+                  }
+                  else{
+                    $('.list').fadeIn(200);
+                    data.map((report, index) =>(
+
+                            $('.results').append(
+                                    '<li><a href="{{ path('Catalogue-des-rapports') }}'+report.id+'" class="text-info d-flex justify-content-between"><span><span class="btn btn-white btn-round btn-just-icon mr-1"><i class="material-icons">content_paste</i></span>'+report.Nom_Rapport+'</span><span> '+report.VersionActuelle+'</span></a><span class="ml-1 badge badge-pill badge-info">'+report.nomDossier+'</span></li>'
+                            )
+                    ))
+                  }
+                }
+        )
+      }, 1000);
+    });
   })
+  function hideList()
+  {
+    $('#list').fadeOut(200);
+  }
 </script>
 {% block js %}
 {% endblock %}

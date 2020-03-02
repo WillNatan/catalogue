@@ -2,9 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 use App\Entity\SousDossier;
-use App\Entity\ReportCatalog;
+use App\Entity\Reports;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -29,7 +29,7 @@ class SQLTextType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ReportCatalog::class,
+            'data_class' => Reports::class,
         ]);
     }
 }

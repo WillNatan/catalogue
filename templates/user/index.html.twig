@@ -39,9 +39,9 @@
                                 <td>
                                     <div class="d-flex">
                                         {% if user.id == app.user.id %}
-                                            <a href="{{ path('Profil', {'id': app.user.id}) }}" class="btn btn-warning mr-1">Voir mon profil</a>
+                                            <a href="{{ path('Profil') }}" class="btn btn-warning mr-1">Voir mon profil</a>
                                         {% else %}
-                                            <a href="{{ path('Détails-utilisateur', {'id': user.id}) }}" class="btn btn-warning mr-1">Voir</a>
+                                            <a href="{{ path('Détails-utilisateur', {'id': app.user.id}) }}" class="btn btn-warning mr-1">Voir</a>
                                             <a href="{{ path('Modifier-utilisateur', {'id': user.id}) }}" class="btn btn-warning">Modifier</a>
                                         {% endif %}
                                     </div>

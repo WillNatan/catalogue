@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 
 use App\Entity\Liens;
 use App\Entity\ReferentielObjets;

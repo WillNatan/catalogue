@@ -43,12 +43,12 @@ class User implements UserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="createdBy")
+     * @ORM\OneToMany(targetEntity="App\Entity\Reports", mappedBy="createdBy")
      */
     private $createdBy;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="updatedBy")
+     * @ORM\OneToMany(targetEntity="App\Entity\Reports", mappedBy="updatedBy")
      */
     private $updatedBy;
     
@@ -172,14 +172,14 @@ class User implements UserInterface
     
 
     /**
-     * @return Collection|ReportCatalog[]
+     * @return Collection|Reports[]
      */
     public function getCreatedBy(): Collection
     {
         return $this->createdBy;
     }
 
-    public function addCreatedBy(ReportCatalog $createdBy): self
+    public function addCreatedBy(Reports $createdBy): self
     {
         if (!$this->createdBy->contains($createdBy)) {
             $this->createdBy[] = $createdBy;
@@ -189,7 +189,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeCreatedBy(ReportCatalog $createdBy): self
+    public function removeCreatedBy(Reports $createdBy): self
     {
         if ($this->createdBy->contains($createdBy)) {
             $this->createdBy->removeElement($createdBy);
@@ -203,14 +203,14 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ReportCatalog[]
+     * @return Collection|Reports[]
      */
     public function getUpdatedBy(): Collection
     {
         return $this->updatedBy;
     }
 
-    public function addUpdatedBy(ReportCatalog $updatedBy): self
+    public function addUpdatedBy(Reports $updatedBy): self
     {
         if (!$this->updatedBy->contains($updatedBy)) {
             $this->updatedBy[] = $updatedBy;
@@ -220,7 +220,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function removeUpdatedBy(ReportCatalog $updatedBy): self
+    public function removeUpdatedBy(Reports $updatedBy): self
     {
         if ($this->updatedBy->contains($updatedBy)) {
             $this->updatedBy->removeElement($updatedBy);

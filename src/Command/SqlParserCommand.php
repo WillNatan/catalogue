@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Entity\ReferentielObjets;
 use App\Entity\RefObjRapport;
-use App\Entity\ReportCatalog;
+use App\Entity\Reports;
 use App\Repository\ReportCatalogRepository;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -43,7 +43,7 @@ class SqlParserCommand extends Command
 
 
         /* Pour tous les rapports qui existent dans la base de donnée */
-        foreach ($em->getRepository(ReportCatalog::class)->findAll() as $report)
+        foreach ($em->getRepository(Reports::class)->findAll() as $report)
         {
             /* Pour toutes les références objets-rapports qui existent dans la base de donnée qui ont pour ID le rapport de la boucle courante */
             foreach($em->getRepository(RefObjRapport::class)->findBy(['rapport'=>$report->getNomRapport()]) as $ref)

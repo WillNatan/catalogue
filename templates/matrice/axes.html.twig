@@ -12,12 +12,16 @@
                 <thead>
                 <tr>
                     <th>Nom axe d'analyse</th>
+                    <th>Dénomination</th>
+                    <th>Type</th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for axe in lien.axes %}
                     <tr>
-                        <td>{{ axe.nomObjet }}</td>
+                        <td><a href="{{ path('objets_details', {'id': axe.id}) }}">{{ axe.nomObjet }}</a></td>
+                        <td>{{ axe.denomination }}</td>
+                        <td>{{ axe.type }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

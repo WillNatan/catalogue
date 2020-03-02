@@ -16,6 +16,9 @@ class FrontController extends AbstractController
 {
     /**
      * @Route("/", name="Main")
+     * @param ReportCatalogRepository $catalogRepository
+     * @param UserRepository $userRepository
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function index(ReportCatalogRepository $catalogRepository, UserRepository $userRepository)
     {
@@ -31,26 +34,37 @@ class FrontController extends AbstractController
 
     /**
      * @Route("/premiere-connexion", name="first-login")
+     * @param ReportCatalogRepository $catalogRepository
+     * @param UserRepository $userRepository
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-    public function firstLogin(ReportCatalogRepository $catalogRepository, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function firstLogin(ReportCatalogRepository $catalogRepository,UserRepository $userRepository, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-
-        $user = new User();
-        $form = $this->createForm(firstLoginType::class, $user);
-        $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
-            $user->setPassword($encodedPassword);
-            $user->setRoles(['ROLE_USER','ROLE_ADMIN']);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
+        if(!empty($userRepository->findAll()))
+        {
             return $this->redirectToRoute('Administration');
         }
-        return $this->render('front/firstreg.html.twig', [
-            'form'=>$form->createView()
-        ]);
+        else{
+            $user = new User();
+            $form = $this->createForm(firstLoginType::class, $user);
+            $form->handleRequest($request);
+
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $encodedPassword = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
+                $user->setPassword($encodedPassword);
+                $user->setRoles(['ROLE_USER','ROLE_ADMIN', 'ROLE_SUPER_ADMIN']);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+                return $this->redirectToRoute('Administration');
+            }
+            return $this->render('front/firstreg.html.twig', [
+                'form'=>$form->createView()
+            ]);
+        }
+
     }
 }

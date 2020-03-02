@@ -25,13 +25,13 @@
                             <tr>
                                 <th>N°</th>
                                 <th>Créateur</th>
-                                <th>Dossier</th>
-                                <th>Sous-dossier</th>
+                                <th>Domaine</th>
+                                <th>Sous-domaine</th>
                                 <th>Nom du rapport</th>
                                 <th>Version actuelle</th>
                                 <th>Catégorie</th>
                                 <th>Statut</th>
-                                <th>actions</th>
+                                <th class="text-right">actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -43,7 +43,9 @@
                                             {{ report.mainFolder.nomDossier }}
                                         {% endif %}</td>
                                     <td>{% if report.subFolder %}
-                                            {{ report.subFolder.nomDossier }}
+                                            <span class="text-primary">{{ report.subFolder.nomDossier }}</span>
+                                            {% else %}
+                                            Aucun sous-domaine
                                         {% endif %}</td>
                                     <td>{{ report.nomRapport }}</td>
                                     <td>{{ report.versionActuelle }}</td>

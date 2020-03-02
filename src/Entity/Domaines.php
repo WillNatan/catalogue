@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\DossierRepository")
  */
-class Dossier
+class Domaines
 {
     /**
      * @ORM\Id()
@@ -31,12 +31,12 @@ class Dossier
     private $subFolders;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="mainFolder", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Reports", mappedBy="mainFolder")
      */
     private $rapport;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Matrice", mappedBy="domaine", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Matrice", mappedBy="domaine")
      */
     private $matrices;
 
@@ -98,14 +98,14 @@ class Dossier
     }
 
     /**
-     * @return Collection|ReportCatalog[]
+     * @return Collection|Reports[]
      */
     public function getRapport(): Collection
     {
         return $this->rapport;
     }
 
-    public function addRapport(ReportCatalog $rapport): self
+    public function addRapport(Reports $rapport): self
     {
         if (!$this->rapport->contains($rapport)) {
             $this->rapport[] = $rapport;
@@ -115,7 +115,7 @@ class Dossier
         return $this;
     }
 
-    public function removeRapport(ReportCatalog $rapport): self
+    public function removeRapport(Reports $rapport): self
     {
         if ($this->rapport->contains($rapport)) {
             $this->rapport->removeElement($rapport);

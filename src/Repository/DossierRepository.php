@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
- * @method Dossier|null find($id, $lockMode = null, $lockVersion = null)
- * @method Dossier|null findOneBy(array $criteria, array $orderBy = null)
- * @method Dossier[]    findAll()
- * @method Dossier[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Domaines|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Domaines|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Domaines[]    findAll()
+ * @method Domaines[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class DossierRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Dossier::class);
+        parent::__construct($registry, Domaines::class);
     }
 
     // /**
-    //  * @return Dossier[] Returns an array of Dossier objects
+    //  * @return Domaines[] Returns an array of Domaines objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class DossierRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Dossier
+    public function findOneBySomeField($value): ?Domaines
     {
         return $this->createQueryBuilder('d')
             ->andWhere('d.exampleField = :val')

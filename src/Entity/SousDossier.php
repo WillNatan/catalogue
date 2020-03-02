@@ -26,14 +26,14 @@ class SousDossier
     private $nomDossier;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dossier", inversedBy="subFolders")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Domaines", inversedBy="subFolders")
      * @ORM\JoinColumn(name="mainfolder_id", referencedColumnName="id")
      */
     private $mainFolder;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ReportCatalog", mappedBy="subFolder")
+     * @ORM\OneToMany(targetEntity="App\Entity\Reports", mappedBy="subFolder")
      */
     private $rapport;
 
@@ -59,12 +59,12 @@ class SousDossier
         return $this;
     }
 
-    public function getMainFolder(): ?Dossier
+    public function getMainFolder(): ?Domaines
     {
         return $this->mainFolder;
     }
 
-    public function setMainFolder(?Dossier $mainFolder): self
+    public function setMainFolder(?Domaines $mainFolder): self
     {
         $this->mainFolder = $mainFolder;
 
@@ -78,14 +78,14 @@ class SousDossier
     }
 
     /**
-     * @return Collection|ReportCatalog[]
+     * @return Collection|Reports[]
      */
     public function getRapport(): Collection
     {
         return $this->rapport;
     }
 
-    public function addRapport(ReportCatalog $rapport): self
+    public function addRapport(Reports $rapport): self
     {
         if (!$this->rapport->contains($rapport)) {
             $this->rapport[] = $rapport;
@@ -95,7 +95,7 @@ class SousDossier
         return $this;
     }
 
-    public function removeRapport(ReportCatalog $rapport): self
+    public function removeRapport(Reports $rapport): self
     {
         if ($this->rapport->contains($rapport)) {
             $this->rapport->removeElement($rapport);

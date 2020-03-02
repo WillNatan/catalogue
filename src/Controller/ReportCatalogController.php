@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\ReferentielObjets;
 use App\Entity\RefObjRapport;
-use App\Entity\ReportCatalog;
+use App\Entity\Reports;
 use App\Form\ReportCatalogType;
 use App\Form\SQLTextType;
 use App\Repository\DossierRepository;
@@ -42,7 +42,7 @@ class ReportCatalogController extends AbstractController
         if (!$accessDecisionManager->decide($token, ['ROLE_SUPER_ADMIN'])) {
             return $this->redirectToRoute('Administration');
         };
-        $reportCatalog = new ReportCatalog();
+        $reportCatalog = new Reports();
         $form = $this->createForm(ReportCatalogType::class, $reportCatalog);
         $form->handleRequest($request);
         
@@ -79,7 +79,7 @@ class ReportCatalogController extends AbstractController
     /**
      * @Route("/{id}", name="Détails-rapport", methods={"GET","POST"})
      */
-    public function show(ReportCatalog $reportCatalog, Request $request): Response
+    public function show(Reports $reportCatalog, Request $request): Response
     {
         $form = $this->createForm(SQLTextType::class, $reportCatalog);
         $form->handleRequest($request);
@@ -145,7 +145,7 @@ class ReportCatalogController extends AbstractController
     /**
      * @Route("/{id}/modifier-rapport", name="Modifier-rapport", methods={"GET","POST"})
      */
-    public function edit(AccessDecisionManagerInterface $accessDecisionManager, Request $request, ReportCatalog $reportCatalog, DossierRepository $dossierRepository): Response
+    public function edit(AccessDecisionManagerInterface $accessDecisionManager, Request $request, Reports $reportCatalog, DossierRepository $dossierRepository): Response
     {
         $user= $this->getUser();
         $token = new UsernamePasswordToken($user, 'none', 'none', $user->getRoles());
@@ -173,7 +173,7 @@ class ReportCatalogController extends AbstractController
     /**
      * @Route("/{id}", name="Suppression-rapport", methods={"DELETE"})
      */
-    public function delete(Request $request, ReportCatalog $reportCatalog): Response
+    public function delete(Request $request, Reports $reportCatalog): Response
     {
         if ($this->isCsrfTokenValid('delete'.$reportCatalog->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

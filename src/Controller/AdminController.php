@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 use App\Entity\Imports;
-use App\Entity\ReportCatalog;
+use App\Entity\Reports;
 use App\Entity\SousDossier;
 use App\Form\EditPasswordType;
 use App\Form\ImportType;
@@ -16,6 +16,7 @@ use App\Repository\ImportsRepository;
 use App\Repository\ReportCatalogRepository;
 use App\Repository\SousDossierRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -24,7 +25,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -40,10 +43,22 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class AdminController extends AbstractController
 {
 
+    /**
+     * @Route("/getCrumbs", name="getCrumb")
+     */
+    public function getCrumb(){
+        $test = "";
+
+        return $this->json($test);
+    }
 
 
     /**
      * @Route("/", name="Administration")
+     * @param ReportCatalogRepository $catalogRepository
+     * @param EntityManagerInterface $em
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
     public function index(ReportCatalogRepository $catalogRepository, EntityManagerInterface $em, Request $request)
     {
@@ -52,7 +67,7 @@ class AdminController extends AbstractController
         $lastReport = $catalogRepository->findOneBy([],['id'=>'DESC']);
         $nbUpdate = 0;
 
-        $qbReports = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
+        $qbReports = $em->getRepository(Reports::class)->createQueryBuilder('r')
             ->leftJoin('r.mainFolder', 'p')
             ->addSelect('p')
             ->select('COUNT(r) AS nombreRapport','p.nomDossier')
@@ -60,7 +75,7 @@ class AdminController extends AbstractController
             ->getQuery()
             ->getArrayResult();
 
-        $qbReportsByUser = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
+        $qbReportsByUser = $em->getRepository(Reports::class)->createQueryBuilder('r')
             ->leftJoin('r.createdBy', 'p')
             ->addSelect('p')
             ->select('COUNT(r) AS nombreRapport','p.username')
@@ -68,7 +83,7 @@ class AdminController extends AbstractController
             ->getQuery()
             ->getArrayResult();
 
-        $qbRecette = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
+        $qbRecette = $em->getRepository(Reports::class)->createQueryBuilder('r')
             ->leftJoin('r.mainFolder','p')
             ->addSelect('p')
             ->select('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n')
@@ -77,7 +92,7 @@ class AdminController extends AbstractController
             ->groupBy('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n');
         $recette = $qbRecette->getQuery()->getArrayResult();
 
-        $qbProd = $em->getRepository(ReportCatalog::class)->createQueryBuilder('r')
+        $qbProd = $em->getRepository(Reports::class)->createQueryBuilder('r')
             ->leftJoin('r.mainFolder','p')
             ->addSelect('p')
             ->select('r.id','r.Nom_Rapport','p.nomDossier','r.VersionActuelle','r.CreationDate','r.n')
@@ -113,10 +128,14 @@ class AdminController extends AbstractController
     }
 
 
-
-
     /**
      * @Route("/profil/{id}", name="Modifier-Profil")
+     * @param AccessDecisionManagerInterface $accessDecisionManager
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @param UserInterface $user
+     * @param EntityManagerInterface $entityManager
+     * @return RedirectResponse|Response
      */
     public function editProfile(AccessDecisionManagerInterface $accessDecisionManager, Request $request, UserPasswordEncoderInterface $encoder, UserInterface $user, EntityManagerInterface $entityManager)
     {
@@ -184,13 +203,13 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/excel", name="spreadsheet")
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function excel(EntityManagerInterface $entityManager, ReportCatalogRepository $catalogRepository){
         $user = $this->getUser();
         if($user) {
             $spreadsheet = new Spreadsheet();
-            $qb = $entityManager->getRepository(ReportCatalog::class)->createQueryBuilder('r');
+            $qb = $entityManager->getRepository(Reports::class)->createQueryBuilder('r');
             $qb
                 ->leftJoin('r.mainFolder', 'p')
                 ->addSelect('p')
@@ -213,8 +232,8 @@ class AdminController extends AbstractController
             $sheet->getStyle('A1:L1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('ff6600');
             $sheet->setTitle("Catalogue des rapports BO");
             $sheet->setCellValue('A1', 'N°');
-            $sheet->setCellValue('B1', 'Dossier');
-            $sheet->setCellValue('C1', 'Sous-Dossier');
+            $sheet->setCellValue('B1', 'Domaines');
+            $sheet->setCellValue('C1', 'Sous-Domaines');
             $sheet->setCellValue('D1', 'Nom du rapport');
             $sheet->setCellValue('E1', 'Version actuelle');
             $sheet->setCellValue('F1', 'Commentaire');
@@ -260,7 +279,7 @@ class AdminController extends AbstractController
      * @Route("/importation", name="Importation")
      *
      * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
-     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws Exception
      */
     public function importation(Request $request, ImportsRepository $importsRepository, ReportCatalogRepository $catalogRepository, DossierRepository $dossierRepository, SousDossierRepository $sousDossierRepository)
     {
@@ -274,8 +293,8 @@ class AdminController extends AbstractController
             $conn = $em->getConnection();
             $platform   = $conn->getDatabasePlatform();
             $conn->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
-            $truncateSql1 = $platform->getTruncateTableSQL('report_catalog');
-            $truncateSql2 = $platform->getTruncateTableSQL('dossier');
+            $truncateSql1 = $platform->getTruncateTableSQL('reports');
+            $truncateSql2 = $platform->getTruncateTableSQL('domaines');
             $truncateSql3 = $platform->getTruncateTableSQL('sous_dossier');
             $truncateSql4 = $platform->getTruncateTableSQL('ref_obj_rapport');
             $truncateSql5 = $platform->getTruncateTableSQL('referentiel_objets');
@@ -319,7 +338,7 @@ class AdminController extends AbstractController
                 unset($arr[0]);
                 for($i = 1;$i<count($arr);$i++)
                 {
-                    $report = new ReportCatalog();
+                    $report = new Reports();
 
                     $report->setN($arr[$i][0]);
                     $report->setNomRapport($arr[$i][3]);
@@ -359,6 +378,7 @@ class AdminController extends AbstractController
                     {
                         $report->setHistoriqueVersions($arr[$i][11]);
                     }
+                    $report->setStatut(true);
                     if($dossierRepository->findOneBy(['nomDossier'=>$arr[$i][1]]))
                     {
                         $mainf = $dossierRepository->findOneBy(['nomDossier'=>$arr[$i][1]]);
@@ -381,7 +401,7 @@ class AdminController extends AbstractController
                             }
                         }
                     }else{
-                        $mainf = new Dossier();
+                        $mainf = new Domaines();
                         $mainf->setNomDossier($arr[$i][1]);
                         $em->persist($mainf);
                         $em->flush();
@@ -421,6 +441,9 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/supprimer-importation/{id}", name="supprimer-importation", methods={"DELETE"})
+     * @param Request $request
+     * @param Imports $imports
+     * @return RedirectResponse
      */
     public function deleteImport(Request $request, Imports $imports)
     {
@@ -438,13 +461,18 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/recherche-rapport", name="recherche-rapport", methods={"POST"})
+     * @param Request $request
+     * @param ReportCatalogRepository $catalogRepository
+     * @return JsonResponse
      */
     public function searchReport(Request $request, ReportCatalogRepository $catalogRepository)
     {
         if($request->isMethod("POST"))
         {
             $query = $catalogRepository->createQueryBuilder('a')
-                ->select('a.Nom_Rapport','a.id')
+                ->select('a.Nom_Rapport','a.id', 'a.VersionActuelle')
+                ->innerJoin('a.mainFolder','d')
+                ->addSelect('d.nomDossier')
                 ->where('a.Nom_Rapport LIKE :rapport')
                 ->setParameter('rapport','%'.$request->get('t').'%')
                 ->getQuery();

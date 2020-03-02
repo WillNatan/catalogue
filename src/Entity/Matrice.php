@@ -19,7 +19,7 @@ class Matrice
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dossier", inversedBy="matrices" ,cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Domaines", inversedBy="matrices")
      */
     private $domaine;
 
@@ -38,12 +38,12 @@ class Matrice
         return $this->id;
     }
 
-    public function getDomaine(): ?Dossier
+    public function getDomaine(): ?Domaines
     {
         return $this->domaine;
     }
 
-    public function setDomaine(?Dossier $domaine): self
+    public function setDomaine(?Domaines $domaine): self
     {
         $this->domaine = $domaine;
 

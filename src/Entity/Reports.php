@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\ReportCatalogRepository")
  */
-class ReportCatalog
+class Reports
 {
     /**
      * @ORM\Id()
@@ -76,7 +76,7 @@ class ReportCatalog
     private $subFolder = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Dossier", inversedBy="rapport")
+         * @ORM\ManyToOne(targetEntity="App\Entity\Domaines", inversedBy="rapport")
      */
     private $mainFolder = null;
 
@@ -255,12 +255,12 @@ class ReportCatalog
         return $this;
     }
 
-    public function getMainFolder(): ?Dossier
+    public function getMainFolder(): ?Domaines
     {
         return $this->mainFolder;
     }
 
-    public function setMainFolder(?Dossier $mainFolder): self
+    public function setMainFolder(?Domaines $mainFolder): self
     {
         $this->mainFolder = $mainFolder;
 

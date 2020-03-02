@@ -2,9 +2,9 @@
 
 namespace App\Form;
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 use App\Entity\SousDossier;
-use App\Entity\ReportCatalog;
+use App\Entity\Reports;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -25,11 +25,11 @@ class ReportCatalogType extends AbstractType
     {
         $builder
         ->add('mainFolder', EntityType::class, [
-            'class' => Dossier::class,
+            'class' => Domaines::class,
             'placeholder'=>'Sélectionnez un domaine',
             'choice_label' => 'nomDossier',
             'label_attr'=>['class'=>'small'],
-            'label'=>'Dossier',
+            'label'=>'Domaines',
             'attr'=>['class'=>'form-control mainFolder']
         ])
         
@@ -83,7 +83,7 @@ class ReportCatalogType extends AbstractType
             }
         );
          */
-         $formModifier = function (FormInterface $form, Dossier $folder = null) {
+         $formModifier = function (FormInterface $form, Domaines $folder = null) {
             $subfolders = null === $folder ? [] : $folder->getSubFolders();
             $form->add('subFolder', EntityType::class, ['required'=>false,
                 'class' => SousDossier::class,
@@ -91,7 +91,7 @@ class ReportCatalogType extends AbstractType
                 'attr'=>['class'=>'form-control mainFolder'],
                 'label_attr'=>['class'=>'small'],
                 'choices' => $subfolders,
-                'label'=>'Sous-Dossier',
+                'label'=>'Sous-Domaines',
                 'choice_label'=>'nomDossier'
             ]);
         };
@@ -117,7 +117,7 @@ class ReportCatalogType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => ReportCatalog::class,
+            'data_class' => Reports::class,
         ]);
     }
 }

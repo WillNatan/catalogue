@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 use App\Entity\Matrice;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -15,7 +15,7 @@ class MatriceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('domaine', EntityType::class, ['class'=>Dossier::class,
+            ->add('domaine', EntityType::class, ['class'=>Domaines::class,
                 'choice_label'=>'nomDossier',
                 'attr'=>['class'=>'form-control']
             ])

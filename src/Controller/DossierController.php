@@ -2,9 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Dossier;
+use App\Entity\Domaines;
 use App\Form\DossierType;
-use App\Entity\SousDossier;
 use App\Repository\DossierRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +31,7 @@ class DossierController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $dossier = new Dossier();
+        $dossier = new Domaines();
         $subfolders = new ArrayCollection();
 
         foreach ($dossier->getSubFolders() as $subfolder){
@@ -67,7 +66,7 @@ class DossierController extends AbstractController
     /**
      * @Route("/{id}", name="Détails-dossier", methods={"GET"})
      */
-    public function show(Dossier $dossier): Response
+    public function show(Domaines $dossier): Response
     {
         return $this->render('dossier/show.html.twig', [
             'dossier' => $dossier,
@@ -77,7 +76,7 @@ class DossierController extends AbstractController
     /**
      * @Route("/{id}/modifier-domaine", name="Modifier-dossier", methods={"GET","POST"})
      */
-    public function edit(Request $request, Dossier $dossier): Response
+    public function edit(Request $request, Domaines $dossier): Response
     {
         $form = $this->createForm(DossierType::class, $dossier);
         $form->handleRequest($request);
@@ -97,7 +96,7 @@ class DossierController extends AbstractController
     /**
      * @Route("/{id}", name="Suppression-dossier", methods={"DELETE"})
      */
-    public function delete(Request $request, Dossier $dossier): Response
+    public function delete(Request $request, Domaines $dossier): Response
     {
         if ($this->isCsrfTokenValid('delete'.$dossier->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

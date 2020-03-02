@@ -17,7 +17,7 @@ class RefObjRapport
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ReportCatalog", inversedBy="refObjRapports")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Reports", inversedBy="refObjRapports")
      */
     private $rapport;
 
@@ -41,12 +41,12 @@ class RefObjRapport
         return $this->id;
     }
 
-    public function getRapport(): ?ReportCatalog
+    public function getRapport(): ?Reports
     {
         return $this->rapport;
     }
 
-    public function setRapport(?ReportCatalog $rapport): self
+    public function setRapport(?Reports $rapport): self
     {
         $this->rapport = $rapport;
 
